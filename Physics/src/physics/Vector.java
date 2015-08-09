@@ -60,6 +60,16 @@ public final class Vector {
 		return Scalar.sum(x.multiply(v.x), y.multiply(v.y), z.multiply(v.z));
 	}
 
+	public Vector cross(Vector v) {
+		Scalar x = this.getY().multiply(v.getZ())
+				.subtract(this.getZ().subtract(v.getY()));
+		Scalar y = this.getZ().multiply(v.getX())
+				.subtract(this.getX().subtract(v.getZ()));
+		Scalar z = this.getX().multiply(v.getY())
+				.subtract(this.getY().subtract(v.getX()));
+		return new Vector(x, y, z);
+	}
+
 	public Vector subtract(Vector v) {
 		return this.add(v.negate());
 	}
