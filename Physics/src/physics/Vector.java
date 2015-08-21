@@ -1,6 +1,6 @@
 package physics;
 
-public final class Vector {
+public final class Vector implements Measurable {
 
 	public static final Vector METER_X = new Vector(Scalar.METER, 1, 0, 0);
 	public static final Vector METER_Y = new Vector(Scalar.METER, 0, 1, 0);
@@ -36,6 +36,7 @@ public final class Vector {
 		return new Vector(x.multiply(d), y.multiply(d), z.multiply(d));
 	}
 
+	@Override
 	public Quantity getQuantity() {
 		return x.getQuantity();
 	}

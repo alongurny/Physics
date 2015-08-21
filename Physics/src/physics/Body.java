@@ -5,7 +5,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class Body {
 
-	private static final Scalar DEFAULT_DT = Scalar.SECOND.multiply(15e-3);
+	private static final Scalar DEFAULT_DT = Scalar.SECOND.multiply(15e-3)
+			.multiply(1e6);
 
 	private final Scalar mass;
 	private final Scalar charge;
@@ -54,24 +55,25 @@ public abstract class Body {
 		return charge;
 	}
 
-	public Scalar getElectricalField(Scalar radius) {
-		Quantities.require(radius, Quantity.POSITION);
-		return Scalar.K.multiply(charge).divide(radius.pow(2));
+	public VectorField getElectricalField() {
+		return v -> {
+			Vector diff = v.subtract(position);
+			return diff.multiply(Scalar.K.multiply(charge)).divide(
+					diff.getMagnitude().pow(2));
+		};
 	}
 
-	public Scalar getGravitationalEnergy(Body b) {
-		return Scalar.product(Scalar.G, b.getMass(), getMass())
-				.divide(distance(b)).negate();
-	}
-
-	public Scalar getGravitationalField(Scalar radius) {
-		Quantities.require(radius, Quantity.POSITION);
-		return Scalar.G.multiply(mass).divide(radius.pow(2));
+	public VectorField getGravitationalField() {
+		return v -> {
+			Vector diff = position.subtract(v);
+			return diff.multiply(Scalar.G.multiply(mass)).divide(
+					diff.getMagnitude().pow(3));
+		};
 	}
 
 	public Scalar getTranslationalKinecticEnergy() {
-		return Scalar.product(velocity.getMagnitude(), velocity.getMagnitude(),
-				mass).multiply(0.5);
+		return Scalar.product(velocity.getMagnitude().pow(2), mass).multiply(
+				0.5);
 	}
 
 	public Scalar getMass() {

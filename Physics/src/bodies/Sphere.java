@@ -11,7 +11,8 @@ public class Sphere extends RigidBody {
 	public Sphere(Scalar mass, Scalar charge, Vector center, Vector velocity,
 			Vector angularPosition, Vector angularVelocity, Scalar radius) {
 		super(mass, charge, center, velocity, mass.multiply(radius.pow(2))
-				.multiply(0.4), angularPosition, angularVelocity);
+				.multiply(0.4).divide(Scalar.RADIAN.pow(2)), angularPosition,
+				angularVelocity);
 		this.radius = radius;
 	}
 

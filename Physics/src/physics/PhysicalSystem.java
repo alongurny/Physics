@@ -15,8 +15,8 @@ public class PhysicalSystem {
 		for (Body t : body) {
 			for (Body s : body) {
 				if (t != s) {
-					t.addAcceleration(t.getAngleWith(s).multiply(
-							s.getGravitationalField(t.distance(s))));
+					t.addAcceleration(s.getGravitationalField().get(
+							t.getPosition()));
 				}
 			}
 		}

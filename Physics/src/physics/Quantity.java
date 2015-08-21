@@ -83,7 +83,7 @@ public class Quantity {
 					Object o = f.get(null);
 					if (o instanceof Quantity) {
 						Quantity q = (Quantity) o;
-						bindName(q, f.getName().toLowerCase());
+						bindName(q, f.getName().toLowerCase().replace("_", " "));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -129,7 +129,7 @@ public class Quantity {
 		for (int i = 0; i < q.values.length; i++) {
 			if (q.values[i] % n != 0) {
 				throw new IllegalArgumentException("Root " + n
-						+ " not possible");
+						+ " not possible for " + q);
 			}
 		}
 		int[] res = new int[COUNT];
