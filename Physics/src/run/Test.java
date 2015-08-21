@@ -1,13 +1,12 @@
 package run;
 
-import physics.Quantity;
 import physics.Scalar;
 import physics.Vector;
 
 public class Test {
 	public static void main(String[] args) {
-		System.out.println(new Vector(Scalar.RADIAN.divide(Scalar.SECOND), 0,
-				0, 1).multiply(Scalar.zero(Quantity.MOMENT_OF_INERTIA))
-				.getQuantity());
+		Vector v = new Vector(Scalar.ONE, 3, -3, 1);
+		Vector u = new Vector(Scalar.ONE, 4, 9, 2);
+		System.out.println(v.cross(u));
 	}
 }

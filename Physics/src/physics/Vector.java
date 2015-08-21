@@ -62,11 +62,11 @@ public final class Vector {
 
 	public Vector cross(Vector v) {
 		Scalar x = this.getY().multiply(v.getZ())
-				.subtract(this.getZ().subtract(v.getY()));
+				.subtract(this.getZ().multiply(v.getY()));
 		Scalar y = this.getZ().multiply(v.getX())
-				.subtract(this.getX().subtract(v.getZ()));
+				.subtract(this.getX().multiply(v.getZ()));
 		Scalar z = this.getX().multiply(v.getY())
-				.subtract(this.getY().subtract(v.getX()));
+				.subtract(this.getY().multiply(v.getX()));
 		return new Vector(x, y, z);
 	}
 

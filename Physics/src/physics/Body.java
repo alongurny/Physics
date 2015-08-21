@@ -5,8 +5,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class Body {
 
+	private static final Scalar DEFAULT_DT = Scalar.SECOND.multiply(15e-3);
+
 	private final Scalar mass;
 	private final Scalar charge;
+	private final Scalar dt;
 	private Vector position;
 	private Vector velocity;
 	private List<Vector> forces;
@@ -19,6 +22,7 @@ public abstract class Body {
 		this.velocity = velocity;
 		this.forces = new CopyOnWriteArrayList<Vector>();
 		this.impulses = new CopyOnWriteArrayList<Vector>();
+		this.dt = DEFAULT_DT;
 	}
 
 	public void addAcceleration(Vector acceleration) {
@@ -102,9 +106,12 @@ public abstract class Body {
 		return velocity;
 	}
 
-	public void move(Scalar dt) {
-		Quantities.require(dt, Quantity.TIME);
-		position = position.add(velocity.multiply(dt));
+	protected Scalar getTimeSpan() {
+		return dt;
+	}
+
+	public void move() {
+		position = position.add(velocity.multiply(getTimeSpan()));
 		velocity = velocity.add(getAcceleration().multiply(dt)).add(
 				getTotalImpulse().divide(mass));
 		impulses.clear();

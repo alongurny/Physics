@@ -20,8 +20,8 @@ public class RunRobot {
 		Pixel.set(Scalar.METER.divide(100));
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Robot robot = new Robot(Scalar.KILOGRAM.multiply(48),
-				Vector.POSITION_ORIGIN, Scalar.KILOGRAM.multiply(
-						Scalar.METER.divide(Scalar.RADIAN).pow(2)).multiply(6),
+				Vector.POSITION_ORIGIN, Scalar.KILOGRAM.multiply(Scalar.METER
+						.divide(Scalar.RADIAN).pow(2).multiply(12)),
 				Vector.zero(Quantity.ANGLE), Scalar.METER.multiply(0.6),
 				Scalar.METER.multiply(0.8));
 		Frame f = new Frame(screenSize, Color.GRAY, new RobotDrawer(robot,
@@ -29,11 +29,9 @@ public class RunRobot {
 		f.addSign("Velocity", robot::getVelocity);
 		f.addSign("Position", robot::getPosition);
 		f.addSign("Rotation", () -> robot.getAngularPosition().getZ());
-		f.addSign("Angular velocity", robot::getAngularVelocity);
-		f.addDrawingListener(e -> robot.move(Scalar.NANOSECOND.multiply(e
-				.getNanoTimePassed())));
-		f.addDrawingListener(e -> robot.rotate(Scalar.NANOSECOND.multiply(e
-				.getNanoTimePassed())));
+		f.addSign("Angular velocity", () -> robot.getAngularVelocity().getZ());
+		f.addDrawingListener(e -> robot.move());
+		f.addDrawingListener(e -> robot.rotate());
 		double mu = 0.2;
 		Scalar force = Scalar.NEWTONE.multiply(32).multiply(4);
 		f.addDrawingListener(e -> {

@@ -39,7 +39,7 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		Frame f = new Frame(screenSize, Color.DARK_GRAY, new SphereDrawer(sun,
 				Color.YELLOW), new SphereDrawer(earth, Color.GREEN));
-		f.addSign("Total momentum", () -> solar.getTotalMomentum());
+		f.addSign("Total momentum", solar::getTotalMomentum);
 		f.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -65,8 +65,7 @@ public class Main {
 
 			@Override
 			public void onDraw(DrawingEvent e) {
-				solar.forEach(t -> t.move(Scalar.NANOSECOND.multiply(e
-						.getNanoTimePassed() * 1e6)));
+				solar.forEach(Body::move);
 				solar.applyGravityForces();
 				if (focus != null) {
 					f.setFocus(focus.getPosition());

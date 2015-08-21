@@ -80,11 +80,11 @@ public class RigidBody extends Body {
 		return angularVelocity.multiply(inertiaMomement);
 	}
 
-	public void rotate(Scalar dt) {
-		Quantities.require(dt, Quantity.TIME);
-		angularPosition = angularPosition.add(angularVelocity.multiply(dt));
+	public void rotate() {
+		angularPosition = angularPosition.add(angularVelocity
+				.multiply(getTimeSpan()));
 		angularVelocity = angularVelocity.add(
-				getAngularAcceleration().multiply(dt)).add(
+				getAngularAcceleration().multiply(getTimeSpan())).add(
 				getTotalAngularImpulse().divide(inertiaMomement));
 		angularImpulses.clear();
 		torques.clear();
