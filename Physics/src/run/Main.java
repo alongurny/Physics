@@ -3,6 +3,7 @@ package run;
 import graphics.DrawingEvent;
 import graphics.DrawingListener;
 import graphics.Frame;
+import graphics.drawers.ScalarFieldDrawer;
 import graphics.drawers.SphereDrawer;
 
 import java.awt.Color;
@@ -15,8 +16,10 @@ import physics.Body;
 import physics.PhysicalSystem;
 import physics.Quantity;
 import physics.Scalar;
+import physics.UnitSystem;
 import physics.Util;
 import physics.Vector;
+import physics.VectorField;
 import bodies.space.Earth;
 import bodies.space.Planet;
 import bodies.space.Sun;
@@ -35,10 +38,18 @@ public class Main {
 			Vector.zero(Quantity.ANGULAR_VELOCITY), Earth.RADIUS);
 	static PhysicalSystem solar = new PhysicalSystem(sun, earth);
 	static Body focus = null;
+	static ScalarFieldDrawer fieldDrawer = new ScalarFieldDrawer(
+			() -> v -> VectorField
+					.sum(sun.getGravitationalField(),
+							earth.getGravitationalField()).get(v)
+					.getMagnitude(), Scalar.zero(Quantity.ACCELERATION),
+			UnitSystem.SI.get(Quantity.ACCELERATION).multiply(1e-1),
+			screenSize.getWidth(), screenSize.getHeight());
 
 	public static void main(String[] args) throws InterruptedException {
-		Frame f = new Frame(screenSize, Color.DARK_GRAY, new SphereDrawer(sun,
-				Color.YELLOW), new SphereDrawer(earth, Color.GREEN));
+		Frame f = new Frame(screenSize, Color.DARK_GRAY, fieldDrawer,
+				new SphereDrawer(sun, Color.YELLOW), new SphereDrawer(earth,
+						Color.GREEN));
 		f.addSign("Total momentum", solar::getTotalMomentum);
 		f.addKeyListener(new KeyAdapter() {
 			@Override
