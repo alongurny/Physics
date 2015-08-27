@@ -79,6 +79,10 @@ public final class Vector implements Measurable {
 		return this.multiply(s.inverse());
 	}
 
+	public Vector divide(double d) {
+		return new Vector(x.divide(d), y.divide(d), z.divide(d));
+	}
+
 	public Scalar getX() {
 		return x;
 	}
@@ -108,4 +112,5 @@ public final class Vector implements Measurable {
 		}
 		return res;
 	}
+
 }

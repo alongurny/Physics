@@ -1,15 +1,11 @@
 package physics;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 public class RigidBody extends Body {
 
 	private Scalar inertiaMomement;
 	private Vector angularPosition;
 	private Vector angularVelocity;
-	private List<Vector> torques;
-	private List<Vector> angularImpulses;
+	private Vector totalTorque;
 
 	public RigidBody(Scalar mass, Scalar charge, Vector center,
 			Vector velocity, Scalar inertiaMoment, Vector angularPosition,
@@ -21,17 +17,17 @@ public class RigidBody extends Body {
 				Quantity.ANGLE);
 		this.angularVelocity = Quantities.require(angularVelocity,
 				Quantity.ANGULAR_VELOCITY);
-		this.torques = new CopyOnWriteArrayList<Vector>();
-		this.angularImpulses = new CopyOnWriteArrayList<Vector>();
+		this.totalTorque = Vector.zero(Quantity.TORQUE);
 	}
 
 	public void addTorque(Vector torque) {
-		torques.add(Quantities.require(torque, Quantity.TORQUE));
+		totalTorque = totalTorque.add(Quantities.require(torque,
+				Quantity.TORQUE));
 	}
 
 	public void addAngularAcceleration(Vector angularAcceleration) {
-		torques.add(Quantities.require(angularAcceleration,
-				Quantity.ANGULAR_ACCELERATION).multiply(inertiaMomement));
+		totalTorque = totalTorque.add(Quantities.require(angularAcceleration,
+				Quantity.TORQUE).multiply(inertiaMomement));
 	}
 
 	public Vector getAngularAcceleration() {
@@ -39,11 +35,7 @@ public class RigidBody extends Body {
 	}
 
 	public Vector getTotalTorque() {
-		Vector sum = Vector.zero(Quantity.TORQUE);
-		for (Vector t : torques) {
-			sum = sum.add(t);
-		}
-		return sum;
+		return totalTorque;
 	}
 
 	public Scalar getInertiaMomement() {
@@ -51,16 +43,8 @@ public class RigidBody extends Body {
 	}
 
 	public void addAngularImpulse(Vector angularImpulse) {
-		angularImpulses.add(Quantities.require(angularImpulse,
-				Quantity.ANGULAR_IMPULSE));
-	}
-
-	public Vector getTotalAngularImpulse() {
-		Vector sum = Vector.zero(Quantity.ANGULAR_IMPULSE);
-		for (Vector i : angularImpulses) {
-			sum = sum.add(i);
-		}
-		return sum;
+		totalTorque.add(Quantities.require(angularImpulse,
+				Quantity.ANGULAR_IMPULSE).divide(getTimeSpan()));
 	}
 
 	public Scalar getKineticRotationalEnergy() {
@@ -83,10 +67,8 @@ public class RigidBody extends Body {
 	public void rotate() {
 		angularPosition = angularPosition.add(angularVelocity
 				.multiply(getTimeSpan()));
-		angularVelocity = angularVelocity.add(
-				getAngularAcceleration().multiply(getTimeSpan())).add(
-				getTotalAngularImpulse().divide(inertiaMomement));
-		angularImpulses.clear();
-		torques.clear();
+		angularVelocity = angularVelocity.add(getAngularAcceleration()
+				.multiply(getTimeSpan()));
+		totalTorque = Vector.zero(Quantity.TORQUE);
 	}
 }

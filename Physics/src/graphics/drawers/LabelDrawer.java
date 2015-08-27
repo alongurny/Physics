@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class Sign implements Drawable {
+public class LabelDrawer implements Drawable {
 
 	List<String> strings;
 	List<Supplier<?>> suppliers;
 
-	public Sign() {
+	public LabelDrawer() {
 		strings = new ArrayList<String>();
 		suppliers = new ArrayList<Supplier<?>>();
 	}

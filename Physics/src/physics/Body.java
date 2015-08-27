@@ -31,7 +31,7 @@ public abstract class Body {
 
 	public void addImpulse(Vector impulse) {
 		totalForce = totalForce.add(Quantities.require(impulse,
-				Quantity.IMPULSE).divide(dt));
+				Quantity.IMPULSE).divide(getTimeSpan()));
 	}
 
 	public Direction getAngleWith(Body s) {
@@ -97,7 +97,7 @@ public abstract class Body {
 
 	public void move() {
 		position = position.add(velocity.multiply(getTimeSpan()));
-		velocity = velocity.add(getAcceleration().multiply(dt));
+		velocity = velocity.add(getAcceleration().multiply(getTimeSpan()));
 		totalForce = Vector.zero(Quantity.FORCE);
 	}
 

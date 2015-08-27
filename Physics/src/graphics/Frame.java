@@ -1,11 +1,12 @@
 package graphics;
 
 import graphics.drawers.Drawable;
-import graphics.drawers.Sign;
+import graphics.drawers.LabelDrawer;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
@@ -22,14 +23,16 @@ import physics.Vector;
 public class Frame extends JFrame {
 
 	private Vector focus;
-	private Sign sign;
+	private LabelDrawer labelDrawer;
 	private List<Drawable> drawables;
 	private List<DrawingListener> drawingListeners;
+	public static final Dimension DEFAULT_SIZE = Toolkit.getDefaultToolkit()
+			.getScreenSize();
 
-	public Frame(Dimension size, Color background) {
+	public Frame(Color background) {
 		setBackground(background);
 		focus = Vector.zero(Quantity.LENGTH);
-		sign = new Sign();
+		labelDrawer = new LabelDrawer();
 		drawingListeners = new CopyOnWriteArrayList<DrawingListener>();
 		drawables = new ArrayList<Drawable>();
 		add(new JPanel() {
@@ -37,7 +40,7 @@ public class Frame extends JFrame {
 			public void paint(Graphics g) {
 				int dx = getWidth() / 2 - Pixel.to(focus.getX());
 				int dy = getHeight() / 2 - Pixel.to(focus.getY());
-				sign.draw(g, dx, dy);
+				labelDrawer.draw(g, dx, dy);
 				for (Drawable d : drawables) {
 					d.draw(g, dx, dy);
 				}
@@ -54,7 +57,7 @@ public class Frame extends JFrame {
 				// focus = newFocus;
 			}
 		});
-		setSize(size);
+		setSize(DEFAULT_SIZE);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		new Thread(() -> {
@@ -85,8 +88,8 @@ public class Frame extends JFrame {
 		drawables.add(drawable);
 	}
 
-	public void addSign(String desc, Supplier<?> supp) {
-		sign.add(desc, supp);
+	public void addLabel(String desc, Supplier<?> supp) {
+		labelDrawer.add(desc, supp);
 	}
 
 	public void addDrawingListener(DrawingListener drawingListener) {

@@ -47,10 +47,11 @@ public class RunSolarSystem {
 			screenSize.getWidth(), screenSize.getHeight());
 
 	public static void main(String[] args) throws InterruptedException {
-		Frame f = new Frame(screenSize, Color.DARK_GRAY, new SphereDrawer(sun,
-				Color.YELLOW), new SphereDrawer(earth, Color.GREEN));
-		f.addSign("Total momentum", solar::getTotalMomentum);
-		f.addSign("Total force", solar::getTotalForce);
+		Frame f = new Frame(Color.DARK_GRAY);
+		f.addDrawable(new SphereDrawer(sun, Color.YELLOW));
+		f.addDrawable(new SphereDrawer(earth, Color.GREEN));
+		f.addLabel("Total momentum", solar::getTotalMomentum);
+		f.addLabel("Total force", solar::getTotalForce);
 		f.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
