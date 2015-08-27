@@ -1,42 +1,37 @@
 package physics;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 public abstract class Body {
 
-	private static final Scalar DEFAULT_DT = Scalar.SECOND.multiply(15e-3)
-			.multiply(1e6);
+	private static final Scalar DEFAULT_DT = Scalar.SECOND.multiply(15e-3);
 
 	private final Scalar mass;
 	private final Scalar charge;
 	private final Scalar dt;
 	private Vector position;
 	private Vector velocity;
-	private List<Vector> forces;
-	private List<Vector> impulses;
+	private Vector totalForce;
 
 	public Body(Scalar mass, Scalar charge, Vector position, Vector velocity) {
 		this.mass = mass;
 		this.charge = charge;
 		this.position = position;
 		this.velocity = velocity;
-		this.forces = new CopyOnWriteArrayList<Vector>();
-		this.impulses = new CopyOnWriteArrayList<Vector>();
+		this.totalForce = Vector.zero(Quantity.FORCE);
 		this.dt = DEFAULT_DT;
 	}
 
 	public void addAcceleration(Vector acceleration) {
-		forces.add(Quantities.require(acceleration, Quantity.ACCELERATION)
-				.multiply(mass));
+		totalForce = totalForce.add(Quantities.require(acceleration,
+				Quantity.ACCELERATION).multiply(mass));
 	}
 
 	public void addForce(Vector force) {
-		forces.add(Quantities.require(force, Quantity.FORCE));
+		totalForce = totalForce.add(Quantities.require(force, Quantity.FORCE));
 	}
 
 	public void addImpulse(Vector impulse) {
-		impulses.add(Quantities.require(impulse, Quantity.IMPULSE));
+		totalForce = totalForce.add(Quantities.require(impulse,
+				Quantity.IMPULSE).divide(dt));
 	}
 
 	public Direction getAngleWith(Body s) {
@@ -89,19 +84,7 @@ public abstract class Body {
 	}
 
 	public Vector getTotalForce() {
-		Vector sum = Vector.zero(Quantity.FORCE);
-		for (Vector f : forces) {
-			sum = sum.add(f);
-		}
-		return sum;
-	}
-
-	public Vector getTotalImpulse() {
-		Vector sum = Vector.zero(Quantity.IMPULSE);
-		for (Vector j : impulses) {
-			sum = sum.add(j);
-		}
-		return sum;
+		return totalForce;
 	}
 
 	public Vector getVelocity() {
@@ -114,10 +97,8 @@ public abstract class Body {
 
 	public void move() {
 		position = position.add(velocity.multiply(getTimeSpan()));
-		velocity = velocity.add(getAcceleration().multiply(dt)).add(
-				getTotalImpulse().divide(mass));
-		impulses.clear();
-		forces.clear();
+		velocity = velocity.add(getAcceleration().multiply(dt));
+		totalForce = Vector.zero(Quantity.FORCE);
 	}
 
 }

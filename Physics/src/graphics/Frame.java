@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
@@ -22,13 +23,15 @@ public class Frame extends JFrame {
 
 	private Vector focus;
 	private Sign sign;
+	private List<Drawable> drawables;
 	private List<DrawingListener> drawingListeners;
 
-	public Frame(Dimension size, Color background, Drawable... drawables) {
+	public Frame(Dimension size, Color background) {
 		setBackground(background);
-		focus = Vector.zero(Quantity.POSITION);
+		focus = Vector.zero(Quantity.LENGTH);
 		sign = new Sign();
 		drawingListeners = new CopyOnWriteArrayList<DrawingListener>();
+		drawables = new ArrayList<Drawable>();
 		add(new JPanel() {
 			@Override
 			public void paint(Graphics g) {
@@ -64,7 +67,7 @@ public class Frame extends JFrame {
 				lastMove = now;
 				repaint();
 				try {
-					Thread.sleep(20);
+					Thread.sleep(15);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -76,6 +79,10 @@ public class Frame extends JFrame {
 
 	public void setFocus(Vector focus) {
 		this.focus = focus;
+	}
+
+	public void addDrawable(Drawable drawable) {
+		drawables.add(drawable);
 	}
 
 	public void addSign(String desc, Supplier<?> supp) {

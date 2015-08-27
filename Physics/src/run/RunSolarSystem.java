@@ -24,14 +24,14 @@ import bodies.space.Earth;
 import bodies.space.Planet;
 import bodies.space.Sun;
 
-public class Main {
+public class RunSolarSystem {
 
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static Planet sun = new Planet(Sun.MASS, Vector.POSITION_ORIGIN,
 			Vector.zero(Quantity.VELOCITY), Vector.zero(Quantity.ANGLE),
 			Vector.zero(Quantity.ANGULAR_VELOCITY), Sun.RADIUS);
 	static Planet earth = new Planet(Earth.MASS, new Vector(Earth.ROUND_RADIUS,
-			Scalar.zero(Quantity.POSITION), Scalar.zero(Quantity.POSITION)),
+			Scalar.zero(Quantity.LENGTH), Scalar.zero(Quantity.LENGTH)),
 			new Vector(Scalar.zero(Quantity.VELOCITY), Util
 					.forCircularMovement(sun, Earth.ROUND_RADIUS), Scalar
 					.zero(Quantity.VELOCITY)), Vector.zero(Quantity.ANGLE),
@@ -47,10 +47,10 @@ public class Main {
 			screenSize.getWidth(), screenSize.getHeight());
 
 	public static void main(String[] args) throws InterruptedException {
-		Frame f = new Frame(screenSize, Color.DARK_GRAY, fieldDrawer,
-				new SphereDrawer(sun, Color.YELLOW), new SphereDrawer(earth,
-						Color.GREEN));
+		Frame f = new Frame(screenSize, Color.DARK_GRAY, new SphereDrawer(sun,
+				Color.YELLOW), new SphereDrawer(earth, Color.GREEN));
 		f.addSign("Total momentum", solar::getTotalMomentum);
+		f.addSign("Total force", solar::getTotalForce);
 		f.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {

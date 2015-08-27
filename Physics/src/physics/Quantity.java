@@ -11,13 +11,13 @@ public class Quantity {
 
 	public static final int COUNT = 5;
 
-	private static final String[] letters = new String[] { "pos", "time",
+	private static final String[] letters = new String[] { "length", "time",
 			"mass", "charge", "angle" };
 
 	private static Map<Quantity, String> repr = new HashMap<Quantity, String>();
 
 	public enum Basic {
-		POSITION, TIME, MASS, CHARGE, ANGLE
+		LENGTH, TIME, MASS, CHARGE, ANGLE
 	}
 
 	public static void bindName(Quantity quantity, String name) {
@@ -28,7 +28,7 @@ public class Quantity {
 	 * Basics
 	 */
 	public static final Quantity NONE = new Quantity(0, 0, 0, 0, 0);
-	public static final Quantity POSITION = new Quantity(1, 0, 0, 0, 0);
+	public static final Quantity LENGTH = new Quantity(1, 0, 0, 0, 0);
 	public static final Quantity TIME = new Quantity(0, 1, 0, 0, 0);
 	public static final Quantity MASS = new Quantity(0, 0, 1, 0, 0);
 	public static final Quantity CHARGE = new Quantity(0, 0, 0, 1, 0);
@@ -37,14 +37,19 @@ public class Quantity {
 	/*
 	 * Mechanics
 	 */
-	public static final Quantity VELOCITY = quotinent(POSITION, TIME);
+	public static final Quantity VELOCITY = quotinent(LENGTH, TIME);
 	public static final Quantity ACCELERATION = quotinent(VELOCITY, TIME);
 	public static final Quantity FORCE = product(MASS, ACCELERATION);
-	public static final Quantity WORK = product(FORCE, POSITION);
-	public static final Quantity ENERGY = WORK;
-	public static final Quantity POWER = quotinent(ENERGY, TIME);
+
 	public static final Quantity MOMENTUM = product(MASS, VELOCITY);
 	public static final Quantity IMPULSE = MOMENTUM;
+
+	/*
+	 * Energy
+	 */
+	public static final Quantity ENERGY = product(FORCE, LENGTH);
+	public static final Quantity WORK = ENERGY;
+	public static final Quantity POWER = quotinent(ENERGY, TIME);
 
 	/*
 	 * Rigid Body Mechanics
@@ -53,7 +58,7 @@ public class Quantity {
 	public static final Quantity ANGULAR_VELOCITY = quotinent(ANGLE, TIME);
 	public static final Quantity ANGULAR_ACCELERATION = quotinent(
 			ANGULAR_VELOCITY, TIME);
-	public static final Quantity TORQUE = product(FORCE, POSITION)
+	public static final Quantity TORQUE = product(FORCE, LENGTH)
 			.divide(ANGLE);
 	public static final Quantity MOMENT_OF_INERTIA = quotinent(TORQUE,
 			ANGULAR_ACCELERATION);
@@ -64,8 +69,8 @@ public class Quantity {
 	/*
 	 * Geometry
 	 */
-	public static final Quantity AREA = pow(POSITION, 2);
-	public static final Quantity VOLUME = pow(POSITION, 3);
+	public static final Quantity AREA = pow(LENGTH, 2);
+	public static final Quantity VOLUME = pow(LENGTH, 3);
 
 	/*
 	 * Electricity

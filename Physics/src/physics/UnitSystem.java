@@ -15,9 +15,13 @@ public class UnitSystem {
 		SI.bindName(Quantity.FORCE, "N");
 		SI.bindName(Quantity.CURRENT, "A");
 		SI.bindName(Quantity.RESISTANCE, "ohm");
+		SI.bindName(Quantity.CONDUCTION, "mho");
 		SI.bindName(Quantity.VOLTAGE, "V");
 		SI.bindName(Quantity.POWER, "W");
 		SI.bindName(Quantity.ENERGY, "J");
+		SI.bindName(Quantity.VELOCITY, "m/s");
+		SI.bindName(Quantity.ANGULAR_VELOCITY, "rad/s");
+		SI.bindName(Quantity.TORQUE, "J/rad");
 		SI.bindName(Quantity.quotinent(Quantity.FORCE, Quantity.CHARGE), "N/C");
 		SI.bindName(Quantity.VELOCITY, "m/s");
 		SI.bindName(Quantity.MOMENTUM, "N s");

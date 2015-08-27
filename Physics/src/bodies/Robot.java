@@ -15,8 +15,8 @@ public class Robot extends RigidBody {
 		super(mass, Scalar.zero(Quantity.CHARGE), center, Vector
 				.zero(Quantity.VELOCITY), inertiaMomemnt, angularPosition,
 				Vector.zero(Quantity.ANGULAR_VELOCITY));
-		this.width = Quantities.require(width, Quantity.POSITION);
-		this.height = Quantities.require(height, Quantity.POSITION);
+		this.width = Quantities.require(width, Quantity.LENGTH);
+		this.height = Quantities.require(height, Quantity.LENGTH);
 	}
 
 	public Scalar getPivot() {

@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public final class Scalar implements Comparable<Scalar>, Measurable {
 
-	public static final Scalar METER = new Scalar(Quantity.POSITION, 1);
-	public static final Scalar CENTIMETER = new Scalar(Quantity.POSITION, 1e-2);
+	public static final Scalar METER = new Scalar(Quantity.LENGTH, 1);
+	public static final Scalar CENTIMETER = new Scalar(Quantity.LENGTH, 1e-2);
 
 	public static final Scalar SECOND = new Scalar(Quantity.TIME, 1);
 	public static final Scalar LIGHT_SPEED = new Scalar(Quantity.VELOCITY,

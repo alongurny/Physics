@@ -33,4 +33,12 @@ public class PhysicalSystem {
 		}
 		return sum;
 	}
+
+	public Vector getTotalForce() {
+		Vector sum = Vector.zero(Quantity.FORCE);
+		for (Body b : body) {
+			sum = sum.add(b.getTotalForce());
+		}
+		return sum;
+	}
 }

@@ -15,7 +15,7 @@ public class Pixel {
 	}
 
 	public static synchronized void set(Scalar s) {
-		pixel = Quantities.require(s, Quantity.POSITION);
+		pixel = Quantities.require(s, Quantity.LENGTH);
 	}
 
 	public static synchronized int to(Scalar s) {
