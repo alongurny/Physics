@@ -21,7 +21,7 @@ public class RunRobot {
 						.divide(Scalar.RADIAN).pow(2).multiply(12)),
 				Vector.zero(Quantity.ANGLE), Scalar.METER.multiply(0.6),
 				Scalar.METER.multiply(0.8));
-		Frame f = new Frame(Color.GRAY);
+		Frame f = new Frame(Vector.POSITION_ORIGIN, Color.GRAY);
 		f.addDrawable(new RobotDrawer(robot, Color.WHITE));
 		f.addLabel("Velocity", robot::getVelocity);
 		f.addLabel("Position", robot::getPosition);

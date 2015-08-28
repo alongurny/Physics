@@ -97,7 +97,7 @@ public final class Vector implements Measurable {
 
 	@Override
 	public String toString() {
-		return String.format("(%s, %s, %s) ", x.convert(UnitSystem.SI),
+		return String.format("(%.4g, %.4g, %.4g) ", x.convert(UnitSystem.SI),
 				y.convert(UnitSystem.SI), z.convert(UnitSystem.SI))
 				+ UnitSystem.SI.getUnitName(getQuantity());
 	}

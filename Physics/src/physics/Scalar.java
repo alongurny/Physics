@@ -147,7 +147,8 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 
 	@Override
 	public String toString() {
-		return value + " " + UnitSystem.SI.getUnitName(quantity);
+		return String.format("%.4g", value) + " "
+				+ UnitSystem.SI.getUnitName(quantity);
 	}
 
 	public static boolean isInfinite(Scalar s) {

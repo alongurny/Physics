@@ -11,13 +11,13 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import physics.Quantity;
 import physics.Vector;
 
 public class Frame extends JFrame {
@@ -29,17 +29,17 @@ public class Frame extends JFrame {
 	public static final Dimension DEFAULT_SIZE = Toolkit.getDefaultToolkit()
 			.getScreenSize();
 
-	public Frame(Color background) {
+	public Frame(Vector focus, Color background) {
 		setBackground(background);
-		focus = Vector.zero(Quantity.LENGTH);
-		labelDrawer = new LabelDrawer();
+		this.focus = focus;
+		labelDrawer = new LabelDrawer(10, 20);
 		drawingListeners = new CopyOnWriteArrayList<DrawingListener>();
 		drawables = new ArrayList<Drawable>();
 		add(new JPanel() {
 			@Override
 			public void paint(Graphics g) {
-				int dx = getWidth() / 2 - Pixel.to(focus.getX());
-				int dy = getHeight() / 2 - Pixel.to(focus.getY());
+				int dx = getWidth() / 2 - Pixel.to(Frame.this.focus.getX());
+				int dy = getHeight() / 2 - Pixel.to(Frame.this.focus.getY());
 				labelDrawer.draw(g, dx, dy);
 				for (Drawable d : drawables) {
 					d.draw(g, dx, dy);
@@ -50,11 +50,7 @@ public class Frame extends JFrame {
 
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				// Vector newFocus = new Vector(Pixel.get(), e.getX() -
-				// getWidth()
-				// / 2, e.getY() - getHeight() / 2, 0).add(focus);
 				Pixel.scroll(Math.pow(1.1, e.getPreciseWheelRotation()));
-				// focus = newFocus;
 			}
 		});
 		setSize(DEFAULT_SIZE);
@@ -81,7 +77,7 @@ public class Frame extends JFrame {
 	}
 
 	public void setFocus(Vector focus) {
-		this.focus = focus;
+		this.focus = Objects.requireNonNull(focus, "Focus cannot be null");
 	}
 
 	public void addDrawable(Drawable drawable) {

@@ -6,7 +6,7 @@ public class Electron extends Body {
 	public static final Scalar CHARGE = Scalar.E_CHARGE;
 
 	public Electron(Vector position, Vector velocity) {
-		super(MASS, Scalar.E_CHARGE, position, velocity);
+		super(MASS, CHARGE, position, velocity);
 	}
 
 }

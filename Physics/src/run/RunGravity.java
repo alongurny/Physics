@@ -19,7 +19,7 @@ import bodies.space.Earth;
 public class RunGravity {
 	public static void main(String[] args) {
 		Pixel.set(Scalar.METER.multiply(1000));
-		Frame f = new Frame(Color.GRAY);
+		Frame f = new Frame(Vector.POSITION_ORIGIN, Color.GRAY);
 		Cube earth = new Cube(Earth.MASS, Scalar.zero(Quantity.CHARGE),
 				Vector.POSITION_ORIGIN, Vector.zero(Quantity.VELOCITY),
 				Vector.zero(Quantity.ANGLE),

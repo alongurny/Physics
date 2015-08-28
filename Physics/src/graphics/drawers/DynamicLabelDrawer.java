@@ -1,22 +1,29 @@
 package graphics.drawers;
 
+import graphics.Pixel;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class LabelDrawer implements Drawable {
+import physics.Body;
+import physics.Vector;
+
+public class DynamicLabelDrawer implements Drawable {
 
 	private List<String> strings;
 	private List<Supplier<?>> suppliers;
-	private int x, y;
+	private Body body;
+	private int offsetX, offsetY;
 
-	public LabelDrawer(int x, int y) {
+	public DynamicLabelDrawer(Body body, int offsetX, int offsetY) {
 		strings = new ArrayList<String>();
 		suppliers = new ArrayList<Supplier<?>>();
-		this.x = x;
-		this.y = y;
+		this.body = body;
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
 	}
 
 	public void add(String desc, Supplier<?> supp) {
@@ -27,9 +34,12 @@ public class LabelDrawer implements Drawable {
 	@Override
 	public void draw(Graphics g, int dx, int dy) {
 		g.setColor(Color.WHITE);
+		Vector p = body.getPosition();
 		for (int i = 0; i < strings.size(); i++) {
-			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(), x, y
-					+ 10 * i);
+
+			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(),
+					Pixel.to(p.getX()) + dx + offsetX, Pixel.to(p.getY()) + dy
+							+ offsetY + 10 * i);
 		}
 	}
 }
