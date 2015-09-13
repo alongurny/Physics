@@ -36,7 +36,6 @@ public class DynamicLabelDrawer implements Drawable {
 		g.setColor(Color.WHITE);
 		Vector p = body.getPosition();
 		for (int i = 0; i < strings.size(); i++) {
-
 			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(),
 					Pixel.to(p.getX()) + dx + offsetX, Pixel.to(p.getY()) + dy
 							+ offsetY + 10 * i);

@@ -3,7 +3,7 @@ package physics;
 public abstract class Body {
 
 	public static final Scalar DEFAULT_TIME_SPAN = Scalar.SECOND
-			.multiply(15e-3).multiply(1e6);
+			.multiply(15e-3).multiply(365 * 24 * 60 * 6);
 
 	private final Scalar mass;
 	private final Scalar charge;

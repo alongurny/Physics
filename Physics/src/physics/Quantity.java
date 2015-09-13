@@ -40,6 +40,13 @@ public class Quantity {
 	public static final Quantity MOMENTUM = product(MASS, VELOCITY);
 
 	public static final Quantity IMPULSE = MOMENTUM;
+
+	/*
+	 * Waves
+	 */
+
+	public static final Quantity FREQUENCY = inverse(TIME);
+
 	/*
 	 * Energy
 	 */
@@ -47,12 +54,11 @@ public class Quantity {
 
 	public static final Quantity WORK = ENERGY;
 	public static final Quantity POWER = quotinent(ENERGY, TIME);
-	public static final Quantity ANGULAR_VELOCITY = quotinent(ANGLE, TIME);
 
 	/*
 	 * Rigid Body Mechanics
 	 */
-
+	public static final Quantity ANGULAR_VELOCITY = quotinent(ANGLE, TIME);
 	public static final Quantity ANGULAR_ACCELERATION = quotinent(
 			ANGULAR_VELOCITY, TIME);
 	public static final Quantity TORQUE = product(FORCE, LENGTH).divide(ANGLE);
@@ -61,20 +67,21 @@ public class Quantity {
 	public static final Quantity ANGULAR_MOMENTUM = product(MOMENT_OF_INERTIA,
 			ANGULAR_VELOCITY);
 	public static final Quantity ANGULAR_IMPULSE = ANGULAR_MOMENTUM;
+
 	/*
 	 * Geometry
 	 */
 	public static final Quantity AREA = pow(LENGTH, 2);
-
 	public static final Quantity VOLUME = pow(LENGTH, 3);
+
 	/*
 	 * Electricity
 	 */
 	public static final Quantity CURRENT = quotinent(CHARGE, TIME);
-
 	public static final Quantity VOLTAGE = quotinent(ENERGY, CHARGE);
 	public static final Quantity RESISTANCE = quotinent(VOLTAGE, CURRENT);
 	public static final Quantity CONDUCTION = quotinent(CURRENT, VOLTAGE);
+
 	static {
 		for (Field f : Quantity.class.getFields()) {
 			if (Modifier.isStatic(f.getModifiers())

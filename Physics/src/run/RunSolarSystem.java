@@ -28,15 +28,15 @@ import bodies.space.Sun;
 public class RunSolarSystem {
 
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	static Planet sun = new Planet(Sun.MASS, Vector.POSITION_ORIGIN,
+	static Planet sun = new Sun(Vector.POSITION_ORIGIN,
 			Vector.zero(Quantity.VELOCITY), Vector.zero(Quantity.ANGLE),
-			Vector.zero(Quantity.ANGULAR_VELOCITY), Sun.RADIUS);
-	static Planet earth = new Planet(Earth.MASS, new Vector(Earth.ROUND_RADIUS,
+			Vector.zero(Quantity.ANGULAR_VELOCITY));
+	static Planet earth = new Earth(new Vector(Earth.ROUND_RADIUS,
 			Scalar.zero(Quantity.LENGTH), Scalar.zero(Quantity.LENGTH)),
 			new Vector(Scalar.zero(Quantity.VELOCITY), Util
 					.forCircularMovement(sun, Earth.ROUND_RADIUS), Scalar
 					.zero(Quantity.VELOCITY)), Vector.zero(Quantity.ANGLE),
-			Vector.zero(Quantity.ANGULAR_VELOCITY), Earth.RADIUS);
+			Vector.zero(Quantity.ANGULAR_VELOCITY));
 	static PhysicalSystem solar = new PhysicalSystem(sun, earth);
 	static Body focus = sun;
 	static ScalarFieldDrawer fieldDrawer = new ScalarFieldDrawer(

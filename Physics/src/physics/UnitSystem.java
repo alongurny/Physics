@@ -23,7 +23,6 @@ public class UnitSystem {
 		SI.bindName(Quantity.ANGULAR_VELOCITY, "rad/s");
 		SI.bindName(Quantity.TORQUE, "J/rad");
 		SI.bindName(Quantity.quotinent(Quantity.FORCE, Quantity.CHARGE), "N/C");
-		SI.bindName(Quantity.VELOCITY, "m/s");
 		SI.bindName(Quantity.MOMENTUM, "N s");
 	}
 

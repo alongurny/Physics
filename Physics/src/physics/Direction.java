@@ -24,6 +24,18 @@ public class Direction {
 		return new Direction(Math.cos(angle), Math.sin(angle), 0);
 	}
 
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public double getZ() {
+		return z;
+	}
+
 	@Override
 	public String toString() {
 		return "Direction(" + x + ", " + y + ", " + z + ")";

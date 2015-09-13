@@ -34,8 +34,8 @@ public class ScalarFieldDrawer implements Drawable {
 		ScalarField field = fieldSupp.get();
 		Scalar pixel = Pixel.get();
 
-		for (int y = 0; y < height; y += 7) {
-			for (int x = 0; x < width; x += 7) {
+		for (int y = 0; y < height; y += 3) {
+			for (int x = 0; x < width; x += 3) {
 
 				Scalar value = field.get(new Vector(pixel, x - dx, y - dy, 0));
 				if (value.compareTo(max) > 0) {

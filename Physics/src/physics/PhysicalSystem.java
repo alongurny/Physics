@@ -5,15 +5,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 public class PhysicalSystem {
-	private List<Body> body;
+	private List<Body> bodies;
 
 	public PhysicalSystem(Body... things) {
-		this.body = new CopyOnWriteArrayList<Body>(things);
+		this.bodies = new CopyOnWriteArrayList<Body>(things);
 	}
 
 	public synchronized void applyGravityForces() {
-		for (Body t : body) {
-			for (Body s : body) {
+		for (Body t : bodies) {
+			for (Body s : bodies) {
 				if (t != s) {
 					t.addAcceleration(s.getGravitationalField().get(
 							t.getPosition()));
@@ -23,12 +23,12 @@ public class PhysicalSystem {
 	}
 
 	public synchronized void forEach(Consumer<? super Body> action) {
-		body.forEach(action);
+		bodies.forEach(action);
 	}
 
 	public Vector getTotalMomentum() {
 		Vector sum = Vector.zero(Quantity.MOMENTUM);
-		for (Body b : body) {
+		for (Body b : bodies) {
 			sum = sum.add(b.getMomentum());
 		}
 		return sum;
@@ -36,7 +36,7 @@ public class PhysicalSystem {
 
 	public Vector getTotalForce() {
 		Vector sum = Vector.zero(Quantity.FORCE);
-		for (Body b : body) {
+		for (Body b : bodies) {
 			sum = sum.add(b.getTotalForce());
 		}
 		return sum;
