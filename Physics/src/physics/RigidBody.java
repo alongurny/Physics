@@ -2,7 +2,7 @@ package physics;
 
 public class RigidBody extends Body {
 
-	private Scalar inertiaMomement;
+	private Scalar momentOfInertia;
 	private Vector angularPosition;
 	private Vector angularVelocity;
 	private Vector totalTorque;
@@ -11,7 +11,7 @@ public class RigidBody extends Body {
 			Vector velocity, Scalar inertiaMoment, Vector angularPosition,
 			Vector angularVelocity) {
 		super(mass, charge, center, velocity);
-		this.inertiaMomement = Quantities.require(inertiaMoment,
+		this.momentOfInertia = Quantities.require(inertiaMoment,
 				Quantity.MOMENT_OF_INERTIA);
 		this.angularPosition = Quantities.require(angularPosition,
 				Quantity.ANGLE);
@@ -27,28 +27,29 @@ public class RigidBody extends Body {
 
 	public void addAngularAcceleration(Vector angularAcceleration) {
 		totalTorque = totalTorque.add(Quantities.require(angularAcceleration,
-				Quantity.TORQUE).multiply(inertiaMomement));
+				Quantity.TORQUE).multiply(momentOfInertia));
 	}
 
 	public Vector getAngularAcceleration() {
-		return getTotalTorque().divide(inertiaMomement);
+		return getTotalTorque().divide(momentOfInertia);
 	}
 
 	public Vector getTotalTorque() {
 		return totalTorque;
 	}
 
-	public Scalar getInertiaMomement() {
-		return inertiaMomement;
+	public Scalar getMomentOfInertia() {
+		return momentOfInertia;
 	}
 
 	public void addAngularImpulse(Vector angularImpulse) {
-		totalTorque.add(Quantities.require(angularImpulse,
-				Quantity.ANGULAR_IMPULSE).divide(getTimeSpan()));
+		totalTorque = totalTorque.add(Quantities.require(angularImpulse,
+				Quantity.ANGULAR_MOMENTUM).divide(getTimeSpan()));
+
 	}
 
 	public Scalar getKineticRotationalEnergy() {
-		return inertiaMomement.multiply(angularVelocity.getMagnitude().pow(2))
+		return momentOfInertia.multiply(angularVelocity.getMagnitude().pow(2))
 				.divide(2);
 	}
 
@@ -61,7 +62,7 @@ public class RigidBody extends Body {
 	}
 
 	public Vector getAngularMomentum() {
-		return angularVelocity.multiply(inertiaMomement);
+		return angularVelocity.multiply(momentOfInertia);
 	}
 
 	public void rotate() {

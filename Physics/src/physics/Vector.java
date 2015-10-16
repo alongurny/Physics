@@ -2,14 +2,19 @@ package physics;
 
 public final class Vector implements Measurable {
 
-	public static final Vector METER_X = new Vector(Scalar.METER, 1, 0, 0);
-	public static final Vector METER_Y = new Vector(Scalar.METER, 0, 1, 0);
-	public static final Vector METER_Z = new Vector(Scalar.METER, 0, 0, 1);
+	public static final Vector UNIT_X = new Vector(Scalar.ONE, 1, 0, 0);
+	public static final Vector UNIT_Y = new Vector(Scalar.ONE, 0, 1, 0);
+	public static final Vector UNIT_Z = new Vector(Scalar.ONE, 0, 0, 1);
+
 	public static final Vector POSITION_ORIGIN = Vector.zero(Quantity.LENGTH);
 
 	private final Scalar x;
 	private final Scalar y;
 	private final Scalar z;
+
+	public Vector(double x, double y, double z) {
+		this(Scalar.ONE, x, y, z);
+	}
 
 	public Vector(Scalar x, Scalar y, Scalar z) {
 		Quantities.requireSame(x, y);

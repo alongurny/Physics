@@ -40,7 +40,7 @@ public class RunGravity {
 
 			}
 			ps.forEach(Body::move);
-			ps.applyGravityForces();
+			ps.applyForces();
 
 		});
 		f.addLabel("Force", ball::getTotalForce);

@@ -3,15 +3,23 @@ package physics;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class PhysicalSystem {
 	private List<Body> bodies;
+	private List<Function<Body, Vector>> forces;
 
 	public PhysicalSystem(Body... things) {
-		this.bodies = new CopyOnWriteArrayList<Body>(things);
+		this.bodies = new CopyOnWriteArrayList<>(things);
+		this.forces = new CopyOnWriteArrayList<>();
 	}
 
-	public synchronized void applyGravityForces() {
+	public void applyForces() {
+		applyGravityForces();
+		bodies.forEach(b -> forces.forEach(f -> b.addForce(f.apply(b))));
+	}
+
+	private synchronized void applyGravityForces() {
 		for (Body t : bodies) {
 			for (Body s : bodies) {
 				if (t != s) {
@@ -40,5 +48,9 @@ public class PhysicalSystem {
 			sum = sum.add(b.getTotalForce());
 		}
 		return sum;
+	}
+
+	public void addExternalForce(Function<Body, Vector> force) {
+		forces.add(force);
 	}
 }

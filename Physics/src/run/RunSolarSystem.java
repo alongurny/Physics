@@ -81,7 +81,7 @@ public class RunSolarSystem {
 			@Override
 			public void onDraw(DrawingEvent e) {
 				solar.forEach(Body::move);
-				solar.applyGravityForces();
+				solar.applyForces();
 				f.setFocus(focus.getPosition());
 			}
 		});

@@ -3,7 +3,7 @@ package physics;
 public abstract class Body {
 
 	public static final Scalar DEFAULT_TIME_SPAN = Scalar.SECOND
-			.multiply(15e-3).multiply(365 * 24 * 60 * 6);
+			.multiply(15e-3);
 
 	private final Scalar mass;
 	private final Scalar charge;
@@ -32,7 +32,7 @@ public abstract class Body {
 
 	public final void addImpulse(Vector impulse) {
 		totalForce = totalForce.add(Quantities.require(impulse,
-				Quantity.IMPULSE).divide(getTimeSpan()));
+				Quantity.MOMENTUM).divide(getTimeSpan()));
 	}
 
 	public final Vector getAcceleration() {

@@ -5,6 +5,10 @@ import physics.Quantity;
 import physics.Scalar;
 
 public class Pixel {
+
+	private Pixel() {
+	}
+
 	private static Scalar pixel = Scalar.METER.multiply(1e7);
 
 	public static synchronized void scroll(double c) {

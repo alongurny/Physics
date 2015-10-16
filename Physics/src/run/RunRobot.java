@@ -1,12 +1,14 @@
 package run;
 
+import graphics.Drivetrain;
 import graphics.Frame;
+import graphics.Joystick;
 import graphics.Pixel;
 import graphics.drawers.RobotDrawer;
 
 import java.awt.Color;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import physics.Quantity;
 import physics.Scalar;
@@ -29,8 +31,7 @@ public class RunRobot {
 		f.addLabel("Angular velocity", () -> robot.getAngularVelocity().getZ());
 		f.addDrawingListener(e -> robot.move());
 		f.addDrawingListener(e -> robot.rotate());
-		double mu = 0.2;
-		Scalar force = Scalar.NEWTONE.multiply(32).multiply(4);
+		double mu = 0.04;
 		f.addDrawingListener(e -> {
 			if (!Scalar.isZero(robot.getVelocity().getMagnitude())) {
 				Vector friction = robot.getVelocity().getDirection()
@@ -44,33 +45,16 @@ public class RunRobot {
 				robot.addTorque(friction);
 			}
 		});
-		f.addKeyListener(new KeyAdapter() {
+		Joystick j = new Joystick();
+		Drivetrain d = new Drivetrain(robot);
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {
+
 			@Override
-			public void keyTyped(KeyEvent e) {
-				double rotation = robot.getAngularPosition().getZ()
-						.convert(Scalar.RADIAN);
-				switch (e.getKeyChar()) {
-				case 'w':
-					robot.addForce(new Vector(force, Math.sin(rotation), -Math
-							.cos(rotation), 0));
-					break;
-				case 's':
-					robot.addForce(new Vector(force, -Math.sin(rotation), Math
-							.cos(rotation), 0));
-					break;
-				case 'a':
-					robot.addTorque(new Vector(
-							force.multiply(robot.getPivot()), 0, 0, -1));
-					break;
-				case 'd':
-					robot.addTorque(new Vector(
-							force.multiply(robot.getPivot()), 0, 0, 1));
-					break;
-				default:
-					break;
-				}
+			public void run() {
+				d.arcade(-j.getY(), -j.getX());
 			}
-		});
+		}, 0, 30);
 
 	}
 }

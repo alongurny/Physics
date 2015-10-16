@@ -45,6 +45,10 @@ public class UnitSystem {
 		repr.put(q, r);
 	}
 
+	public Scalar get(Quantity q, double factor) {
+		return get(q).multiply(factor);
+	}
+
 	public Scalar get(Quantity q) {
 		Scalar res = Scalar.ONE;
 		for (int i = 0; i < Quantity.COUNT; i++) {

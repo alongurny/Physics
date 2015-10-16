@@ -39,8 +39,6 @@ public class Quantity {
 	public static final Quantity FORCE = product(MASS, ACCELERATION);
 	public static final Quantity MOMENTUM = product(MASS, VELOCITY);
 
-	public static final Quantity IMPULSE = MOMENTUM;
-
 	/*
 	 * Waves
 	 */
@@ -51,8 +49,6 @@ public class Quantity {
 	 * Energy
 	 */
 	public static final Quantity ENERGY = product(FORCE, LENGTH);
-
-	public static final Quantity WORK = ENERGY;
 	public static final Quantity POWER = quotinent(ENERGY, TIME);
 
 	/*
@@ -66,7 +62,6 @@ public class Quantity {
 			ANGULAR_ACCELERATION);
 	public static final Quantity ANGULAR_MOMENTUM = product(MOMENT_OF_INERTIA,
 			ANGULAR_VELOCITY);
-	public static final Quantity ANGULAR_IMPULSE = ANGULAR_MOMENTUM;
 
 	/*
 	 * Geometry

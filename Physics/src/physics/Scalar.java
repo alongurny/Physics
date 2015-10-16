@@ -8,9 +8,12 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	public static final Scalar CENTIMETER = new Scalar(Quantity.LENGTH, 1e-2);
 
 	public static final Scalar SECOND = new Scalar(Quantity.TIME, 1);
+	public static final Scalar MINUTE = new Scalar(SECOND, 60);
+	public static final Scalar HOUR = new Scalar(MINUTE, 60);
+	public static final Scalar DAY = new Scalar(HOUR, 24);
+	public static final Scalar YEAR = new Scalar(DAY, 365.25);
 	public static final Scalar LIGHT_SPEED = new Scalar(Quantity.VELOCITY,
 			299792458);
-	public static final Scalar NANOSECOND = new Scalar(Quantity.TIME, 1e-9);
 	public static final Scalar KILOGRAM = new Scalar(Quantity.MASS, 1);
 	public static final Scalar NEWTONE = new Scalar(Quantity.FORCE, 1);
 	public static final Scalar JOULE = new Scalar(Quantity.ENERGY, 1);
@@ -77,6 +80,14 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	private final Quantity quantity;
 
 	private final double value;
+
+	public Scalar(double value) {
+		this(Quantity.NONE, value);
+	}
+
+	public Scalar(Scalar s, double factor) {
+		this(Objects.requireNonNull(s.quantity), s.value * factor);
+	}
 
 	private Scalar(Quantity quantity, double value) {
 		this.quantity = Objects.requireNonNull(quantity);
@@ -147,11 +158,33 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 
 	@Override
 	public String toString() {
-		return String.format("%.4g", value) + " "
+		return toString(4);
+	}
+
+	public String toString(int n) {
+		return String.format("%." + n + "g", value) + " "
 				+ UnitSystem.SI.getUnitName(quantity);
 	}
 
 	public static boolean isInfinite(Scalar s) {
 		return Double.isInfinite(s.value);
+	}
+
+	public boolean equals(Object other) {
+		if (!(other instanceof Scalar)) {
+			return false;
+		}
+		Scalar s = (Scalar) other;
+		return quantity.equals(s.getQuantity()) && value == s.value;
+	}
+
+	public static double sin(Scalar s) {
+		Quantities.require(s, Quantity.ANGLE);
+		return Math.sin(s.convert(Scalar.RADIAN));
+	}
+
+	public static double cos(Scalar s) {
+		Quantities.require(s, Quantity.ANGLE);
+		return Math.cos(s.convert(Scalar.RADIAN));
 	}
 }
