@@ -7,9 +7,9 @@ import java.util.Map;
 
 public class UnitSystem {
 
-	public static final UnitSystem SI = new UnitSystem(new Scalar[] {
-			Scalar.METER, Scalar.SECOND, Scalar.KILOGRAM, Scalar.COULOMB,
-			Scalar.RADIAN }, new String[] { "m", "s", "kg", "C", "rad" });
+	public static final UnitSystem SI = new UnitSystem(
+			new Scalar[] { Scalar.METER, Scalar.SECOND, Scalar.KILOGRAM, Scalar.COULOMB, Scalar.RADIAN },
+			new String[] { "m", "s", "kg", "C", "rad" });
 
 	static {
 		SI.bindName(Quantity.FORCE, "N");
@@ -65,8 +65,7 @@ public class UnitSystem {
 		for (int i = 0; i < Quantity.COUNT; i++) {
 			int dim = quantity.get(i);
 			if (dim != 0) {
-				ss.add(dim == 1 ? repr.get(scalars[i].getQuantity()) : repr
-						.get(scalars[i].getQuantity()) + "^" + dim);
+				ss.add(dim == 1 ? repr.get(scalars[i].getQuantity()) : repr.get(scalars[i].getQuantity()) + "^" + dim);
 			}
 
 		}
