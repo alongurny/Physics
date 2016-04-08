@@ -12,6 +12,7 @@ import bodies.space.Sun;
 import graphics.DrawingEvent;
 import graphics.DrawingListener;
 import graphics.Frame;
+import graphics.PixelHandler;
 import graphics.drawers.DynamicLabelDrawer;
 import graphics.drawers.ScalarFieldDrawer;
 import graphics.drawers.SphereDrawer;
@@ -26,6 +27,7 @@ import physics.VectorField;
 
 public class RunSolarSystem {
 
+	static PixelHandler pixelHandler = new PixelHandler(Scalar.METER.multiply(1e7));
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static Planet sun = new Sun(Vector.Axes3D.ORIGIN, Vector.zero(Quantity.VELOCITY, 3), Vector.zero(Quantity.ANGLE, 3),
 			Vector.zero(Quantity.ANGULAR_VELOCITY, 3));
@@ -40,16 +42,16 @@ public class RunSolarSystem {
 			() -> v -> VectorField.sum(sun.getGravitationalField(), earth.getGravitationalField()).get(v)
 					.getMagnitude(),
 			Scalar.zero(Quantity.ACCELERATION), UnitSystem.SI.get(Quantity.ACCELERATION).multiply(1e-1),
-			screenSize.getWidth(), screenSize.getHeight());
+			screenSize.getWidth(), screenSize.getHeight(), pixelHandler);
 
 	public static void main(String[] args) throws InterruptedException {
-		Frame f = new Frame(sun.getPosition(), Color.DARK_GRAY);
-		f.addDrawable(new SphereDrawer(sun, Color.YELLOW));
-		f.addDrawable(new SphereDrawer(earth, Color.GREEN));
-		DynamicLabelDrawer sunLabel = new DynamicLabelDrawer(sun, 25, 0);
+		Frame f = new Frame(sun.getPosition(), Color.DARK_GRAY, pixelHandler);
+		f.addDrawable(new SphereDrawer(sun, Color.YELLOW, pixelHandler));
+		f.addDrawable(new SphereDrawer(earth, Color.GREEN, pixelHandler));
+		DynamicLabelDrawer sunLabel = new DynamicLabelDrawer(sun, 25, 0, pixelHandler);
 		sunLabel.add("Velocity", sun::getVelocity);
 		sunLabel.add("Total force", sun::getTotalForce);
-		DynamicLabelDrawer earthLabel = new DynamicLabelDrawer(earth, 25, 0);
+		DynamicLabelDrawer earthLabel = new DynamicLabelDrawer(earth, 25, 0, pixelHandler);
 		earthLabel.add("Velocity", earth::getVelocity);
 		earthLabel.add("Total force", earth::getTotalForce);
 		f.addDrawable(sunLabel);

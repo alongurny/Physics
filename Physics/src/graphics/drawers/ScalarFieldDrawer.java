@@ -1,12 +1,11 @@
 package graphics.drawers;
 
-import graphics.Pixel;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.function.Supplier;
 
+import graphics.PixelHandler;
 import physics.Scalar;
 import physics.ScalarField;
 import physics.Vector;
@@ -17,22 +16,23 @@ public class ScalarFieldDrawer implements Drawable {
 	private Scalar min, max;
 	private Supplier<ScalarField> fieldSupp;
 	private BufferedImage image;
+	private PixelHandler pixelHandler;
 
-	public ScalarFieldDrawer(Supplier<ScalarField> fieldSupp, Scalar min,
-			Scalar max, double width, double height) {
+	public ScalarFieldDrawer(Supplier<ScalarField> fieldSupp, Scalar min, Scalar max, double width, double height,
+			PixelHandler pixelHandler) {
 		this.width = width;
 		this.height = height;
 		this.min = min;
 		this.max = max;
 		this.fieldSupp = fieldSupp;
-		image = new BufferedImage((int) width, (int) height,
-				BufferedImage.TYPE_INT_ARGB);
+		image = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_ARGB);
+		this.pixelHandler = pixelHandler;
 	}
 
 	@Override
 	public void draw(Graphics g, int dx, int dy) {
 		ScalarField field = fieldSupp.get();
-		Scalar pixel = Pixel.get();
+		Scalar pixel = pixelHandler.get();
 
 		for (int y = 0; y < height; y += 3) {
 			for (int x = 0; x < width; x += 3) {
