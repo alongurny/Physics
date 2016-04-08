@@ -11,7 +11,7 @@ public class Container {
 	private Quantity quantity;
 
 	public Container(Scalar maximum, Scalar value) {
-		Quantities.requireSame(maximum, value);
+		Quantities.requireSameQuantity(maximum, value);
 		this.maximum = maximum;
 		this.value = value;
 		this.quantity = maximum.getQuantity();

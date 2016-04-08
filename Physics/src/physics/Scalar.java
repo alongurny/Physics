@@ -33,7 +33,7 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	public static final Scalar ELECTRON_VOLT = E_CHARGE.multiply(VOLT);
 
 	public static double atan2(Scalar y, Scalar x) {
-		Quantities.requireSame(y, x);
+		Quantities.requireSameQuantity(y, x);
 		return Math.atan2(y.value, x.value);
 	}
 
@@ -99,18 +99,18 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	}
 
 	public Scalar add(Scalar v) {
-		Quantities.requireSame(this, v);
+		Quantities.requireSameQuantity(this, v);
 		return new Scalar(quantity, value + v.value);
 	}
 
 	@Override
 	public int compareTo(Scalar o) {
-		Quantities.requireSame(this, o);
+		Quantities.requireSameQuantity(this, o);
 		return Double.compare(value, o.value);
 	}
 
 	public double convert(Scalar v) {
-		Quantities.requireSame(this, v);
+		Quantities.requireSameQuantity(this, v);
 		return value / v.value;
 	}
 

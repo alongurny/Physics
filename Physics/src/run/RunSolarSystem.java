@@ -1,18 +1,20 @@
 package run;
 
-import graphics.DrawingEvent;
-import graphics.DrawingListener;
-import graphics.Frame;
-import graphics.drawers.DynamicLabelDrawer;
-import graphics.drawers.ScalarFieldDrawer;
-import graphics.drawers.SphereDrawer;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import bodies.space.Earth;
+import bodies.space.Planet;
+import bodies.space.Sun;
+import graphics.DrawingEvent;
+import graphics.DrawingListener;
+import graphics.Frame;
+import graphics.drawers.DynamicLabelDrawer;
+import graphics.drawers.ScalarFieldDrawer;
+import graphics.drawers.SphereDrawer;
 import physics.Body;
 import physics.PhysicalSystem;
 import physics.Quantity;
@@ -21,30 +23,23 @@ import physics.UnitSystem;
 import physics.Util;
 import physics.Vector;
 import physics.VectorField;
-import bodies.space.Earth;
-import bodies.space.Planet;
-import bodies.space.Sun;
 
 public class RunSolarSystem {
 
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	static Planet sun = new Sun(Vector.POSITION_ORIGIN,
-			Vector.zero(Quantity.VELOCITY), Vector.zero(Quantity.ANGLE),
-			Vector.zero(Quantity.ANGULAR_VELOCITY));
-	static Planet earth = new Earth(new Vector(Earth.ROUND_RADIUS,
-			Scalar.zero(Quantity.LENGTH), Scalar.zero(Quantity.LENGTH)),
-			new Vector(Scalar.zero(Quantity.VELOCITY), Util
-					.forCircularMovement(sun, Earth.ROUND_RADIUS), Scalar
-					.zero(Quantity.VELOCITY)), Vector.zero(Quantity.ANGLE),
-			Vector.zero(Quantity.ANGULAR_VELOCITY));
-	static PhysicalSystem solar = new PhysicalSystem(sun, earth);
+	static Planet sun = new Sun(Vector.Axes3D.ORIGIN, Vector.zero(Quantity.VELOCITY, 3), Vector.zero(Quantity.ANGLE, 3),
+			Vector.zero(Quantity.ANGULAR_VELOCITY, 3));
+	static Planet earth = new Earth(
+			new Vector(Earth.ROUND_RADIUS, Scalar.zero(Quantity.LENGTH), Scalar.zero(Quantity.LENGTH)),
+			new Vector(Scalar.zero(Quantity.VELOCITY), Util.forCircularMovement(sun, Earth.ROUND_RADIUS),
+					Scalar.zero(Quantity.VELOCITY)),
+			Vector.zero(Quantity.ANGLE, 3), Vector.zero(Quantity.ANGULAR_VELOCITY, 3));
+	static PhysicalSystem solar = new PhysicalSystem(3, sun, earth);
 	static Body focus = sun;
 	static ScalarFieldDrawer fieldDrawer = new ScalarFieldDrawer(
-			() -> v -> VectorField
-					.sum(sun.getGravitationalField(),
-							earth.getGravitationalField()).get(v)
-					.getMagnitude(), Scalar.zero(Quantity.ACCELERATION),
-			UnitSystem.SI.get(Quantity.ACCELERATION).multiply(1e-1),
+			() -> v -> VectorField.sum(sun.getGravitationalField(), earth.getGravitationalField()).get(v)
+					.getMagnitude(),
+			Scalar.zero(Quantity.ACCELERATION), UnitSystem.SI.get(Quantity.ACCELERATION).multiply(1e-1),
 			screenSize.getWidth(), screenSize.getHeight());
 
 	public static void main(String[] args) throws InterruptedException {

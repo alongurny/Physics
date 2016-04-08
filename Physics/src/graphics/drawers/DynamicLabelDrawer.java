@@ -1,13 +1,12 @@
 package graphics.drawers;
 
-import graphics.Pixel;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import graphics.Pixel;
 import physics.Body;
 import physics.Vector;
 
@@ -36,9 +35,8 @@ public class DynamicLabelDrawer implements Drawable {
 		g.setColor(Color.WHITE);
 		Vector p = body.getPosition();
 		for (int i = 0; i < strings.size(); i++) {
-			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(),
-					Pixel.to(p.getX()) + dx + offsetX, Pixel.to(p.getY()) + dy
-							+ offsetY + 10 * i);
+			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(), Pixel.to(p.get(0)) + dx + offsetX,
+					Pixel.to(p.get(1)) + dy + offsetY + 10 * i);
 		}
 	}
 }

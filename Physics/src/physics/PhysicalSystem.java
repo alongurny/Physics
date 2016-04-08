@@ -9,9 +9,12 @@ public class PhysicalSystem {
 	private List<Body> bodies;
 	private List<Function<Body, Vector>> forces;
 
-	public PhysicalSystem(Body... things) {
+	private int length;
+
+	public PhysicalSystem(int dimensions, Body... things) {
 		this.bodies = new CopyOnWriteArrayList<>(things);
 		this.forces = new CopyOnWriteArrayList<>();
+		this.length = dimensions;
 	}
 
 	public void applyForces() {
@@ -23,8 +26,7 @@ public class PhysicalSystem {
 		for (Body t : bodies) {
 			for (Body s : bodies) {
 				if (t != s) {
-					t.addAcceleration(s.getGravitationalField().get(
-							t.getPosition()));
+					t.addAcceleration(s.getGravitationalField().get(t.getPosition()));
 				}
 			}
 		}
@@ -35,7 +37,7 @@ public class PhysicalSystem {
 	}
 
 	public Vector getTotalMomentum() {
-		Vector sum = Vector.zero(Quantity.MOMENTUM);
+		Vector sum = Vector.zero(Quantity.MOMENTUM, length);
 		for (Body b : bodies) {
 			sum = sum.add(b.getMomentum());
 		}
@@ -43,7 +45,7 @@ public class PhysicalSystem {
 	}
 
 	public Vector getTotalForce() {
-		Vector sum = Vector.zero(Quantity.FORCE);
+		Vector sum = Vector.zero(Quantity.FORCE, length);
 		for (Body b : bodies) {
 			sum = sum.add(b.getTotalForce());
 		}

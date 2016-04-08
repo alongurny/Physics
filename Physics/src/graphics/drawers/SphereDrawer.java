@@ -1,11 +1,10 @@
 package graphics.drawers;
 
-import graphics.Pixel;
-
 import java.awt.Color;
 import java.awt.Graphics;
 
 import bodies.Sphere;
+import graphics.Pixel;
 import physics.Scalar;
 import physics.Vector;
 
@@ -24,10 +23,9 @@ public class SphereDrawer implements Drawable {
 		g.setColor(color);
 		Scalar radius = sphere.getRadius();
 
-		Vector p = sphere.getPosition().subtract(
-				new Vector(radius, radius, radius));
-		int x = Pixel.to(p.getX());
-		int y = Pixel.to(p.getY());
+		Vector p = sphere.getPosition().subtract(new Vector(radius, radius, radius));
+		int x = Pixel.to(p.get(0));
+		int y = Pixel.to(p.get(1));
 		int i_radius = Pixel.to(radius);
 		g.fillOval(x + dx, y + dy, Math.max(3, 2 * i_radius), Math.max(3, 2 * i_radius));
 	}

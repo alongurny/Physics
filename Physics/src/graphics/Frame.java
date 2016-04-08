@@ -1,8 +1,5 @@
 package graphics;
 
-import graphics.drawers.Drawable;
-import graphics.drawers.LabelDrawer;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -18,6 +15,8 @@ import java.util.function.Supplier;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import graphics.drawers.Drawable;
+import graphics.drawers.LabelDrawer;
 import physics.Vector;
 
 public class Frame extends JFrame {
@@ -26,8 +25,7 @@ public class Frame extends JFrame {
 	private LabelDrawer labelDrawer;
 	private List<Drawable> drawables;
 	private List<DrawingListener> drawingListeners;
-	public static final Dimension DEFAULT_SIZE = Toolkit.getDefaultToolkit()
-			.getScreenSize();
+	public static final Dimension DEFAULT_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public Frame(Vector focus, Color background) {
 		setBackground(background);
@@ -38,8 +36,8 @@ public class Frame extends JFrame {
 		add(new JPanel() {
 			@Override
 			public void paint(Graphics g) {
-				int dx = getWidth() / 2 - Pixel.to(Frame.this.focus.getX());
-				int dy = getHeight() / 2 - Pixel.to(Frame.this.focus.getY());
+				int dx = getWidth() / 2 - Pixel.to(Frame.this.focus.get(0));
+				int dy = getHeight() / 2 - Pixel.to(Frame.this.focus.get(1));
 				labelDrawer.draw(g, dx, dy);
 				for (Drawable d : drawables) {
 					d.draw(g, dx, dy);
@@ -61,8 +59,7 @@ public class Frame extends JFrame {
 			while (true) {
 				long now = System.nanoTime();
 				long prev = lastMove;
-				drawingListeners.forEach(d -> d.onDraw(new DrawingEvent(prev,
-						now)));
+				drawingListeners.forEach(d -> d.onDraw(new DrawingEvent(prev, now)));
 				lastMove = now;
 				repaint();
 				try {

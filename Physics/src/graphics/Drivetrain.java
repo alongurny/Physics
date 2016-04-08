@@ -1,10 +1,10 @@
 package graphics;
 
+import bodies.Robot;
 import physics.Quantity;
 import physics.Scalar;
 import physics.UnitSystem;
 import physics.Vector;
-import bodies.Robot;
 
 public class Drivetrain {
 
@@ -43,21 +43,16 @@ public class Drivetrain {
 		Scalar leftSpeed = maximumSpeed.multiply(left);
 		Scalar rightSpeed = maximumSpeed.multiply(right);
 		if (leftSpeed.equals(rightSpeed)) {
-			robot.addImpulse(Vector.UNIT_Y.multiply(leftSpeed).multiply(
-					robot.getMass()));
+			robot.addImpulse(Vector.Axes2D.X.multiply(leftSpeed).multiply(robot.getMass()));
 		} else {
-			Scalar angularVelocity = leftSpeed.subtract(rightSpeed).divide(
-					robot.getWidth());
-			Scalar gamma = robot.getWidth().multiply(leftSpeed.add(rightSpeed))
-					.divide(leftSpeed.subtract(rightSpeed))
+			Scalar angularVelocity = leftSpeed.subtract(rightSpeed).divide(robot.getWidth());
+			Scalar gamma = robot.getWidth().multiply(leftSpeed.add(rightSpeed)).divide(leftSpeed.subtract(rightSpeed))
 					.multiply(angularVelocity);
-			Vector velocity = new Vector(-Scalar.sin(robot.getAngularPosition()
-					.getZ()), Scalar.cos(robot.getAngularPosition().getZ()), 0)
-					.multiply(gamma);
+			Vector velocity = new Vector(-Scalar.sin(robot.getAngularPosition().get(0)),
+					Scalar.cos(robot.getAngularPosition().get(0))).multiply(gamma);
 			robot.addImpulse(velocity.multiply(robot.getMass()));
-			robot.addAngularImpulse(Vector.UNIT_Z.multiply(
-					angularVelocity.multiply(Scalar.RADIAN)).multiply(
-					robot.getMomentOfInertia()));
+			robot.addAngularImpulse(
+					new Vector(angularVelocity.multiply(Scalar.RADIAN).multiply(robot.getMomentOfInertia())));
 
 		}
 	}
