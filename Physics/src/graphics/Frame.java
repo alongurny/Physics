@@ -25,12 +25,10 @@ public class Frame extends JFrame {
 	private LabelDrawer labelDrawer;
 	private List<Drawable> drawables;
 	private List<DrawingListener> drawingListeners;
-	private PixelHandler pixelHandler;
 	public static final Dimension DEFAULT_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public Frame(Vector focus, Color background, PixelHandler pixelHandler) {
 		setBackground(background);
-		this.pixelHandler = pixelHandler;
 		this.focus = focus;
 		labelDrawer = new LabelDrawer(10, 20);
 		drawingListeners = new CopyOnWriteArrayList<DrawingListener>();
