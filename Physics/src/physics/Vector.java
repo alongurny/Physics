@@ -19,14 +19,6 @@ public final class Vector implements Measurable {
 		public static final Vector Z = new Vector(0, 0, 1);
 	}
 
-	private static double[] convertToUnitSystem(Scalar[] scalars, UnitSystem system) {
-		double[] arr = new double[scalars.length];
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = scalars[i].convert(system);
-		}
-		return arr;
-	}
-
 	private static Object[] convertToUnitSystemObjectArray(Scalar[] scalars, UnitSystem system) {
 		Object[] arr = new Object[scalars.length];
 		for (int i = 0; i < arr.length; i++) {
