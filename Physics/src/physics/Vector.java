@@ -117,11 +117,12 @@ public final class Vector implements Measurable {
 	}
 
 	public String toString(UnitSystem system) {
-		StringBuilder sb = new StringBuilder("%.4g");
+		StringBuilder sb = new StringBuilder("(%.4g");
 		for (int i = 1; i < entries.length; i++) {
 			sb.append(", %.4g");
 		}
-		return String.format(sb.toString(), convertToUnitSystemObjectArray(entries, system)) + ")";
+		return String.format(sb.toString(), convertToUnitSystemObjectArray(entries, system)) + ") "
+				+ system.getUnitName(getQuantity());
 	}
 
 	public static Vector sum(Vector... vectors) {

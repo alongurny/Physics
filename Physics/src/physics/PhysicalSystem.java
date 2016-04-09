@@ -18,18 +18,7 @@ public class PhysicalSystem {
 	}
 
 	public void applyForces() {
-		applyGravityForces();
 		bodies.forEach(b -> forces.forEach(f -> b.addForce(f.apply(b))));
-	}
-
-	private synchronized void applyGravityForces() {
-		for (Body t : bodies) {
-			for (Body s : bodies) {
-				if (t != s) {
-					t.addAcceleration(s.getGravitationalField().get(t.getPosition()));
-				}
-			}
-		}
 	}
 
 	public synchronized void forEach(Consumer<? super Body> action) {

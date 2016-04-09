@@ -44,7 +44,7 @@ public abstract class Body {
 	public final VectorField getElectricalField() {
 		return v -> {
 			Vector diff = v.subtract(position);
-			return diff.multiply(Scalar.K.multiply(charge)).divide(diff.getMagnitude().pow(2));
+			return diff.multiply(Scalar.K.multiply(charge)).divide(diff.getMagnitude().pow(3));
 		};
 	}
 
