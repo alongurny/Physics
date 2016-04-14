@@ -27,6 +27,10 @@ public class Matrix {
 		this(values.length, values[0].length, (i, j) -> values[i][j]);
 	}
 
+	public Matrix(double[][] values) {
+		this(values.length, values[0].length, (i, j) -> new Scalar(values[i][j]));
+	}
+
 	public Vector getRow(int i) {
 		return new Vector(ArrayComprehension.get(getColumnCount(), j -> values[i][j]));
 	}
@@ -61,7 +65,14 @@ public class Matrix {
 
 	public Matrix multiply(Matrix other) {
 		return new Matrix(getRowCount(), other.getColumnCount(), (i, j) -> getRow(i).dot(other.getColumn(j)));
+	}
 
+	public Vector multiplyColumn(Vector v) {
+		return multiply(column(v)).getColumn(0);
+	}
+
+	public static Matrix column(Vector v) {
+		return new Matrix(v.getLength(), 1, (i, j) -> v.get(i));
 	}
 
 	public int getRowCount() {
@@ -70,6 +81,19 @@ public class Matrix {
 
 	public int getColumnCount() {
 		return values[0].length;
+	}
+
+	public static Matrix rotation(double phi) {
+		return new Matrix(new double[][] { { Math.cos(phi), -Math.sin(phi) }, { Math.sin(phi), Math.cos(phi) } });
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < getRowCount(); i++) {
+			sb.append(getRow(i).toString() + "\n");
+		}
+		return sb.toString();
 	}
 
 }

@@ -4,23 +4,23 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import bodies.Spaceship;
-import graphics.PixelHandler;
+import graphics.Pixel;
+import physics.IntVector;
+import physics.Scalar;
 
 public class SpaceshipDrawer implements Drawable {
 
 	private Spaceship ship;
-	private PixelHandler pixelHandler;
 
-	public SpaceshipDrawer(Spaceship ship, PixelHandler pixelHandler) {
+	public SpaceshipDrawer(Spaceship ship) {
 		this.ship = ship;
-		this.pixelHandler = pixelHandler;
 	}
 
 	@Override
-	public void draw(Graphics g, int dx, int dy) {
+	public void draw(Graphics g, Scalar pixel) {
 		g.setColor(Color.RED);
-		g.fillOval(pixelHandler.to(ship.getPosition().get(0)) + dx, pixelHandler.to(ship.getPosition().get(1)) + dy, 10,
-				10);
+		IntVector i_p = Pixel.convert(ship.getPosition(), pixel);
+		g.fillOval(i_p.get(0), i_p.get(1), 10, 10);
 	}
 
 }

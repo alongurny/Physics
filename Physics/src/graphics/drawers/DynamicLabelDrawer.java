@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import graphics.PixelHandler;
+import graphics.Pixel;
 import physics.Body;
+import physics.IntVector;
+import physics.Scalar;
 import physics.Vector;
 
 public class DynamicLabelDrawer implements Drawable {
@@ -16,15 +18,13 @@ public class DynamicLabelDrawer implements Drawable {
 	private List<Supplier<?>> suppliers;
 	private Body body;
 	private int offsetX, offsetY;
-	private PixelHandler pixelHandler;
 
-	public DynamicLabelDrawer(Body body, int offsetX, int offsetY, PixelHandler pixelHandler) {
+	public DynamicLabelDrawer(Body body, int offsetX, int offsetY) {
 		strings = new ArrayList<String>();
 		suppliers = new ArrayList<Supplier<?>>();
 		this.body = body;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
-		this.pixelHandler = pixelHandler;
 	}
 
 	public void add(String desc, Supplier<?> supp) {
@@ -33,12 +33,13 @@ public class DynamicLabelDrawer implements Drawable {
 	}
 
 	@Override
-	public void draw(Graphics g, int dx, int dy) {
+	public void draw(Graphics g, Scalar pixel) {
 		g.setColor(Color.WHITE);
 		Vector p = body.getPosition();
+		IntVector i_p = Pixel.convert(p, pixel);
 		for (int i = 0; i < strings.size(); i++) {
-			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(), pixelHandler.to(p.get(0)) + dx + offsetX,
-					pixelHandler.to(p.get(1)) + dy + offsetY + 10 * i);
+			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(), i_p.get(0) + offsetX,
+					i_p.get(1) + offsetY + 10 * i);
 		}
 	}
 }

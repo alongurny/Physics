@@ -12,22 +12,18 @@ import bodies.space.Sun;
 import graphics.DrawingEvent;
 import graphics.DrawingListener;
 import graphics.Frame;
-import graphics.PixelHandler;
 import graphics.drawers.DynamicLabelDrawer;
-import graphics.drawers.ScalarFieldDrawer;
 import graphics.drawers.SphereDrawer;
 import physics.Body;
+import physics.Forces;
 import physics.PhysicalSystem;
 import physics.Quantity;
 import physics.Scalar;
-import physics.UnitSystem;
 import physics.Util;
 import physics.Vector;
-import physics.VectorField;
 
 public class RunSolarSystem {
 
-	static PixelHandler pixelHandler = new PixelHandler(Scalar.METER.multiply(1e7));
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static Planet sun = new Sun(Vector.Axes3D.ORIGIN, Vector.zero(Quantity.VELOCITY, 3), Vector.zero(Quantity.ANGLE, 3),
 			Vector.zero(Quantity.ANGULAR_VELOCITY, 3));
@@ -38,20 +34,16 @@ public class RunSolarSystem {
 			Vector.zero(Quantity.ANGLE, 3), Vector.zero(Quantity.ANGULAR_VELOCITY, 3));
 	static PhysicalSystem solar = new PhysicalSystem(3, sun, earth);
 	static Body focus = sun;
-	static ScalarFieldDrawer fieldDrawer = new ScalarFieldDrawer(
-			() -> v -> VectorField.sum(sun.getGravitationalField(), earth.getGravitationalField()).get(v)
-					.getMagnitude(),
-			Scalar.zero(Quantity.ACCELERATION), UnitSystem.SI.get(Quantity.ACCELERATION).multiply(1e-1),
-			screenSize.getWidth(), screenSize.getHeight(), pixelHandler);
 
 	public static void main(String[] args) throws InterruptedException {
-		Frame f = new Frame(sun.getPosition(), Color.DARK_GRAY, pixelHandler);
-		f.addDrawable(new SphereDrawer(sun, Color.YELLOW, pixelHandler));
-		f.addDrawable(new SphereDrawer(earth, Color.GREEN, pixelHandler));
-		DynamicLabelDrawer sunLabel = new DynamicLabelDrawer(sun, 25, 0, pixelHandler);
+		solar.addExternalBiForce(Forces::getGravity);
+		Frame f = new Frame(sun.getPosition(), Color.DARK_GRAY, Scalar.METER.multiply(1e7));
+		f.addDrawable(new SphereDrawer(sun, Color.YELLOW));
+		f.addDrawable(new SphereDrawer(earth, Color.GREEN));
+		DynamicLabelDrawer sunLabel = new DynamicLabelDrawer(sun, 25, 0);
 		sunLabel.add("Velocity", sun::getVelocity);
 		sunLabel.add("Total force", sun::getTotalForce);
-		DynamicLabelDrawer earthLabel = new DynamicLabelDrawer(earth, 25, 0, pixelHandler);
+		DynamicLabelDrawer earthLabel = new DynamicLabelDrawer(earth, 25, 0);
 		earthLabel.add("Velocity", earth::getVelocity);
 		earthLabel.add("Total force", earth::getTotalForce);
 		f.addDrawable(sunLabel);
@@ -77,8 +69,8 @@ public class RunSolarSystem {
 
 			@Override
 			public void onDraw(DrawingEvent e) {
-				solar.forEach(Body::move);
 				solar.applyForces();
+				solar.forEach(Body::move);
 				f.setFocus(focus.getPosition());
 			}
 		});

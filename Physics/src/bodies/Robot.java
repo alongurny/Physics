@@ -34,6 +34,10 @@ public class Robot extends RigidBody {
 		return Scalar.LITTLE_G.multiply(getMass());
 	}
 
+	public Vector getDimensions() {
+		return new Vector(width, height);
+	}
+
 	public Scalar getFriction(double factor) {
 		return getWeight().multiply(factor);
 	}

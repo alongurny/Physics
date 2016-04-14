@@ -2,39 +2,46 @@ package physics;
 
 public abstract class Body {
 
-	public static final Scalar DEFAULT_TIME_SPAN = Scalar.SECOND.multiply(15e-3).multiply(1e6);
+	public static final Scalar DEFAULT_TIME_SPAN = Scalar.SECOND.multiply(15e-3);
 
 	private final Scalar mass;
 	private final Scalar charge;
 	private final Scalar timeSpan;
 	private Vector position;
 	private Vector velocity;
-	private Vector totalForce;
+	private Vector acceleration;
 
 	public Body(Scalar mass, Scalar charge, Vector position, Vector velocity) {
 		Quantities.requireSameLength(position, velocity);
-		this.mass = mass;
-		this.charge = charge;
-		this.position = position;
-		this.velocity = velocity;
-		this.totalForce = Vector.zero(Quantity.FORCE, position.getLength());
+		this.mass = Quantities.require(mass, Quantity.MASS);
+		this.charge = Quantities.require(charge, Quantity.CHARGE);
+		this.position = Quantities.require(position, Quantity.LENGTH);
+		this.velocity = Quantities.require(velocity, Quantity.VELOCITY);
+		this.acceleration = Vector.zero(Quantity.ACCELERATION, position.getLength());
 		this.timeSpan = DEFAULT_TIME_SPAN;
 	}
 
 	public final void addAcceleration(Vector acceleration) {
-		totalForce = totalForce.add(Quantities.require(acceleration, Quantity.ACCELERATION).multiply(mass));
+		Quantities.require(acceleration, Quantity.ACCELERATION);
+		this.acceleration = this.acceleration.add(acceleration);
 	}
 
 	public final void addForce(Vector force) {
-		totalForce = totalForce.add(Quantities.require(force, Quantity.FORCE));
+		Quantities.require(force, Quantity.FORCE);
+		this.acceleration = this.acceleration.add(force.divide(mass));
 	}
 
 	public final void addImpulse(Vector impulse) {
-		totalForce = totalForce.add(Quantities.require(impulse, Quantity.MOMENTUM).divide(getTimeSpan()));
+		Quantities.require(impulse, Quantity.MOMENTUM);
+		this.acceleration = this.acceleration.add(impulse.divide(mass).divide(getTimeSpan()));
 	}
 
 	public final Vector getAcceleration() {
-		return getTotalForce().divide(mass);
+		return acceleration;
+	}
+
+	public final Vector getTotalForce() {
+		return acceleration.multiply(mass);
 	}
 
 	public final Scalar getCharge() {
@@ -71,12 +78,12 @@ public abstract class Body {
 		return timeSpan;
 	}
 
-	public final Vector getTotalForce() {
-		return totalForce;
-	}
-
 	public final Scalar getTranslationalKinecticEnergy() {
 		return Scalar.product(velocity.getMagnitude().pow(2), mass).multiply(0.5);
+	}
+
+	public void setVelocity(Vector v) {
+		this.velocity = v;
 	}
 
 	public final Vector getVelocity() {
@@ -84,9 +91,9 @@ public abstract class Body {
 	}
 
 	public final void move() {
+		velocity = velocity.add(acceleration.multiply(getTimeSpan()));
 		position = position.add(velocity.multiply(getTimeSpan()));
-		velocity = velocity.add(getAcceleration().multiply(getTimeSpan()));
-		totalForce = Vector.zero(Quantity.FORCE, totalForce.getLength());
+		acceleration = Vector.zero(Quantity.ACCELERATION, acceleration.getLength());
 	}
 
 }

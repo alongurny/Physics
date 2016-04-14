@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Joystick {
 
 	private static final int C_RADIUS = 25;
@@ -27,8 +28,7 @@ public class Joystick {
 				int side = Math.min(panel.getWidth(), panel.getHeight());
 				super.paintComponent(g);
 				g.setColor(Color.RED);
-				g.fillOval((int) ((x + 1) * side / 2) - C_RADIUS,
-						(int) ((y + 1) * side / 2) - C_RADIUS, 2 * C_RADIUS,
+				g.fillOval((int) ((x + 1) * side / 2) - C_RADIUS, (int) ((y + 1) * side / 2) - C_RADIUS, 2 * C_RADIUS,
 						2 * C_RADIUS);
 				g.setColor(Color.BLACK);
 				g.drawOval(0, 0, side, side);
@@ -43,10 +43,8 @@ public class Joystick {
 			public void mousePressed(MouseEvent e) {
 				int side = Math.min(panel.getWidth(), panel.getHeight());
 				int ex = e.getX(), ey = e.getY();
-				if (ex > (int) ((x + 1) * side / 2) - C_RADIUS
-						&& ex < (int) ((x + 1) * side / 2) + C_RADIUS
-						&& ey > (int) ((y + 1) * side / 2) - C_RADIUS
-						&& ey < (int) ((y + 1) * side / 2) + C_RADIUS) {
+				if (ex > (int) ((x + 1) * side / 2) - C_RADIUS && ex < (int) ((x + 1) * side / 2) + C_RADIUS
+						&& ey > (int) ((y + 1) * side / 2) - C_RADIUS && ey < (int) ((y + 1) * side / 2) + C_RADIUS) {
 					dragging = true;
 				}
 			}

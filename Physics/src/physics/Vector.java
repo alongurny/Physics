@@ -142,4 +142,8 @@ public final class Vector implements Measurable {
 		return new Vector(ArrayComprehension.get(length, i -> zero));
 	}
 
+	public static Vector fromPolar(Scalar magnitude, double phase) {
+		return new Vector(magnitude.multiply(Math.cos(phase)), magnitude.multiply(Math.sin(phase)));
+	}
+
 }

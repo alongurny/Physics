@@ -12,8 +12,7 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	public static final Scalar HOUR = new Scalar(MINUTE, 60);
 	public static final Scalar DAY = new Scalar(HOUR, 24);
 	public static final Scalar YEAR = new Scalar(DAY, 365.25);
-	public static final Scalar LIGHT_SPEED = new Scalar(Quantity.VELOCITY,
-			299792458);
+	public static final Scalar LIGHT_SPEED = new Scalar(Quantity.VELOCITY, 299792458);
 	public static final Scalar KILOGRAM = new Scalar(Quantity.MASS, 1);
 	public static final Scalar NEWTONE = new Scalar(Quantity.FORCE, 1);
 	public static final Scalar JOULE = new Scalar(Quantity.ENERGY, 1);
@@ -24,12 +23,9 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	public static final Scalar VOLT = new Scalar(Quantity.VOLTAGE, 1);
 	public static final Scalar HERTZ = SECOND.inverse();
 	public static final Scalar ONE = new Scalar(Quantity.NONE, 1);
-	public static final Scalar G = METER.pow(3)
-			.divide(product(SECOND, SECOND, KILOGRAM)).multiply(6.67384e-11);
-	public static final Scalar K = NEWTONE.multiply(METER.pow(2))
-			.divide(COULOMB.pow(2)).multiply(8.98755e9);
-	public static final Scalar LITTLE_G = METER.divide(SECOND.pow(2)).multiply(
-			10);
+	public static final Scalar G = METER.pow(3).divide(product(SECOND, SECOND, KILOGRAM)).multiply(6.67384e-11);
+	public static final Scalar K = NEWTONE.multiply(METER.pow(2)).divide(COULOMB.pow(2)).multiply(8.98755e9);
+	public static final Scalar LITTLE_G = METER.divide(SECOND.pow(2)).multiply(10);
 	public static final Scalar ELECTRON_VOLT = E_CHARGE.multiply(VOLT);
 
 	public static double atan2(Scalar y, Scalar x) {
@@ -63,8 +59,7 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 
 	public static Scalar sum(Scalar... us) {
 		if (us.length == 0) {
-			throw new IllegalArgumentException(
-					"Must have at least one scalar to compute sum");
+			throw new IllegalArgumentException("Must have at least one scalar to compute sum");
 		}
 		Scalar res = us[0];
 		for (int i = 1; i < us.length; i++) {
@@ -92,8 +87,7 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	private Scalar(Quantity quantity, double value) {
 		this.quantity = Objects.requireNonNull(quantity);
 		if (Double.isNaN(value)) {
-			throw new IllegalArgumentException(
-					"Must be a finite or infinite number: " + value);
+			throw new IllegalArgumentException("Must be a finite or infinite number: " + value);
 		}
 		this.value = value;
 	}
@@ -140,8 +134,7 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	}
 
 	public Scalar multiply(Scalar v) {
-		return new Scalar(Quantity.product(quantity, v.quantity), value
-				* v.value);
+		return new Scalar(Quantity.product(quantity, v.quantity), value * v.value);
 	}
 
 	public Scalar negate() {
@@ -162,8 +155,7 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	}
 
 	public String toString(int n) {
-		return String.format("%." + n + "g", value) + " "
-				+ UnitSystem.SI.getUnitName(quantity);
+		return String.format("%." + n + "g", value) + " " + UnitSystem.SI.getUnitName(quantity);
 	}
 
 	public static boolean isInfinite(Scalar s) {

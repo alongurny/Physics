@@ -3,7 +3,6 @@ package graphics;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Toolkit;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
@@ -17,30 +16,41 @@ import javax.swing.JPanel;
 
 import graphics.drawers.Drawable;
 import graphics.drawers.LabelDrawer;
+import physics.IntVector;
+import physics.Scalar;
 import physics.Vector;
 
+@SuppressWarnings("serial")
 public class Frame extends JFrame {
 
 	private Vector focus;
 	private LabelDrawer labelDrawer;
 	private List<Drawable> drawables;
 	private List<DrawingListener> drawingListeners;
-	public static final Dimension DEFAULT_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+	private Scalar pixel;
+	public static final Dimension DEFAULT_SIZE = /*
+													 * Toolkit.getDefaultToolkit
+													 * (). getScreenSize()
+													 */ new Dimension(640, 640);
 
-	public Frame(Vector focus, Color background, PixelHandler pixelHandler) {
+	public Frame(Vector focus, Color background, Scalar pixel) {
 		setBackground(background);
 		this.focus = focus;
+		this.pixel = pixel;
 		labelDrawer = new LabelDrawer(10, 20);
 		drawingListeners = new CopyOnWriteArrayList<DrawingListener>();
 		drawables = new ArrayList<Drawable>();
 		add(new JPanel() {
 			@Override
 			public void paint(Graphics g) {
-				int dx = getWidth() / 2 - pixelHandler.to(Frame.this.focus.get(0));
-				int dy = getHeight() / 2 - pixelHandler.to(Frame.this.focus.get(1));
-				labelDrawer.draw(g, dx, dy);
+				labelDrawer.draw(g, Frame.this.pixel);
+				IntVector i_focus = Pixel.convert(Frame.this.focus, Frame.this.pixel);
+				int dx = getWidth() / 2 - i_focus.get(0);
+				int dy = getHeight() / 2 - i_focus.get(1);
 				for (Drawable d : drawables) {
-					d.draw(g, dx, dy);
+					g.translate(dx, dy);
+					d.draw(g, Frame.this.pixel);
+					g.translate(-dx, -dy);
 				}
 			}
 		});
@@ -48,7 +58,7 @@ public class Frame extends JFrame {
 
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				pixelHandler.scroll(Math.pow(1.1, e.getPreciseWheelRotation()));
+				Frame.this.pixel = Frame.this.pixel.multiply(Math.pow(1.1, e.getPreciseWheelRotation()));
 			}
 		});
 		setSize(DEFAULT_SIZE);

@@ -30,6 +30,15 @@ public class Quantities {
 		return vectors[0].getLength();
 	}
 
+	public static int requireSameLength(IntVector... vectors) {
+		for (IntVector v : vectors) {
+			if (v.getLength() != vectors[0].getLength()) {
+				throw new VectorLengthMismatchException();
+			}
+		}
+		return vectors[0].getLength();
+	}
+
 	@SafeVarargs
 	public static void requireSameQuantity(Measurable... us) {
 		for (Measurable u : us) {

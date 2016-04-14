@@ -8,7 +8,6 @@ import bodies.Robot;
 import graphics.Drivetrain;
 import graphics.Frame;
 import graphics.Joystick;
-import graphics.PixelHandler;
 import graphics.drawers.RobotDrawer;
 import physics.Quantity;
 import physics.Scalar;
@@ -19,9 +18,8 @@ public class RunRobot {
 		Robot robot = new Robot(Scalar.KILOGRAM.multiply(48), Vector.Axes2D.ORIGIN,
 				Scalar.KILOGRAM.multiply(Scalar.METER.divide(Scalar.RADIAN).pow(2).multiply(12)),
 				Vector.zero(Quantity.ANGLE, 1), Scalar.METER.multiply(0.6), Scalar.METER.multiply(0.8));
-		PixelHandler pixelHandler = new PixelHandler(Scalar.METER.divide(100));
-		Frame f = new Frame(Vector.Axes2D.ORIGIN, Color.GRAY, pixelHandler);
-		f.addDrawable(new RobotDrawer(robot, Color.WHITE, pixelHandler));
+		Frame f = new Frame(Vector.Axes2D.ORIGIN, Color.GRAY, Scalar.METER.divide(100));
+		f.addDrawable(new RobotDrawer(robot, Color.WHITE));
 		f.addLabel("Velocity", robot::getVelocity);
 		f.addLabel("Position", robot::getPosition);
 		f.addLabel("Rotation", () -> robot.getAngularPosition().get(0));
