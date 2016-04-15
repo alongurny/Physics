@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import physics.Scalar;
+import physics.math.Scalar;
 
 public class LabelDrawer implements Drawable {
 

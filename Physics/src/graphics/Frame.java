@@ -17,9 +17,9 @@ import javax.swing.JPanel;
 
 import graphics.drawers.Drawable;
 import graphics.drawers.LabelDrawer;
-import physics.IntVector;
-import physics.Scalar;
-import physics.Vector;
+import physics.math.IntVector;
+import physics.math.Scalar;
+import physics.math.Vector;
 
 @SuppressWarnings("serial")
 public class Frame extends JFrame {

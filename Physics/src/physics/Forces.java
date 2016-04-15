@@ -1,6 +1,9 @@
 package physics;
 
-import physics.interfaces.Body;
+import physics.body.Body;
+import physics.math.Scalar;
+import physics.math.Vector;
+import physics.quantity.Quantity;
 
 public class Forces {
 

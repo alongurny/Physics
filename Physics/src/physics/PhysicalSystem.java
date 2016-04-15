@@ -6,7 +6,10 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import physics.interfaces.Movable;
+import physics.body.Movable;
+import physics.math.Scalar;
+import physics.math.Vector;
+import physics.quantity.Quantity;
 
 public class PhysicalSystem {
 	private List<Movable> regularBodies;

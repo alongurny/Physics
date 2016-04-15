@@ -2,7 +2,7 @@ package graphics.drawers;
 
 import java.awt.Graphics;
 
-import physics.Scalar;
+import physics.math.Scalar;
 
 public interface Drawable {
 

@@ -3,11 +3,11 @@ package graphics.drawers;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import bodies.Sphere;
 import graphics.Pixel;
-import physics.IntVector;
-import physics.Scalar;
-import physics.Vector;
+import physics.body.geometric.Sphere;
+import physics.math.IntVector;
+import physics.math.Scalar;
+import physics.math.Vector;
 
 public class SphereDrawer implements Drawable {
 

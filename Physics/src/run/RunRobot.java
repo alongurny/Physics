@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import bodies.Robot;
-import graphics.Drivetrain;
 import graphics.Frame;
 import graphics.Joystick;
 import graphics.drawers.RobotDrawer;
-import physics.Quantity;
-import physics.Scalar;
-import physics.Vector;
+import physics.body.machine.Drivetrain;
+import physics.body.machine.Robot;
+import physics.math.Scalar;
+import physics.math.Vector;
+import physics.quantity.Quantity;
 
 public class RunRobot {
 	public static void main(String[] args) {

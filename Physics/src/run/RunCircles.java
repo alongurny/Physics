@@ -14,11 +14,11 @@ import graphics.drawers.DrawableBody;
 import physics.Collision;
 import physics.Forces;
 import physics.PhysicalSystem;
-import physics.Scalar;
-import physics.Vector;
-import physics.interfaces.Movable;
-import twoDimensions.Circle;
-import twoDimensions.Rectangle;
+import physics.body.Movable;
+import physics.graphics.Circle;
+import physics.graphics.Rectangle;
+import physics.math.Scalar;
+import physics.math.Vector;
 
 public class RunCircles {
 

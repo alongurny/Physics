@@ -1,7 +1,8 @@
 package physics;
 
 import graphics.drawers.DrawableBody;
-import physics.interfaces.Body;
+import physics.math.Scalar;
+import physics.math.Vector;
 
 public class Collision {
 
@@ -11,15 +12,13 @@ public class Collision {
 		return v1.add(dx.multiply(m2.divide(m1.add(m2)).multiply(2).multiply(dv.dot(dx)).divide(dx.dot(dx))));
 	}
 
-	public static <T extends Body & DrawableBody, S extends RegularBody & DrawableBody> Vector getVelocity(T c1, S c2,
-			Vector contactPoint) {
-		Vector ce1 = c1.getCircleCenter(contactPoint);
-		Vector ce2 = c2.getCircleCenter(contactPoint);
-		return getVelocity(c1.getMass(), c2.getMass(), ce1, ce2, c1.getVelocity(), c2.getVelocity());
+	public static Vector getVelocity(DrawableBody a, DrawableBody b, Vector contactPoint) {
+		Vector ce1 = a.getCircleCenter(contactPoint);
+		Vector ce2 = b.getCircleCenter(contactPoint);
+		return getVelocity(a.getMass(), b.getMass(), ce1, ce2, a.getVelocity(), b.getVelocity());
 	}
 
-	public static <T extends Body & DrawableBody, S extends RegularBody & DrawableBody> Vector getImpulse(T c1, S c2,
-			Vector contactPoint) {
+	public static Vector getImpulse(DrawableBody c1, DrawableBody c2, Vector contactPoint) {
 		return getVelocity(c1, c2, contactPoint).multiply(c1.getMass()).subtract(c1.getMomentum());
 	}
 }

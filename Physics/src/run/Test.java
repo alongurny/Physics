@@ -6,10 +6,10 @@ import graphics.DrawingEvent;
 import graphics.DrawingListener;
 import graphics.Frame;
 import graphics.drawers.SphereDrawer;
-import physics.Electron;
-import physics.Quantity;
-import physics.Scalar;
-import physics.Vector;
+import physics.body.atom.Electron;
+import physics.math.Scalar;
+import physics.math.Vector;
+import physics.quantity.Quantity;
 
 public class Test {
 	static int x = 0, y = 0;

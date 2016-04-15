@@ -1,8 +1,8 @@
 package graphics;
 
-import physics.IntVector;
-import physics.Scalar;
-import physics.Vector;
+import physics.math.IntVector;
+import physics.math.Scalar;
+import physics.math.Vector;
 
 public class Pixel {
 

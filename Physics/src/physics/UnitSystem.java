@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import physics.math.Scalar;
+import physics.quantity.Quantity;
+
 public class UnitSystem {
 
 	public static final UnitSystem SI = new UnitSystem(

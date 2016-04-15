@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import graphics.Pixel;
-import physics.RegularBody;
-import physics.IntVector;
-import physics.Scalar;
-import physics.Vector;
+import physics.body.RegularBody;
+import physics.math.IntVector;
+import physics.math.Scalar;
+import physics.math.Vector;
 
 public class DynamicLabelDrawer implements Drawable {
 

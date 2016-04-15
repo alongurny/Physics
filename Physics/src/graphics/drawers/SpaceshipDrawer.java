@@ -3,10 +3,10 @@ package graphics.drawers;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import bodies.Spaceship;
 import graphics.Pixel;
-import physics.IntVector;
-import physics.Scalar;
+import physics.body.machine.Spaceship;
+import physics.math.IntVector;
+import physics.math.Scalar;
 
 public class SpaceshipDrawer implements Drawable {
 

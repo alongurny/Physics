@@ -6,9 +6,6 @@ import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import bodies.space.Earth;
-import bodies.space.Planet;
-import bodies.space.Sun;
 import graphics.DrawingEvent;
 import graphics.DrawingListener;
 import graphics.Frame;
@@ -16,12 +13,15 @@ import graphics.drawers.DynamicLabelDrawer;
 import graphics.drawers.SphereDrawer;
 import physics.Forces;
 import physics.PhysicalSystem;
-import physics.Quantity;
-import physics.Scalar;
 import physics.Util;
-import physics.Vector;
-import physics.interfaces.Body;
-import physics.interfaces.Movable;
+import physics.body.Body;
+import physics.body.Movable;
+import physics.body.space.Earth;
+import physics.body.space.Planet;
+import physics.body.space.Sun;
+import physics.math.Scalar;
+import physics.math.Vector;
+import physics.quantity.Quantity;
 
 public class RunSolarSystem {
 

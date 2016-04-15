@@ -5,10 +5,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import bodies.Robot;
 import graphics.Pixel;
-import physics.IntVector;
-import physics.Scalar;
+import physics.body.machine.Robot;
+import physics.math.IntVector;
+import physics.math.Scalar;
 
 public class RobotDrawer implements Drawable {
 

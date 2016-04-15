@@ -4,10 +4,10 @@ import java.awt.Polygon;
 import java.awt.geom.Area;
 import java.util.Optional;
 
-import physics.IntVector;
-import physics.Scalar;
-import physics.Vector;
-import physics.interfaces.Body;
+import physics.body.Body;
+import physics.math.IntVector;
+import physics.math.Scalar;
+import physics.math.Vector;
 
 public interface DrawableBody extends Drawable, Body {
 
