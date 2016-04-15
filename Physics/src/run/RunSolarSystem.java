@@ -13,7 +13,7 @@ import graphics.drawers.DynamicLabelDrawer;
 import graphics.drawers.SphereDrawer;
 import physics.Forces;
 import physics.PhysicalSystem;
-import physics.Util;
+import physics.Dynamics;
 import physics.body.Body;
 import physics.body.Movable;
 import physics.body.space.Earth;
@@ -29,7 +29,7 @@ public class RunSolarSystem {
 	static Planet sun = new Sun(Vector.Axes3D.ORIGIN, Vector.zero(Quantity.VELOCITY, 3));
 	static Planet earth = new Earth(
 			new Vector(Earth.ROUND_RADIUS, Scalar.zero(Quantity.LENGTH), Scalar.zero(Quantity.LENGTH)),
-			new Vector(Scalar.zero(Quantity.VELOCITY), Util.forCircularMovement(sun, Earth.ROUND_RADIUS),
+			new Vector(Scalar.zero(Quantity.VELOCITY), Dynamics.getOrbitVelocity(sun, Earth.ROUND_RADIUS),
 					Scalar.zero(Quantity.VELOCITY)));
 	static PhysicalSystem solar = new PhysicalSystem(3, sun, earth);
 	static Body focus = sun;

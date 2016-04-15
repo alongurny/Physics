@@ -1,9 +1,9 @@
 package physics.body.machine;
 
-import physics.UnitSystem;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
+import physics.quantity.UnitSystem;
 
 public class Drivetrain {
 

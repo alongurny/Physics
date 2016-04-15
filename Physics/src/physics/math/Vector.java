@@ -3,11 +3,11 @@ package physics.math;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import physics.UnitSystem;
 import physics.dimension.Dimensioned;
 import physics.dimension.Dimensions;
 import physics.quantity.Measurable;
 import physics.quantity.Quantity;
+import physics.quantity.UnitSystem;
 
 public final class Vector implements Measurable, Dimensioned {
 

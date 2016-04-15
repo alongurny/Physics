@@ -1,4 +1,4 @@
-package physics;
+package physics.quantity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import physics.math.Scalar;
-import physics.quantity.Quantity;
 
 public class UnitSystem {
 

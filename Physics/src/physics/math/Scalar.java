@@ -2,11 +2,11 @@ package physics.math;
 
 import java.util.Objects;
 
-import physics.UnitSystem;
 import physics.dimension.Dimensioned;
 import physics.quantity.Measurable;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
+import physics.quantity.UnitSystem;
 
 public final class Scalar implements Comparable<Scalar>, Measurable, Dimensioned {
 
