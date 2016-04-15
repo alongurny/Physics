@@ -18,7 +18,6 @@ public class Count {
 			paths.forEach(path -> {
 				File f = path.toFile();
 				if (f.isFile() && !f.getName().startsWith("Count") && f.getName().endsWith(".java")) {
-					System.out.println(f);
 					try (BufferedReader in = new BufferedReader(new FileReader(f))) {
 						while (in.readLine() != null) {
 							count++;

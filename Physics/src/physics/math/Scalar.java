@@ -3,12 +3,12 @@ package physics.math;
 import java.util.Objects;
 
 import physics.dimension.Dimensioned;
-import physics.quantity.Measurable;
+import physics.quantity.Quantifiable;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 import physics.quantity.UnitSystem;
 
-public final class Scalar implements Comparable<Scalar>, Measurable, Dimensioned {
+public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimensioned {
 
 	public static final Scalar METER = new Scalar(Quantity.LENGTH, 1);
 	public static final Scalar CENTIMETER = new Scalar(Quantity.LENGTH, 1e-2);

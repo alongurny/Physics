@@ -15,14 +15,14 @@ public class Quantities {
 		return found;
 	}
 
-	public static <T extends Measurable> T require(T m, Quantity expected) {
+	public static <T extends Quantifiable> T require(T m, Quantity expected) {
 		require(m.getQuantity(), expected);
 		return m;
 	}
 
 	@SafeVarargs
-	public static void requireSameQuantity(Measurable... us) {
-		for (Measurable u : us) {
+	public static void requireSameQuantity(Quantifiable... us) {
+		for (Quantifiable u : us) {
 			require(u, us[0].getQuantity());
 		}
 	}

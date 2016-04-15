@@ -1,5 +1,5 @@
 package physics.quantity;
 
-public interface Measurable {
+public interface Quantifiable {
 	Quantity getQuantity();
 }

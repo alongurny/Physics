@@ -5,11 +5,11 @@ import java.util.function.Function;
 
 import physics.dimension.Dimensioned;
 import physics.dimension.Dimensions;
-import physics.quantity.Measurable;
+import physics.quantity.Quantifiable;
 import physics.quantity.Quantity;
 import physics.quantity.UnitSystem;
 
-public final class Vector implements Measurable, Dimensioned {
+public final class Vector implements Quantifiable, Dimensioned {
 
 	public static class Axes2D {
 		public static final Vector ORIGIN = Vector.zero(Quantity.LENGTH, 2);
