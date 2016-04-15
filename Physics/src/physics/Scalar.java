@@ -2,7 +2,7 @@ package physics;
 
 import java.util.Objects;
 
-public final class Scalar implements Comparable<Scalar>, Measurable {
+public final class Scalar implements Comparable<Scalar>, Measurable, Dimensioned {
 
 	public static final Scalar METER = new Scalar(Quantity.LENGTH, 1);
 	public static final Scalar CENTIMETER = new Scalar(Quantity.LENGTH, 1e-2);
@@ -20,11 +20,14 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 	public static final Scalar RADIAN = new Scalar(Quantity.ANGLE, 1);
 	public static final Scalar E_CHARGE = COULOMB.multiply(1.6e-19);
 	public static final Scalar AMPERE = new Scalar(Quantity.CURRENT, 1);
+	public static final Scalar TESLA = NEWTONE.divide(METER.multiply(AMPERE));
 	public static final Scalar VOLT = new Scalar(Quantity.VOLTAGE, 1);
 	public static final Scalar HERTZ = SECOND.inverse();
 	public static final Scalar ONE = new Scalar(Quantity.NONE, 1);
 	public static final Scalar G = METER.pow(3).divide(product(SECOND, SECOND, KILOGRAM)).multiply(6.67384e-11);
 	public static final Scalar K = NEWTONE.multiply(METER.pow(2)).divide(COULOMB.pow(2)).multiply(8.98755e9);
+	public static final Scalar EPSILON0 = K.multiply(4 * Math.PI).inverse();
+	public static final Scalar MU0 = product(LIGHT_SPEED.pow(2), EPSILON0).inverse();
 	public static final Scalar LITTLE_G = METER.divide(SECOND.pow(2)).multiply(10);
 	public static final Scalar ELECTRON_VOLT = E_CHARGE.multiply(VOLT);
 
@@ -33,8 +36,22 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 		return Math.atan2(y.value, x.value);
 	}
 
-	public static boolean isZero(Scalar u) {
-		return u.value == 0;
+	public static int compare(Scalar s, Scalar t) {
+		Quantities.requireSameQuantity(s, t);
+		return Double.compare(s.value, t.value);
+	}
+
+	public static double cos(Scalar s) {
+		Quantities.require(s, Quantity.ANGLE);
+		return Math.cos(s.convert(Scalar.RADIAN));
+	}
+
+	public static boolean isInfinite(Scalar s) {
+		return Double.isInfinite(s.value);
+	}
+
+	public static boolean isZero(Scalar s) {
+		return s.value == 0;
 	}
 
 	public static Scalar negativeInfinity(Quantity q) {
@@ -51,6 +68,11 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 			res = res.multiply(u);
 		}
 		return res;
+	}
+
+	public static double sin(Scalar s) {
+		Quantities.require(s, Quantity.ANGLE);
+		return Math.sin(s.convert(Scalar.RADIAN));
 	}
 
 	public static Scalar sqrt(Scalar u) {
@@ -80,16 +102,16 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 		this(Quantity.NONE, value);
 	}
 
-	public Scalar(Scalar s, double factor) {
-		this(Objects.requireNonNull(s.quantity), s.value * factor);
-	}
-
 	private Scalar(Quantity quantity, double value) {
 		this.quantity = Objects.requireNonNull(quantity);
 		if (Double.isNaN(value)) {
 			throw new IllegalArgumentException("Must be a finite or infinite number: " + value);
 		}
 		this.value = value;
+	}
+
+	public Scalar(Scalar s, double factor) {
+		this(Objects.requireNonNull(s.quantity), s.value * factor);
 	}
 
 	public Scalar add(Scalar v) {
@@ -120,6 +142,19 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 		return multiply(v.inverse());
 	}
 
+	public boolean equals(Object other) {
+		if (!(other instanceof Scalar)) {
+			return false;
+		}
+		Scalar s = (Scalar) other;
+		return quantity.equals(s.getQuantity()) && value == s.value;
+	}
+
+	@Override
+	public int getDimension() {
+		return 1;
+	}
+
 	@Override
 	public Quantity getQuantity() {
 		return quantity;
@@ -133,8 +168,12 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 		return new Scalar(quantity, value * c);
 	}
 
-	public Scalar multiply(Scalar v) {
-		return new Scalar(Quantity.product(quantity, v.quantity), value * v.value);
+	public Scalar multiply(Scalar s) {
+		return new Scalar(Quantity.product(quantity, s.quantity), value * s.value);
+	}
+
+	public Vector multiply(Vector v) {
+		return v.multiply(this);
 	}
 
 	public Scalar negate() {
@@ -156,27 +195,5 @@ public final class Scalar implements Comparable<Scalar>, Measurable {
 
 	public String toString(int n) {
 		return String.format("%." + n + "g", value) + " " + UnitSystem.SI.getUnitName(quantity);
-	}
-
-	public static boolean isInfinite(Scalar s) {
-		return Double.isInfinite(s.value);
-	}
-
-	public boolean equals(Object other) {
-		if (!(other instanceof Scalar)) {
-			return false;
-		}
-		Scalar s = (Scalar) other;
-		return quantity.equals(s.getQuantity()) && value == s.value;
-	}
-
-	public static double sin(Scalar s) {
-		Quantities.require(s, Quantity.ANGLE);
-		return Math.sin(s.convert(Scalar.RADIAN));
-	}
-
-	public static double cos(Scalar s) {
-		Quantities.require(s, Quantity.ANGLE);
-		return Math.cos(s.convert(Scalar.RADIAN));
 	}
 }

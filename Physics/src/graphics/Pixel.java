@@ -11,7 +11,7 @@ public class Pixel {
 	}
 
 	public static IntVector convert(Vector v, Scalar pixel) {
-		int[] arr = new int[v.getLength()];
+		int[] arr = new int[v.getDimension()];
 		for (int i = 0; i < arr.length; i++) {
 			arr[i] = convert(v.get(i), pixel);
 		}

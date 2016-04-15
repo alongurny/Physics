@@ -12,8 +12,8 @@ public class Robot extends RigidBody {
 
 	public Robot(Scalar mass, Vector center, Scalar inertiaMomemnt, Vector angularPosition, Scalar width,
 			Scalar height) {
-		super(mass, Scalar.zero(Quantity.CHARGE), center, Vector.zero(Quantity.VELOCITY, center.getLength()),
-				inertiaMomemnt, angularPosition, Vector.zero(Quantity.ANGULAR_VELOCITY, angularPosition.getLength()));
+		super(mass, Scalar.zero(Quantity.CHARGE), center, Vector.zero(Quantity.VELOCITY, center.getDimension()),
+				inertiaMomemnt, angularPosition, Vector.zero(Quantity.ANGULAR_VELOCITY, angularPosition.getDimension()));
 		this.width = Quantities.require(width, Quantity.LENGTH);
 		this.height = Quantities.require(height, Quantity.LENGTH);
 	}

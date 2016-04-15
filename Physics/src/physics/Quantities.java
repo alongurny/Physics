@@ -3,7 +3,6 @@ package physics;
 import java.util.Objects;
 
 import exceptions.QuantityMismatchException;
-import exceptions.VectorLengthMismatchException;
 
 public class Quantities {
 
@@ -19,24 +18,6 @@ public class Quantities {
 	public static <T extends Measurable> T require(T m, Quantity expected) {
 		require(m.getQuantity(), expected);
 		return m;
-	}
-
-	public static int requireSameLength(Vector... vectors) {
-		for (Vector v : vectors) {
-			if (v.getLength() != vectors[0].getLength()) {
-				throw new VectorLengthMismatchException();
-			}
-		}
-		return vectors[0].getLength();
-	}
-
-	public static int requireSameLength(IntVector... vectors) {
-		for (IntVector v : vectors) {
-			if (v.getLength() != vectors[0].getLength()) {
-				throw new VectorLengthMismatchException();
-			}
-		}
-		return vectors[0].getLength();
 	}
 
 	@SafeVarargs

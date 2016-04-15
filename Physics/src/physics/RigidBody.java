@@ -1,6 +1,6 @@
 package physics;
 
-public class RigidBody extends Body {
+public class RigidBody extends RegularBody {
 
 	private Scalar momentOfInertia;
 	private Vector angularPosition;
@@ -10,11 +10,11 @@ public class RigidBody extends Body {
 	public RigidBody(Scalar mass, Scalar charge, Vector center, Vector velocity, Scalar inertiaMoment,
 			Vector angularPosition, Vector angularVelocity) {
 		super(mass, charge, center, velocity);
-		Quantities.requireSameLength(angularPosition, angularVelocity);
+		Dimensions.requireSame(angularPosition, angularVelocity);
 		this.momentOfInertia = Quantities.require(inertiaMoment, Quantity.MOMENT_OF_INERTIA);
 		this.angularPosition = Quantities.require(angularPosition, Quantity.ANGLE);
 		this.angularVelocity = Quantities.require(angularVelocity, Quantity.ANGULAR_VELOCITY);
-		this.totalTorque = Vector.zero(Quantity.TORQUE, angularPosition.getLength());
+		this.totalTorque = Vector.zero(Quantity.TORQUE, angularPosition.getDimension());
 	}
 
 	public void addTorque(Vector torque) {
@@ -63,6 +63,6 @@ public class RigidBody extends Body {
 	public void rotate() {
 		angularPosition = angularPosition.add(angularVelocity.multiply(getTimeSpan()));
 		angularVelocity = angularVelocity.add(getAngularAcceleration().multiply(getTimeSpan()));
-		totalTorque = Vector.zero(Quantity.TORQUE, totalTorque.getLength());
+		totalTorque = Vector.zero(Quantity.TORQUE, totalTorque.getDimension());
 	}
 }

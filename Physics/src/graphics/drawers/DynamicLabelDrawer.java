@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import graphics.Pixel;
-import physics.Body;
+import physics.RegularBody;
 import physics.IntVector;
 import physics.Scalar;
 import physics.Vector;
@@ -16,13 +16,13 @@ public class DynamicLabelDrawer implements Drawable {
 
 	private List<String> strings;
 	private List<Supplier<?>> suppliers;
-	private Body body;
+	private RegularBody regularBody;
 	private int offsetX, offsetY;
 
-	public DynamicLabelDrawer(Body body, int offsetX, int offsetY) {
+	public DynamicLabelDrawer(RegularBody regularBody, int offsetX, int offsetY) {
 		strings = new ArrayList<String>();
 		suppliers = new ArrayList<Supplier<?>>();
-		this.body = body;
+		this.regularBody = regularBody;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 	}
@@ -35,7 +35,7 @@ public class DynamicLabelDrawer implements Drawable {
 	@Override
 	public void draw(Graphics g, Scalar pixel) {
 		g.setColor(Color.WHITE);
-		Vector p = body.getPosition();
+		Vector p = regularBody.getPosition();
 		IntVector i_p = Pixel.convert(p, pixel);
 		for (int i = 0; i < strings.size(); i++) {
 			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(), i_p.get(0) + offsetX,

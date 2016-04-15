@@ -32,11 +32,11 @@ public class Matrix {
 	}
 
 	public Vector getRow(int i) {
-		return new Vector(ArrayComprehension.get(getColumnCount(), j -> values[i][j]));
+		return new Vector(getColumnCount(), j -> values[i][j]);
 	}
 
 	public Vector getColumn(int j) {
-		return new Vector(ArrayComprehension.get(getRowCount(), i -> values[i][j]));
+		return new Vector(getRowCount(), i -> values[i][j]);
 	}
 
 	public Scalar get(int row, int column) {
@@ -72,7 +72,7 @@ public class Matrix {
 	}
 
 	public static Matrix column(Vector v) {
-		return new Matrix(v.getLength(), 1, (i, j) -> v.get(i));
+		return new Matrix(v.getDimension(), 1, (i, j) -> v.get(i));
 	}
 
 	public int getRowCount() {

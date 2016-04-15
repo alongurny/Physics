@@ -14,13 +14,14 @@ import graphics.DrawingListener;
 import graphics.Frame;
 import graphics.drawers.DynamicLabelDrawer;
 import graphics.drawers.SphereDrawer;
-import physics.Body;
 import physics.Forces;
 import physics.PhysicalSystem;
 import physics.Quantity;
 import physics.Scalar;
 import physics.Util;
 import physics.Vector;
+import physics.interfaces.Body;
+import physics.interfaces.Movable;
 
 public class RunSolarSystem {
 
@@ -70,7 +71,7 @@ public class RunSolarSystem {
 			@Override
 			public void onDraw(DrawingEvent e) {
 				solar.applyForces();
-				solar.forEach(Body::move);
+				solar.forEach(Movable::move);
 				f.setFocus(focus.getPosition());
 			}
 		});

@@ -3,6 +3,7 @@ package graphics;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
@@ -33,6 +34,12 @@ public class Frame extends JFrame {
 													 * (). getScreenSize()
 													 */ new Dimension(640, 640);
 
+	public Vector getVector(int length, Point p) {
+		return focus.add(
+				Vector.extend(new Vector(p.getX() - getWidth() / 2, p.getY() - getHeight() / 2).multiply(pixel), 3));
+
+	}
+
 	public Frame(Vector focus, Color background, Scalar pixel) {
 		setBackground(background);
 		this.focus = focus;
@@ -40,10 +47,10 @@ public class Frame extends JFrame {
 		labelDrawer = new LabelDrawer(10, 20);
 		drawingListeners = new CopyOnWriteArrayList<DrawingListener>();
 		drawables = new ArrayList<Drawable>();
+		setFocusable(true);
 		add(new JPanel() {
 			@Override
 			public void paint(Graphics g) {
-				labelDrawer.draw(g, Frame.this.pixel);
 				IntVector i_focus = Pixel.convert(Frame.this.focus, Frame.this.pixel);
 				int dx = getWidth() / 2 - i_focus.get(0);
 				int dy = getHeight() / 2 - i_focus.get(1);
@@ -52,6 +59,7 @@ public class Frame extends JFrame {
 					d.draw(g, Frame.this.pixel);
 					g.translate(-dx, -dy);
 				}
+				labelDrawer.draw(g, Frame.this.pixel);
 			}
 		});
 		addMouseWheelListener(new MouseWheelListener() {
@@ -97,5 +105,9 @@ public class Frame extends JFrame {
 
 	public void addDrawingListener(DrawingListener drawingListener) {
 		drawingListeners.add(drawingListener);
+	}
+
+	public Vector getFocus() {
+		return focus;
 	}
 }
