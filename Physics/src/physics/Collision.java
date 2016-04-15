@@ -13,8 +13,8 @@ public class Collision {
 	}
 
 	public static Vector getVelocity(DrawableBody a, DrawableBody b, Vector contactPoint) {
-		Vector ce1 = a.getCircleCenter(contactPoint);
-		Vector ce2 = b.getCircleCenter(contactPoint);
+		Vector ce1 = a.getCollisionCircleCenter(contactPoint);
+		Vector ce2 = b.getCollisionCircleCenter(contactPoint);
 		return getVelocity(a.getMass(), b.getMass(), ce1, ce2, a.getVelocity(), b.getVelocity());
 	}
 

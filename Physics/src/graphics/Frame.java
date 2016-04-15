@@ -29,15 +29,16 @@ public class Frame extends JFrame {
 	private List<Drawable> drawables;
 	private List<DrawingListener> drawingListeners;
 	private Scalar pixel;
-	public static final Dimension DEFAULT_SIZE = /*
-													 * Toolkit.getDefaultToolkit
-													 * (). getScreenSize()
-													 */ new Dimension(640, 640);
+	public static final Dimension DEFAULT_SIZE = new Dimension(640, 640);
 
 	public Vector getVector(int length, Point p) {
 		return focus.add(
 				Vector.extend(new Vector(p.getX() - getWidth() / 2, p.getY() - getHeight() / 2).multiply(pixel), 3));
 
+	}
+
+	public Scalar getPixel() {
+		return pixel;
 	}
 
 	public Frame(Vector focus, Color background, Scalar pixel) {

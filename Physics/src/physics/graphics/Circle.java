@@ -63,7 +63,7 @@ public class Circle extends RegularBody implements DrawableBody {
 	}
 
 	@Override
-	public Vector getCircleCenter(Vector contactPoint) {
+	public Vector getCollisionCircleCenter(Vector contactPoint) {
 		return getPosition();
 	}
 

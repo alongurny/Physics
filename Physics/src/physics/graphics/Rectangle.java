@@ -64,7 +64,7 @@ public class Rectangle extends RegularBody implements DrawableBody {
 	}
 
 	@Override
-	public Vector getCircleCenter(Vector contactPoint) {
+	public Vector getCollisionCircleCenter(Vector contactPoint) {
 		contactPoint = Vector.extend(contactPoint, getPosition().getDimension());
 		Vector d = contactPoint.subtract(getPosition());
 		double phase = Scalar.atan2(d.get(1), d.get(0));
