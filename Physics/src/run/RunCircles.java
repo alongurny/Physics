@@ -47,7 +47,7 @@ public class RunCircles {
 		PhysicalSystem system = f.getPhysicalSystem();
 		system.addExternalBiForce(Forces::getGravity);
 		system.addExternalBiForce(Forces::getLorentzForce);
-		system.addExternalForce(b -> Forces.getFriction(b, Scalar.LITTLE_G, 0.5));
+		system.addExternalForce(b -> Forces.getFriction(b, Scalar.STANDARD_GRAVITY, 0.5));
 		f.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {

@@ -65,7 +65,7 @@ public abstract class RegularBody implements Movable {
 	public final VectorField getMagneticField() {
 		return v -> {
 			Vector r = v.subtract(position);
-			return Scalar.MU0.multiply(charge).divide(4 * Math.PI).multiply(velocity.cross(r))
+			return Scalar.VACUUM_PERMEABILITY.multiply(charge).divide(4 * Math.PI).multiply(velocity.cross(r))
 					.divide(r.getMagnitude().pow(3));
 		};
 	}

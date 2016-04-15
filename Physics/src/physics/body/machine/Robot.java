@@ -32,7 +32,7 @@ public class Robot extends RegularRigidBody {
 	}
 
 	public Scalar getWeight() {
-		return Scalar.LITTLE_G.multiply(getMass());
+		return Scalar.STANDARD_GRAVITY.multiply(getMass());
 	}
 
 	public Vector getDimensions() {

@@ -12,7 +12,6 @@ public final class Scalar implements Comparable<Scalar>, Measurable, Dimensioned
 
 	public static final Scalar METER = new Scalar(Quantity.LENGTH, 1);
 	public static final Scalar CENTIMETER = new Scalar(Quantity.LENGTH, 1e-2);
-
 	public static final Scalar SECOND = new Scalar(Quantity.TIME, 1);
 	public static final Scalar MINUTE = new Scalar(SECOND, 60);
 	public static final Scalar HOUR = new Scalar(MINUTE, 60);
@@ -24,7 +23,7 @@ public final class Scalar implements Comparable<Scalar>, Measurable, Dimensioned
 	public static final Scalar JOULE = new Scalar(Quantity.ENERGY, 1);
 	public static final Scalar COULOMB = new Scalar(Quantity.CHARGE, 1);
 	public static final Scalar RADIAN = new Scalar(Quantity.ANGLE, 1);
-	public static final Scalar E_CHARGE = COULOMB.multiply(1.6e-19);
+	public static final Scalar ELEMENTARY_CHARGE = COULOMB.multiply(1.6e-19);
 	public static final Scalar AMPERE = new Scalar(Quantity.CURRENT, 1);
 	public static final Scalar TESLA = NEWTONE.divide(METER.multiply(AMPERE));
 	public static final Scalar VOLT = new Scalar(Quantity.VOLTAGE, 1);
@@ -32,10 +31,10 @@ public final class Scalar implements Comparable<Scalar>, Measurable, Dimensioned
 	public static final Scalar ONE = new Scalar(Quantity.NONE, 1);
 	public static final Scalar G = METER.pow(3).divide(product(SECOND, SECOND, KILOGRAM)).multiply(6.67384e-11);
 	public static final Scalar K = NEWTONE.multiply(METER.pow(2)).divide(COULOMB.pow(2)).multiply(8.98755e9);
-	public static final Scalar EPSILON0 = K.multiply(4 * Math.PI).inverse();
-	public static final Scalar MU0 = product(LIGHT_SPEED.pow(2), EPSILON0).inverse();
-	public static final Scalar LITTLE_G = METER.divide(SECOND.pow(2)).multiply(10);
-	public static final Scalar ELECTRON_VOLT = E_CHARGE.multiply(VOLT);
+	public static final Scalar VACUUM_PERMITTIVITY = K.multiply(4 * Math.PI).inverse();
+	public static final Scalar VACUUM_PERMEABILITY = product(LIGHT_SPEED.pow(2), VACUUM_PERMITTIVITY).inverse();
+	public static final Scalar STANDARD_GRAVITY = new Scalar(Quantity.ACCELERATION, 9.80665);
+	public static final Scalar ELECTRON_VOLT = ELEMENTARY_CHARGE.multiply(VOLT);
 
 	public static double atan2(Scalar y, Scalar x) {
 		Quantities.requireSameQuantity(y, x);
