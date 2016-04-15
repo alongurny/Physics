@@ -1,11 +1,14 @@
 package physics;
 
+import java.util.Objects;
+
 import exceptions.DimensionMismatchException;
 
 public class Dimensions {
 
 	public static int require(int dimension, Dimensioned... ds) {
 		for (Dimensioned d : ds) {
+			Objects.requireNonNull(d);
 			if (d.getDimension() != dimension) {
 				throw new DimensionMismatchException(d.getDimension(), dimension);
 			}
