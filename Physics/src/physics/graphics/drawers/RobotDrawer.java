@@ -35,6 +35,7 @@ public class RobotDrawer implements Drawable {
 		g2d.fill(rect);
 		g2d.setColor(Color.RED);
 		g2d.drawLine(x - width / 2, y - height / 2, x + width / 2, y - height / 2);
+		g2d.rotate(-angle, x, y);
 
 	}
 

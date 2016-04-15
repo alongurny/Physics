@@ -19,8 +19,9 @@ public class RegularRigidBody extends RegularBody implements RigidBody {
 		super(mass, charge, position, velocity);
 		this.momentOfInertia = Quantities.require(momentOfInertia, Quantity.MOMENT_OF_INERTIA);
 		this.angularPosition = Quantities.require(angularPosition, Quantity.ANGLE);
-		this.angularVelocity = Quantities.require(angularPosition, Quantity.ANGULAR_VELOCITY);
-		Dimensions.requireSame(angularPosition, angularVelocity);
+		this.angularVelocity = Quantities.require(angularVelocity, Quantity.ANGULAR_VELOCITY);
+		int dimension = Dimensions.requireSame(angularPosition, angularVelocity);
+		this.angularAcceleration = Vector.zero(Quantity.ANGULAR_ACCELERATION, dimension);
 	}
 
 	@Override
