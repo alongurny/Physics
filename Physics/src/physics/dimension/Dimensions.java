@@ -2,7 +2,7 @@ package physics.dimension;
 
 import java.util.Objects;
 
-import exceptions.DimensionMismatchException;
+import physics.exception.DimensionMismatchException;
 
 public class Dimensions {
 

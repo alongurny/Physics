@@ -2,11 +2,11 @@ package run;
 
 import java.awt.Color;
 
-import graphics.DrawingEvent;
-import graphics.DrawingListener;
-import graphics.Frame;
 import graphics.drawers.SphereDrawer;
 import physics.body.atom.Electron;
+import physics.graphics.DrawingEvent;
+import physics.graphics.DrawingListener;
+import physics.graphics.Frame;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;

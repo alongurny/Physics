@@ -1,4 +1,4 @@
-package graphics;
+package physics.graphics;
 
 import physics.math.IntVector;
 import physics.math.Scalar;

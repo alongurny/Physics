@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import graphics.Frame;
-import graphics.Joystick;
 import graphics.drawers.RobotDrawer;
 import physics.body.machine.Drivetrain;
 import physics.body.machine.Robot;
+import physics.graphics.Frame;
+import physics.graphics.Joystick;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;

@@ -2,7 +2,7 @@ package physics.quantity;
 
 import java.util.Objects;
 
-import exceptions.QuantityMismatchException;
+import physics.exception.QuantityMismatchException;
 
 public class Quantities {
 

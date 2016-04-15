@@ -1,4 +1,4 @@
-package exceptions;
+package physics.exception;
 
 import physics.quantity.Quantity;
 

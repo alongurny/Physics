@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import graphics.Pixel;
 import physics.body.Body;
+import physics.graphics.Pixel;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;

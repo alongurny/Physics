@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import graphics.PhysicalFrame;
 import graphics.drawers.DrawableBody;
 import physics.Collision;
 import physics.Forces;
 import physics.PhysicalSystem;
 import physics.graphics.Circle;
+import physics.graphics.PhysicalFrame;
 import physics.graphics.Rectangle;
 import physics.math.Scalar;
 import physics.math.Vector;

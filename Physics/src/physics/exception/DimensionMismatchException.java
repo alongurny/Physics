@@ -1,4 +1,4 @@
-package exceptions;
+package physics.exception;
 
 @SuppressWarnings("serial")
 public class DimensionMismatchException extends RuntimeException {

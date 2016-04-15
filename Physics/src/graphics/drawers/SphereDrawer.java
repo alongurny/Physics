@@ -3,8 +3,8 @@ package graphics.drawers;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import graphics.Pixel;
 import physics.body.geometric.Sphere;
+import physics.graphics.Pixel;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;

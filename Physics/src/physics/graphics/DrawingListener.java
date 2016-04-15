@@ -1,4 +1,4 @@
-package graphics;
+package physics.graphics;
 
 public interface DrawingListener {
 

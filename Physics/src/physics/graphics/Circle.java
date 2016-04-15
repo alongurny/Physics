@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 
-import graphics.Pixel;
 import graphics.drawers.DrawableBody;
 import physics.body.RegularBody;
 import physics.math.IntVector;
