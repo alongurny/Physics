@@ -3,7 +3,6 @@ package physics;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import physics.body.Movable;
@@ -13,37 +12,31 @@ import physics.math.Vector;
 import physics.quantity.Quantity;
 
 public class PhysicalSystem implements Dimensioned {
+
+	public static final Scalar DEFAULT_TIME_SPAN = Scalar.SECOND.multiply(15e-3);
 	private List<Movable> bodies;
 	private List<Function<Movable, Vector>> forces;
 	private List<BiFunction<Movable, Movable, Vector>> biforces;
 
 	private int dimension;
+	private Scalar dt;
 
-	public PhysicalSystem(int dimension, Movable... things) {
-		this.bodies = new CopyOnWriteArrayList<>(things);
+	public PhysicalSystem(int dimension, Scalar dt) {
+		this.bodies = new CopyOnWriteArrayList<>();
 		this.forces = new CopyOnWriteArrayList<>();
 		this.biforces = new CopyOnWriteArrayList<>();
+		this.dt = dt;
 		this.dimension = dimension;
 	}
 
-	public PhysicalSystem(int dimension, List<? extends Movable> things) {
-		this.bodies = new CopyOnWriteArrayList<>(things);
-		this.forces = new CopyOnWriteArrayList<>();
-		this.biforces = new CopyOnWriteArrayList<>();
-		this.dimension = dimension;
-	}
-
-	public void applyForces() {
+	public void progress() {
 		bodies.forEach(b -> forces.forEach(f -> b.addForce(f.apply(b))));
 		biforces.forEach(f -> bodies.forEach(b -> bodies.forEach(c -> {
 			if (b != c) {
 				b.addForce(f.apply(b, c));
 			}
 		})));
-	}
-
-	public void forEach(Consumer<? super Movable> action) {
-		bodies.forEach(action);
+		bodies.forEach(b -> b.move(dt));
 	}
 
 	public Scalar getTotalScalar(Quantity quantity, Function<Movable, Scalar> f) {
@@ -85,5 +78,9 @@ public class PhysicalSystem implements Dimensioned {
 	@Override
 	public int getDimension() {
 		return dimension;
+	}
+
+	public Scalar getDt() {
+		return dt;
 	}
 }

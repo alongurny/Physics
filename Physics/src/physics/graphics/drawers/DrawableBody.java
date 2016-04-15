@@ -18,9 +18,9 @@ public interface DrawableBody extends Drawable, Movable {
 				: Optional.of(new Vector(sa.getBounds().getCenterX(), sa.getBounds().getCenterY()).multiply(pixel));
 	}
 
-	public static Optional<Vector> getFutureIntersection(Scalar pixel, DrawableBody a, DrawableBody b) {
-		IntVector va = a.getVelocity(pixel);
-		IntVector vb = b.getVelocity(pixel);
+	public static Optional<Vector> getFutureIntersection(Scalar pixel, DrawableBody a, DrawableBody b, Scalar dt) {
+		IntVector va = a.getVelocity(pixel.divide(dt));
+		IntVector vb = b.getVelocity(pixel.divide(dt));
 		a.getBounds(pixel).translate(va.get(0), va.get(1));
 		b.getBounds(pixel).translate(vb.get(0), vb.get(1));
 		Optional<Vector> result = getIntersection(pixel, a, b);

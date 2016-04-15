@@ -1,13 +1,14 @@
 package physics.body;
 
+import physics.math.Scalar;
 import physics.math.Vector;
 
 public interface Movable extends Body {
 
-	void move();
+	void move(Scalar dt);
 
 	void addForce(Vector force);
 
-	void addImpulse(Vector impulse);
+	void addImpulse(Vector impulse, Scalar dt);
 
 }

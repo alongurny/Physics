@@ -19,7 +19,7 @@ public class Spaceship extends RegularRigidBody {
 		Scalar pull = fuel.pull(value);
 		Scalar v0 = getVelocity().getMagnitude();
 		Scalar v = Scalar.sqrt(pull.multiply(2).divide(getMass()).add(v0.pow(2)));
-		addImpulse(getAngularPosition().multiply(v).subtract(getVelocity()).multiply(getMass()));
+		addImpulse(getAngularPosition().multiply(v).subtract(getVelocity()).multiply(getMass()), dt);
 	}
 
 	public Container getFuel() {

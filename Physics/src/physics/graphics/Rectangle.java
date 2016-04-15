@@ -55,7 +55,7 @@ public class Rectangle extends RegularBody implements DrawableBody {
 
 	@Override
 	public IntVector getVelocity(Scalar pixel) {
-		return Pixel.convert(getVelocity().multiply(RegularBody.DEFAULT_TIME_SPAN), pixel);
+		return Pixel.convert(getVelocity(), pixel);
 	}
 
 	public Color getColor() {

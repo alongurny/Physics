@@ -23,7 +23,8 @@ public class RunCircles {
 
 	public static void main(String[] args) {
 		Scalar pixel = Scalar.METER.multiply(1);
-		PhysicalFrame f = new PhysicalFrame(Vector.Axes3D.ORIGIN, Color.GRAY, pixel, 3);
+		PhysicalFrame f = new PhysicalFrame(Vector.Axes3D.ORIGIN, Color.GRAY, pixel, 3,
+				PhysicalSystem.DEFAULT_TIME_SPAN);
 		Color[] cs = new Color[] { Color.BLUE, Color.RED };
 		List<Circle> circles = new ArrayList<>();
 		Vector[] locs = new Vector[] { new Vector(pixel, -200, 0, 0), new Vector(pixel, 50, 50, 0) };
@@ -63,7 +64,8 @@ public class RunCircles {
 		});
 		f.addLabel("r1", circles.get(0)::getPosition);
 		f.addLabel("r2", circles.get(1)::getPosition);
-		f.addDrawingListener(e -> circles.forEach(c -> rects.forEach(r -> DrawableBody
-				.getFutureIntersection(pixel, c, r).ifPresent(p -> c.addImpulse(Collision.getImpulse(c, r, p))))));
+		f.addDrawingListener(e -> circles.forEach(c -> rects.forEach(
+				r -> DrawableBody.getFutureIntersection(pixel, c, r, PhysicalSystem.DEFAULT_TIME_SPAN).ifPresent(
+						p -> c.addImpulse(Collision.getImpulse(c, r, p), PhysicalSystem.DEFAULT_TIME_SPAN)))));
 	}
 }

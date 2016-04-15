@@ -6,11 +6,10 @@ import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import physics.Dynamics;
 import physics.Forces;
 import physics.PhysicalSystem;
-import physics.Dynamics;
 import physics.body.Body;
-import physics.body.Movable;
 import physics.body.space.Earth;
 import physics.body.space.Planet;
 import physics.body.space.Sun;
@@ -31,7 +30,7 @@ public class RunSolarSystem {
 			new Vector(Earth.ROUND_RADIUS, Scalar.zero(Quantity.LENGTH), Scalar.zero(Quantity.LENGTH)),
 			new Vector(Scalar.zero(Quantity.VELOCITY), Dynamics.getOrbitVelocity(sun, Earth.ROUND_RADIUS),
 					Scalar.zero(Quantity.VELOCITY)));
-	static PhysicalSystem solar = new PhysicalSystem(3, sun, earth);
+	static PhysicalSystem solar = new PhysicalSystem(3, PhysicalSystem.DEFAULT_TIME_SPAN);
 	static Body focus = sun;
 
 	public static void main(String[] args) throws InterruptedException {
@@ -67,8 +66,7 @@ public class RunSolarSystem {
 		f.addDrawingListener(new DrawingListener() {
 			@Override
 			public void onDraw(DrawingEvent e) {
-				solar.applyForces();
-				solar.forEach(Movable::move);
+				solar.progress();
 				f.setFocus(focus.getPosition());
 			}
 		});

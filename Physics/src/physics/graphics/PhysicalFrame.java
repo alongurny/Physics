@@ -6,7 +6,6 @@ import java.util.List;
 
 import physics.Collision;
 import physics.PhysicalSystem;
-import physics.body.Movable;
 import physics.dimension.Dimensioned;
 import physics.graphics.drawers.DrawableBody;
 import physics.math.Scalar;
@@ -18,16 +17,15 @@ public class PhysicalFrame extends Frame implements Dimensioned {
 	private PhysicalSystem system;
 	private List<DrawableBody> bodies;
 
-	public PhysicalFrame(Vector focus, Color background, Scalar pixel, int dimension) {
+	public PhysicalFrame(Vector focus, Color background, Scalar pixel, int dimension, Scalar dt) {
 		super(focus, background, pixel);
 		bodies = new ArrayList<>();
-		system = new PhysicalSystem(dimension);
-		addDrawingListener(e -> system.applyForces());
-		addDrawingListener(e -> system.forEach(Movable::move));
+		system = new PhysicalSystem(dimension, dt);
+		addDrawingListener(e -> system.progress());
 		addDrawingListener(e -> bodies.forEach(a -> bodies.forEach(b -> {
 			if (a != b) {
-				DrawableBody.getFutureIntersection(getPixel(), a, b)
-						.ifPresent(p -> a.addImpulse(Collision.getImpulse(a, b, p)));
+				DrawableBody.getFutureIntersection(getPixel(), a, b, system.getDt())
+						.ifPresent(p -> a.addImpulse(Collision.getImpulse(a, b, p), system.getDt()));
 			}
 		})));
 	}

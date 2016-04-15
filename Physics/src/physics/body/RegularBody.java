@@ -9,11 +9,8 @@ import physics.quantity.Quantity;
 
 public abstract class RegularBody implements Movable {
 
-	public static final Scalar DEFAULT_TIME_SPAN = Scalar.SECOND.multiply(15e-3);
-
 	private final Scalar mass;
 	private final Scalar charge;
-	private final Scalar timeSpan;
 	private Vector position;
 	private Vector velocity;
 	private Vector acceleration;
@@ -25,7 +22,6 @@ public abstract class RegularBody implements Movable {
 		this.position = Quantities.require(position, Quantity.LENGTH);
 		this.velocity = Quantities.require(velocity, Quantity.VELOCITY);
 		this.acceleration = Vector.zero(Quantity.ACCELERATION, position.getDimension());
-		this.timeSpan = DEFAULT_TIME_SPAN;
 	}
 
 	public final void addAcceleration(Vector acceleration) {
@@ -38,9 +34,9 @@ public abstract class RegularBody implements Movable {
 		this.acceleration = this.acceleration.add(force.divide(mass));
 	}
 
-	public final void addImpulse(Vector impulse) {
+	public final void addImpulse(Vector impulse, Scalar dt) {
 		Quantities.require(impulse, Quantity.MOMENTUM);
-		this.acceleration = this.acceleration.add(impulse.divide(mass).divide(getTimeSpan()));
+		this.acceleration = this.acceleration.add(impulse.divide(mass).divide(dt));
 	}
 
 	public final Vector getAcceleration() {
@@ -89,10 +85,6 @@ public abstract class RegularBody implements Movable {
 		return position;
 	}
 
-	protected final Scalar getTimeSpan() {
-		return timeSpan;
-	}
-
 	public final Scalar getTranslationalKinecticEnergy() {
 		return Scalar.product(velocity.getMagnitude().pow(2), mass).multiply(0.5);
 	}
@@ -101,9 +93,9 @@ public abstract class RegularBody implements Movable {
 		return velocity;
 	}
 
-	public final void move() {
-		velocity = velocity.add(acceleration.multiply(getTimeSpan()));
-		position = position.add(velocity.multiply(getTimeSpan()));
+	public final void move(Scalar dt) {
+		velocity = velocity.add(acceleration.multiply(dt));
+		position = position.add(velocity.multiply(dt));
 		acceleration = Vector.zero(Quantity.ACCELERATION, acceleration.getDimension());
 	}
 

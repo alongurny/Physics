@@ -38,7 +38,8 @@ public class Circle extends RegularBody implements DrawableBody {
 		int[] x = new int[ACCURACY];
 		int[] y = new int[ACCURACY];
 		for (int i = 0; i < ACCURACY; i++) {
-			Vector v = Vector.extend(Vector.fromPolar(radius, (2 * Math.PI * i) / ACCURACY), getPosition().getDimension());
+			Vector v = Vector.extend(Vector.fromPolar(radius, (2 * Math.PI * i) / ACCURACY),
+					getPosition().getDimension());
 			IntVector iv = Pixel.convert(getPosition().add(v), pixel);
 			x[i] = iv.get(0);
 			y[i] = iv.get(1);
@@ -54,7 +55,7 @@ public class Circle extends RegularBody implements DrawableBody {
 
 	@Override
 	public IntVector getVelocity(Scalar pixel) {
-		return Pixel.convert(getVelocity().multiply(RegularBody.DEFAULT_TIME_SPAN), pixel);
+		return Pixel.convert(getVelocity(), pixel);
 	}
 
 	public Color getColor() {

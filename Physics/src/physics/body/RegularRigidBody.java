@@ -39,9 +39,9 @@ public class RegularRigidBody extends RegularBody implements RigidBody {
 		return angularVelocity;
 	}
 
-	public final void rotate() {
-		angularVelocity = angularVelocity.add(angularAcceleration.multiply(getTimeSpan()));
-		angularPosition = angularPosition.add(angularVelocity.multiply(getTimeSpan()));
+	public final void rotate(Scalar dt) {
+		angularVelocity = angularVelocity.add(angularAcceleration.multiply(dt));
+		angularPosition = angularPosition.add(angularVelocity.multiply(dt));
 		angularAcceleration = Vector.zero(Quantity.ANGULAR_ACCELERATION, angularAcceleration.getDimension());
 	}
 
@@ -55,10 +55,9 @@ public class RegularRigidBody extends RegularBody implements RigidBody {
 		this.angularAcceleration = this.angularAcceleration.add(torque.divide(momentOfInertia));
 	}
 
-	public final void addAngularImpulse(Vector angularImpulse) {
+	public final void addAngularImpulse(Vector angularImpulse, Scalar dt) {
 		Quantities.require(angularImpulse, Quantity.ANGULAR_MOMENTUM);
-		this.angularAcceleration = this.angularAcceleration
-				.add(angularImpulse.divide(momentOfInertia).divide(getTimeSpan()));
+		this.angularAcceleration = this.angularAcceleration.add(angularImpulse.divide(momentOfInertia).divide(dt));
 	}
 
 }

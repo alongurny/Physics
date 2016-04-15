@@ -2,6 +2,7 @@ package run;
 
 import java.awt.Color;
 
+import physics.PhysicalSystem;
 import physics.body.atom.Electron;
 import physics.graphics.DrawingEvent;
 import physics.graphics.DrawingListener;
@@ -29,8 +30,8 @@ public class Test {
 			public void onDraw(DrawingEvent e) {
 				e1.addForce(e2.getElectricalField().get(e1.getPosition()).multiply(e1.getCharge()));
 				e2.addForce(e1.getElectricalField().get(e2.getPosition()).multiply(e2.getCharge()));
-				e1.move();
-				e2.move();
+				e1.move(PhysicalSystem.DEFAULT_TIME_SPAN);
+				e2.move(PhysicalSystem.DEFAULT_TIME_SPAN);
 			}
 		});
 	}

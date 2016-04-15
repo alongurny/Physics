@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import physics.PhysicalSystem;
 import physics.body.machine.Drivetrain;
 import physics.body.machine.Robot;
 import physics.graphics.Frame;
@@ -24,8 +25,8 @@ public class RunRobot {
 		f.addLabel("Position", robot::getPosition);
 		f.addLabel("Rotation", () -> robot.getAngularPosition().get(0));
 		f.addLabel("Angular velocity", () -> robot.getAngularVelocity().get(0));
-		f.addDrawingListener(e -> robot.move());
-		f.addDrawingListener(e -> robot.rotate());
+		f.addDrawingListener(e -> robot.move(PhysicalSystem.DEFAULT_TIME_SPAN));
+		f.addDrawingListener(e -> robot.move(PhysicalSystem.DEFAULT_TIME_SPAN));
 		double mu = 0.04;
 		f.addDrawingListener(e -> {
 			if (!Scalar.isZero(robot.getVelocity().getMagnitude())) {
@@ -39,7 +40,7 @@ public class RunRobot {
 			}
 		});
 		Joystick j = new Joystick();
-		Drivetrain d = new Drivetrain(robot);
+		Drivetrain d = new Drivetrain(robot, PhysicalSystem.DEFAULT_TIME_SPAN);
 		Timer t = new Timer();
 		t.schedule(new TimerTask() {
 
