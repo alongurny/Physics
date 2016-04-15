@@ -1,6 +1,6 @@
 package physics;
 
-import graphics.drawers.DrawableBody;
+import physics.graphics.drawers.DrawableBody;
 import physics.math.Scalar;
 import physics.math.Vector;
 

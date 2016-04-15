@@ -15,8 +15,8 @@ import java.util.function.Supplier;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import graphics.drawers.Drawable;
-import graphics.drawers.LabelDrawer;
+import physics.graphics.drawers.Drawable;
+import physics.graphics.drawers.LabelDrawer;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;

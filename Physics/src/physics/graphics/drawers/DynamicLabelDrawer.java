@@ -1,4 +1,4 @@
-package graphics.drawers;
+package physics.graphics.drawers;
 
 import java.awt.Color;
 import java.awt.Graphics;

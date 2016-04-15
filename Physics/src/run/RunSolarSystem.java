@@ -6,8 +6,6 @@ import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import graphics.drawers.DynamicLabelDrawer;
-import graphics.drawers.SphereDrawer;
 import physics.Forces;
 import physics.PhysicalSystem;
 import physics.Dynamics;
@@ -19,6 +17,8 @@ import physics.body.space.Sun;
 import physics.graphics.DrawingEvent;
 import physics.graphics.DrawingListener;
 import physics.graphics.Frame;
+import physics.graphics.drawers.DynamicLabelDrawer;
+import physics.graphics.drawers.SphereDrawer;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;

@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import graphics.drawers.DrawableBody;
 import physics.Collision;
 import physics.PhysicalSystem;
 import physics.body.Movable;
 import physics.dimension.Dimensioned;
+import physics.graphics.drawers.DrawableBody;
 import physics.math.Scalar;
 import physics.math.Vector;
 

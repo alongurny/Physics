@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 
-import graphics.drawers.DrawableBody;
 import physics.body.RegularBody;
+import physics.graphics.drawers.DrawableBody;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
