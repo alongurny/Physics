@@ -1,11 +1,11 @@
 package physics.body.machine;
 
-import physics.body.RigidBody;
+import physics.body.RegularRigidBody;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
 
-public class Spaceship extends RigidBody {
+public class Spaceship extends RegularRigidBody {
 
 	private Container fuel;
 

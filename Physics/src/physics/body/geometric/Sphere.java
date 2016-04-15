@@ -1,17 +1,15 @@
 package physics.body.geometric;
 
-import physics.body.RigidBody;
+import physics.body.RegularBody;
 import physics.math.Scalar;
 import physics.math.Vector;
 
-public class Sphere extends RigidBody {
+public class Sphere extends RegularBody {
 
 	private Scalar radius;
 
-	public Sphere(Scalar mass, Scalar charge, Vector center, Vector velocity, Vector angularPosition,
-			Vector angularVelocity, Scalar radius) {
-		super(mass, charge, center, velocity, mass.multiply(radius.pow(2)).multiply(0.4).divide(Scalar.RADIAN.pow(2)),
-				angularPosition, angularVelocity);
+	public Sphere(Scalar mass, Scalar charge, Vector center, Vector velocity, Scalar radius) {
+		super(mass, charge, center, velocity);
 		this.radius = radius;
 	}
 

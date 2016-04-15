@@ -26,13 +26,11 @@ import physics.quantity.Quantity;
 public class RunSolarSystem {
 
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	static Planet sun = new Sun(Vector.Axes3D.ORIGIN, Vector.zero(Quantity.VELOCITY, 3), Vector.zero(Quantity.ANGLE, 3),
-			Vector.zero(Quantity.ANGULAR_VELOCITY, 3));
+	static Planet sun = new Sun(Vector.Axes3D.ORIGIN, Vector.zero(Quantity.VELOCITY, 3));
 	static Planet earth = new Earth(
 			new Vector(Earth.ROUND_RADIUS, Scalar.zero(Quantity.LENGTH), Scalar.zero(Quantity.LENGTH)),
 			new Vector(Scalar.zero(Quantity.VELOCITY), Util.forCircularMovement(sun, Earth.ROUND_RADIUS),
-					Scalar.zero(Quantity.VELOCITY)),
-			Vector.zero(Quantity.ANGLE, 3), Vector.zero(Quantity.ANGULAR_VELOCITY, 3));
+					Scalar.zero(Quantity.VELOCITY)));
 	static PhysicalSystem solar = new PhysicalSystem(3, sun, earth);
 	static Body focus = sun;
 
@@ -67,7 +65,6 @@ public class RunSolarSystem {
 			}
 		});
 		f.addDrawingListener(new DrawingListener() {
-
 			@Override
 			public void onDraw(DrawingEvent e) {
 				solar.applyForces();

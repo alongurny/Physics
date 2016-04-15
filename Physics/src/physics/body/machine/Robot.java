@@ -1,19 +1,20 @@
 package physics.body.machine;
 
-import physics.body.RigidBody;
+import physics.body.RegularRigidBody;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 
-public class Robot extends RigidBody {
+public class Robot extends RegularRigidBody {
 
 	private Scalar width, height;
 
 	public Robot(Scalar mass, Vector center, Scalar inertiaMomemnt, Vector angularPosition, Scalar width,
 			Scalar height) {
 		super(mass, Scalar.zero(Quantity.CHARGE), center, Vector.zero(Quantity.VELOCITY, center.getDimension()),
-				inertiaMomemnt, angularPosition, Vector.zero(Quantity.ANGULAR_VELOCITY, angularPosition.getDimension()));
+				inertiaMomemnt, angularPosition,
+				Vector.zero(Quantity.ANGULAR_VELOCITY, angularPosition.getDimension()));
 		this.width = Quantities.require(width, Quantity.LENGTH);
 		this.height = Quantities.require(height, Quantity.LENGTH);
 	}
