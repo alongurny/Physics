@@ -105,6 +105,17 @@ public class Matrix {
 		return i;
 	}
 
+	public Scalar getDeterminant() {
+		if (!isSquare()) {
+			throw new MatrixArithmeticException("Matrix is not square");
+		}
+		Scalar s = Scalar.ONE;
+		for (RowOperation r : getRowCanonicalForm().getSecond()) {
+			s = r.changeDeterminant(s);
+		}
+		return s.inverse();
+	}
+
 	public Pair<Matrix, List<RowOperation>> getRowCanonicalForm() {
 		Matrix a = this;
 		List<RowOperation> ops = new ArrayList<>();
@@ -118,13 +129,17 @@ public class Matrix {
 				}
 			}
 			if (!Scalar.isZero(a.get(maxi, j))) {
-				ops.add(RowOperation.swap(i, maxi));
-				a = ops.get(ops.size() - 1).operate(a);
+				if (i != maxi) {
+					ops.add(RowOperation.swap(i, maxi));
+					a = ops.get(ops.size() - 1).operate(a);
+				}
 				ops.add(RowOperation.multiply(i, a.get(i, j).inverse()));
 				a = ops.get(ops.size() - 1).operate(a);
 				for (int u = i + 1; u < m; u++) {
-					ops.add(RowOperation.addRow(u, i, a.get(u, j).negate()));
-					a = ops.get(ops.size() - 1).operate(a);
+					if (!Scalar.isZero(a.get(u, j))) {
+						ops.add(RowOperation.addRow(u, i, a.get(u, j).negate()));
+						a = ops.get(ops.size() - 1).operate(a);
+					}
 				}
 				i++;
 			}
