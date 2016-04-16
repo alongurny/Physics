@@ -2,8 +2,6 @@ package physics.dimension;
 
 import java.util.Objects;
 
-import physics.exception.DimensionMismatchException;
-
 public class Dimensions {
 
 	public static int require(int dimension, Dimensioned... ds) {

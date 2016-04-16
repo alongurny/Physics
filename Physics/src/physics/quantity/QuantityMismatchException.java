@@ -1,6 +1,4 @@
-package physics.exception;
-
-import physics.quantity.Quantity;
+package physics.quantity;
 
 @SuppressWarnings("serial")
 public class QuantityMismatchException extends RuntimeException {

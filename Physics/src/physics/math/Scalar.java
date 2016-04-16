@@ -29,6 +29,7 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 	public static final Scalar VOLT = new Scalar(Quantity.VOLTAGE, 1);
 	public static final Scalar HERTZ = SECOND.inverse();
 	public static final Scalar ONE = new Scalar(Quantity.NONE, 1);
+	public static final Scalar ZERO = new Scalar(Quantity.NONE, 0);
 	public static final Scalar G = METER.pow(3).divide(product(SECOND, SECOND, KILOGRAM)).multiply(6.67384e-11);
 	public static final Scalar K = NEWTONE.multiply(METER.pow(2)).divide(COULOMB.pow(2)).multiply(8.98755e9);
 	public static final Scalar VACUUM_PERMITTIVITY = K.multiply(4 * Math.PI).inverse();
@@ -200,5 +201,12 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 
 	public String toString(int n) {
 		return String.format("%." + n + "g", value) + " " + UnitSystem.SI.getUnitName(quantity);
+	}
+
+	public static Scalar abs(Scalar scalar) {
+		if (scalar.value < 0) {
+			return new Scalar(scalar.quantity, -scalar.value);
+		}
+		return scalar;
 	}
 }

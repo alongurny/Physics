@@ -2,8 +2,6 @@ package physics.quantity;
 
 import java.util.Objects;
 
-import physics.exception.QuantityMismatchException;
-
 public class Quantities {
 
 	public static Quantity require(Quantity found, Quantity expected) {
