@@ -167,7 +167,7 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 	}
 
 	public Scalar inverse() {
-		return new Scalar(Quantity.inverse(quantity), 1 / value);
+		return new Scalar(quantity.inverse(), 1 / value);
 	}
 
 	public Scalar multiply(double c) {

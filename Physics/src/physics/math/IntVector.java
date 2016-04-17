@@ -23,6 +23,10 @@ public final class IntVector implements Dimensioned {
 		return new IntVector(length, i -> 0);
 	}
 
+	public static IntVector axis(int length, int loc) {
+		return new IntVector(length, i -> Mathx.kroneckerDelta(i, loc));
+	}
+
 	private final int[] entries;
 
 	public IntVector(int... entries) {
@@ -58,6 +62,22 @@ public final class IntVector implements Dimensioned {
 		return new IntVector(getDimension(), i -> get(i) * n);
 	}
 
+	public boolean isDivisible(int n) {
+		for (int entry : entries) {
+			if (entry % n != 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public IntVector divide(int n) {
+		if (!isDivisible(n)) {
+			throw new IntVectorArithmeticException("Cannot divide this instance of IntVector by " + n);
+		}
+		return new IntVector(getDimension(), i -> get(i) / n);
+	}
+
 	public IntVector negate() {
 		return new IntVector(getDimension(), i -> -get(i));
 	}
@@ -75,4 +95,17 @@ public final class IntVector implements Dimensioned {
 		return sb.toString() + ")";
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof IntVector && equalsIntVector((IntVector) obj);
+	}
+
+	private boolean equalsIntVector(IntVector p) {
+		for (int i = 0; i < getDimension(); i++) {
+			if (entries[i] != p.entries[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

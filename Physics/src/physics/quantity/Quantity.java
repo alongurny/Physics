@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import physics.math.IntVector;
+
 public class Quantity {
 
 	public enum Basic {
@@ -15,21 +17,20 @@ public class Quantity {
 
 	public static final int COUNT = 5;
 
-	private static final String[] letters = new String[] { "length", "time",
-			"mass", "charge", "angle" };
+	private static final String[] letters = new String[] { "length", "time", "mass", "charge", "angle" };
 
 	private static final Map<Quantity, String> repr = new HashMap<Quantity, String>();
 
 	/*
 	 * Basics
 	 */
-	public static final Quantity NONE = new Quantity(0, 0, 0, 0, 0);
+	public static final Quantity NONE = new Quantity(IntVector.zero(COUNT));
 
-	public static final Quantity LENGTH = new Quantity(1, 0, 0, 0, 0);
-	public static final Quantity TIME = new Quantity(0, 1, 0, 0, 0);
-	public static final Quantity MASS = new Quantity(0, 0, 1, 0, 0);
-	public static final Quantity CHARGE = new Quantity(0, 0, 0, 1, 0);
-	public static final Quantity ANGLE = new Quantity(0, 0, 0, 0, 1);
+	public static final Quantity LENGTH = new Quantity(IntVector.axis(COUNT, 0));
+	public static final Quantity TIME = new Quantity(IntVector.axis(COUNT, 1));
+	public static final Quantity MASS = new Quantity(IntVector.axis(COUNT, 2));
+	public static final Quantity CHARGE = new Quantity(IntVector.axis(COUNT, 3));
+	public static final Quantity ANGLE = new Quantity(IntVector.axis(COUNT, 4));
 	/*
 	 * Mechanics
 	 */
@@ -43,7 +44,7 @@ public class Quantity {
 	 * Waves
 	 */
 
-	public static final Quantity FREQUENCY = inverse(TIME);
+	public static final Quantity FREQUENCY = TIME.inverse();
 
 	/*
 	 * Energy
@@ -55,13 +56,10 @@ public class Quantity {
 	 * Rigid Body Mechanics
 	 */
 	public static final Quantity ANGULAR_VELOCITY = quotinent(ANGLE, TIME);
-	public static final Quantity ANGULAR_ACCELERATION = quotinent(
-			ANGULAR_VELOCITY, TIME);
+	public static final Quantity ANGULAR_ACCELERATION = quotinent(ANGULAR_VELOCITY, TIME);
 	public static final Quantity TORQUE = product(FORCE, LENGTH).divide(ANGLE);
-	public static final Quantity MOMENT_OF_INERTIA = quotinent(TORQUE,
-			ANGULAR_ACCELERATION);
-	public static final Quantity ANGULAR_MOMENTUM = product(MOMENT_OF_INERTIA,
-			ANGULAR_VELOCITY);
+	public static final Quantity MOMENT_OF_INERTIA = quotinent(TORQUE, ANGULAR_ACCELERATION);
+	public static final Quantity ANGULAR_MOMENTUM = product(MOMENT_OF_INERTIA, ANGULAR_VELOCITY);
 
 	/*
 	 * Geometry
@@ -79,8 +77,7 @@ public class Quantity {
 
 	static {
 		for (Field f : Quantity.class.getFields()) {
-			if (Modifier.isStatic(f.getModifiers())
-					&& Modifier.isFinal(f.getModifiers())) {
+			if (Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers())) {
 				try {
 					Object o = f.get(null);
 					if (o instanceof Quantity) {
@@ -99,12 +96,8 @@ public class Quantity {
 		repr.put(quantity, name);
 	}
 
-	public static Quantity inverse(Quantity q) {
-		int[] res = new int[COUNT];
-		for (int i = 0; i < res.length; i++) {
-			res[i] = -q.values[i];
-		}
-		return new Quantity(res);
+	public Quantity inverse() {
+		return new Quantity(vector.negate());
 	}
 
 	public static Quantity pow(Quantity q, int n) {
@@ -120,31 +113,21 @@ public class Quantity {
 	}
 
 	public static Quantity quotinent(Quantity p, Quantity q) {
-		return product(p, inverse(q));
+		return product(p, q.inverse());
 	}
 
 	public static Quantity root(Quantity q, int n) {
-		for (int i = 0; i < q.values.length; i++) {
-			if (q.values[i] % n != 0) {
-				throw new IllegalArgumentException("Root " + n
-						+ " not possible for " + q);
-			}
-		}
-		int[] res = new int[COUNT];
-		for (int i = 0; i < res.length; i++) {
-			res[i] = q.values[i] / n;
-		}
-		return new Quantity(res);
+		return new Quantity(q.vector.divide(n));
 	}
 
 	public static Quantity sqrt(Quantity q) {
 		return root(q, 2);
 	}
 
-	private final int[] values;
+	private final IntVector vector;
 
-	private Quantity(int... values) {
-		this.values = values;
+	private Quantity(IntVector vector) {
+		this.vector = vector;
 	}
 
 	public Quantity divide(Quantity q) {
@@ -157,16 +140,11 @@ public class Quantity {
 	}
 
 	private boolean equalsQuantity(Quantity p) {
-		for (int i = 0; i < COUNT; i++) {
-			if (values[i] != p.values[i]) {
-				return false;
-			}
-		}
-		return true;
+		return vector.equals(p.vector);
 	}
 
 	public int get(int i) {
-		return values[i];
+		return vector.get(i);
 	}
 
 	@Override
@@ -175,33 +153,24 @@ public class Quantity {
 	}
 
 	public Quantity multiply(Quantity q) {
-		int[] res = new int[COUNT];
-		for (int i = 0; i < res.length; i++) {
-			res[i] = values[i] + q.values[i];
-		}
-		return new Quantity(res);
+		return new Quantity(vector.add(q.vector));
 	}
 
 	public Quantity pow(int n) {
-		int[] res = new int[COUNT];
-		for (int i = 0; i < res.length; i++) {
-			res[i] = values[i] * n;
-		}
-		return new Quantity(res);
+		return new Quantity(vector.multiply(n));
 	}
 
 	@Override
 	public String toString() {
 		List<String> ss = new ArrayList<String>();
-		for (int i = 0; i < COUNT; i++) {
-			if (values[i] != 0) {
-				ss.add(values[i] == 1 ? letters[i] : letters[i] + "^"
-						+ values[i]);
+		for (int i = 0; i < vector.getDimension(); i++) {
+			int value = vector.get(i);
+			if (value != 0) {
+				String letter = letters[i];
+				ss.add(value == 1 ? letter : letter + "^" + value);
 			}
 		}
-		String res = "["
-				+ (ss.size() == 0 ? "None" : String.join(" ",
-						ss.toArray(new String[ss.size()]))) + "]";
+		String res = "[" + (ss.size() == 0 ? "None" : String.join(" ", ss.toArray(new String[ss.size()]))) + "]";
 		if (repr.containsKey(this)) {
 			res = repr.get(this) + " " + res;
 		}
