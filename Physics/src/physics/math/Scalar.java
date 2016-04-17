@@ -38,12 +38,12 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 	public static final Scalar ELECTRON_VOLT = ELEMENTARY_CHARGE.multiply(VOLT);
 
 	public static double atan2(Scalar y, Scalar x) {
-		Quantities.requireSameQuantity(y, x);
+		Quantities.requireSame(y, x);
 		return Math.atan2(y.value, x.value);
 	}
 
 	public static int compare(Scalar s, Scalar t) {
-		Quantities.requireSameQuantity(s, t);
+		Quantities.requireSame(s, t);
 		return Double.compare(s.value, t.value);
 	}
 
@@ -121,18 +121,18 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 	}
 
 	public Scalar add(Scalar v) {
-		Quantities.requireSameQuantity(this, v);
+		Quantities.requireSame(this, v);
 		return new Scalar(quantity, value + v.value);
 	}
 
 	@Override
 	public int compareTo(Scalar o) {
-		Quantities.requireSameQuantity(this, o);
+		Quantities.requireSame(this, o);
 		return Double.compare(value, o.value);
 	}
 
 	public double convert(Scalar v) {
-		Quantities.requireSameQuantity(this, v);
+		Quantities.requireSame(this, v);
 		return value / v.value;
 	}
 

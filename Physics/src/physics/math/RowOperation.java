@@ -1,7 +1,8 @@
 package physics.math;
 
 public interface RowOperation {
-	Matrix operate(Matrix m);
+
+	void operate(Scalar[][] arr);
 
 	Scalar changeDeterminant(Scalar s);
 
@@ -9,8 +10,12 @@ public interface RowOperation {
 		return new RowOperation() {
 
 			@Override
-			public Matrix operate(Matrix m) {
-				return new Matrix(m.getRowCount(), m.getColumnCount(), (i, j) -> m.get(i == a ? b : i == b ? a : i, j));
+			public void operate(Scalar[][] arr) {
+				for (int j = 0; j < arr[0].length; j++) {
+					Scalar temp = arr[a][j];
+					arr[a][j] = arr[b][j];
+					arr[b][j] = temp;
+				}
 			}
 
 			@Override
@@ -29,9 +34,10 @@ public interface RowOperation {
 		return new RowOperation() {
 
 			@Override
-			public Matrix operate(Matrix m) {
-				return new Matrix(m.getRowCount(), m.getColumnCount(),
-						(i, j) -> i == a ? c.multiply(m.get(a, j)) : m.get(i, j));
+			public void operate(Scalar[][] arr) {
+				for (int j = 0; j < arr[0].length; j++) {
+					arr[a][j] = arr[a][j].multiply(c);
+				}
 			}
 
 			@Override
@@ -50,9 +56,10 @@ public interface RowOperation {
 		return new RowOperation() {
 
 			@Override
-			public Matrix operate(Matrix m) {
-				return new Matrix(m.getRowCount(), m.getColumnCount(),
-						(i, j) -> i == a ? m.get(a, j).add(c.multiply(m.get(b, j))) : m.get(i, j));
+			public void operate(Scalar[][] arr) {
+				for (int j = 0; j < arr[0].length; j++) {
+					arr[a][j] = arr[a][j].add(arr[b][j].multiply(c));
+				}
 			}
 
 			@Override

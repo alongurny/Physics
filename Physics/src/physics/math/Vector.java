@@ -6,6 +6,7 @@ import java.util.function.Function;
 import physics.dimension.Dimensioned;
 import physics.dimension.Dimensions;
 import physics.quantity.Quantifiable;
+import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 import physics.quantity.UnitSystem;
 
@@ -83,6 +84,7 @@ public final class Vector implements Quantifiable, Dimensioned {
 		for (int i = 0; i < entries.length; i++) {
 			entries[i] = f.apply(i);
 		}
+		Quantities.requireSame(entries);
 	}
 
 	public Vector(Scalar s) {

@@ -2,8 +2,12 @@ package physics.math;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+
+import physics.quantity.Quantities;
+import physics.quantity.Quantity;
 
 public class Matrix {
 
@@ -20,18 +24,26 @@ public class Matrix {
 	}
 
 	private Scalar[][] values;
+	private Optional<Matrix> rref;
+	private Optional<List<RowOperation>> rowOperations;
+	private Optional<Scalar> determinant;
 
 	public Matrix(double[][] values) {
 		this(values.length, values[0].length, (i, j) -> new Scalar(values[i][j]));
 	}
 
 	public Matrix(int rowCount, int columnCount, BiFunction<Integer, Integer, Scalar> f) {
+		rref = Optional.empty();
+		rowOperations = Optional.empty();
+		determinant = Optional.empty();
 		this.values = new Scalar[rowCount][columnCount];
 		for (int i = 0; i < rowCount; i++) {
 			for (int j = 0; j < columnCount; j++) {
 				this.values[i][j] = f.apply(i, j);
+				Quantities.requireSame(this.values[i][j], this.values[0][0]);
 			}
 		}
+
 	}
 
 	public Matrix(Scalar[][] values) {
@@ -91,7 +103,7 @@ public class Matrix {
 	}
 
 	public boolean isInvertible() {
-		return isSquare() && !Vector.isZero(getRowCanonicalForm().getFirst().getRow(getRowCount() - 1));
+		return isSquare() && !Vector.isZero(getRowCanonicalForm().getRow(getRowCount() - 1));
 	}
 
 	public Matrix inverse() {
@@ -99,8 +111,8 @@ public class Matrix {
 			throw new MatrixArithmeticException("Matrix is not invertible");
 		}
 		Matrix i = identity(getRowCount());
-		for (RowOperation r : getRowCanonicalForm().getSecond()) {
-			i = r.operate(i);
+		for (RowOperation r : getRowOperations()) {
+			r.operate(i.values);
 		}
 		return i;
 	}
@@ -109,43 +121,47 @@ public class Matrix {
 		if (!isSquare()) {
 			throw new MatrixArithmeticException("Matrix is not square");
 		}
-		Scalar s = Scalar.ONE;
-		for (RowOperation r : getRowCanonicalForm().getSecond()) {
-			s = r.changeDeterminant(s);
+		if (!determinant.isPresent()) {
+			calculateDeterminant();
 		}
-		return s.inverse();
+		return determinant.get();
 	}
 
-	public Pair<Matrix, List<RowOperation>> getRowCanonicalForm() {
-		Matrix a = this;
-		List<RowOperation> ops = new ArrayList<>();
-		int i = 0, j = 0;
-		int m = getRowCount(), n = getColumnCount();
-		while (i < m && j < n) {
-			int maxi = i;
-			for (int k = i + 1; k < m; k++) {
-				if (Scalar.abs(a.get(k, j)).compareTo(Scalar.abs(a.get(maxi, j))) > 0) {
-					maxi = k;
-				}
-			}
-			if (!Scalar.isZero(a.get(maxi, j))) {
-				if (i != maxi) {
-					ops.add(RowOperation.swap(i, maxi));
-					a = ops.get(ops.size() - 1).operate(a);
-				}
-				ops.add(RowOperation.multiply(i, a.get(i, j).inverse()));
-				a = ops.get(ops.size() - 1).operate(a);
-				for (int u = i + 1; u < m; u++) {
-					if (!Scalar.isZero(a.get(u, j))) {
-						ops.add(RowOperation.addRow(u, i, a.get(u, j).negate()));
-						a = ops.get(ops.size() - 1).operate(a);
-					}
-				}
-				i++;
-			}
-			j++;
+	public Matrix getRowCanonicalForm() {
+		if (!rref.isPresent()) {
+			calculateRREF();
 		}
-		return new Pair<Matrix, List<RowOperation>>(a, ops);
+		return rref.get();
+	}
+
+	public List<RowOperation> getRowOperations() {
+		if (!rowOperations.isPresent()) {
+			calculateRREF();
+		}
+		return rowOperations.get();
+	}
+
+	private void calculateDeterminant() {
+		if (!isInvertible()) {
+			determinant = Optional.of(Scalar.zero(getQuantity().pow(getRowCount())));
+		} else {
+			Scalar s = Scalar.ONE;
+			for (RowOperation r : getRowOperations()) {
+				s = r.changeDeterminant(s);
+			}
+			determinant = Optional.of(s.inverse());
+		}
+	}
+
+	public Quantity getQuantity() {
+		return get(0, 0).getQuantity();
+	}
+
+	private void calculateRREF() {
+		Matrix rep = apply(Function.identity());
+		List<RowOperation> ops = new ArrayList<>();
+		rref = Optional.of(rep);
+		rowOperations = Optional.of(ops);
 	}
 
 	public Matrix subtract(Matrix other) {

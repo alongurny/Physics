@@ -19,7 +19,7 @@ public class Quantities {
 	}
 
 	@SafeVarargs
-	public static void requireSameQuantity(Quantifiable... us) {
+	public static void requireSame(Quantifiable... us) {
 		for (Quantifiable u : us) {
 			require(u, us[0].getQuantity());
 		}
