@@ -29,14 +29,33 @@ public class PhysicalSystem implements Dimensioned {
 		this.dimension = dimension;
 	}
 
-	public void progress() {
-		bodies.forEach(b -> forces.forEach(f -> b.addForce(f.apply(b))));
-		biforces.forEach(f -> bodies.forEach(b -> bodies.forEach(c -> {
-			if (b != c) {
-				b.addForce(f.apply(b, c));
-			}
-		})));
-		bodies.forEach(b -> b.move(dt));
+	public void add(Movable b) {
+		bodies.add(b);
+	}
+
+	public void addExternalBiForce(BiFunction<Movable, Movable, Vector> force) {
+		biforces.add(force);
+	}
+
+	public void addExternalForce(Function<Movable, Vector> force) {
+		forces.add(force);
+	}
+
+	@Override
+	public int getDimension() {
+		return dimension;
+	}
+
+	public Scalar getDt() {
+		return dt;
+	}
+
+	public Vector getTotalForce() {
+		return getTotalVector(Quantity.FORCE, Movable::getTotalForce);
+	}
+
+	public Vector getTotalMomentum() {
+		return getTotalVector(Quantity.MOMENTUM, Movable::getMomentum);
 	}
 
 	public Scalar getTotalScalar(Quantity quantity, Function<Movable, Scalar> f) {
@@ -55,32 +74,13 @@ public class PhysicalSystem implements Dimensioned {
 		return sum;
 	}
 
-	public Vector getTotalMomentum() {
-		return getTotalVector(Quantity.MOMENTUM, Movable::getMomentum);
-	}
-
-	public Vector getTotalForce() {
-		return getTotalVector(Quantity.FORCE, Movable::getTotalForce);
-	}
-
-	public void addExternalForce(Function<Movable, Vector> force) {
-		forces.add(force);
-	}
-
-	public void addExternalBiForce(BiFunction<Movable, Movable, Vector> force) {
-		biforces.add(force);
-	}
-
-	public void add(Movable b) {
-		bodies.add(b);
-	}
-
-	@Override
-	public int getDimension() {
-		return dimension;
-	}
-
-	public Scalar getDt() {
-		return dt;
+	public void progress() {
+		bodies.forEach(b -> forces.forEach(f -> b.addForce(f.apply(b))));
+		biforces.forEach(f -> bodies.forEach(b -> bodies.forEach(c -> {
+			if (b != c) {
+				b.addForce(f.apply(b, c));
+			}
+		})));
+		bodies.forEach(b -> b.move(dt));
 	}
 }

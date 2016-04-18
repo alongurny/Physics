@@ -74,6 +74,8 @@ public class Quantity {
 	public static final Quantity VOLTAGE = quotinent(ENERGY, CHARGE);
 	public static final Quantity RESISTANCE = quotinent(VOLTAGE, CURRENT);
 	public static final Quantity CONDUCTION = quotinent(CURRENT, VOLTAGE);
+	public static final Quantity ELECTRIC_FIELD = quotinent(FORCE, CHARGE);
+	public static final Quantity MAGNETIC_FIELD = quotinent(ELECTRIC_FIELD, VELOCITY);
 
 	static {
 		for (Field f : Quantity.class.getFields()) {
@@ -94,10 +96,6 @@ public class Quantity {
 
 	public static void bindName(Quantity quantity, String name) {
 		repr.put(quantity, name);
-	}
-
-	public Quantity inverse() {
-		return new Quantity(vector.negate());
 	}
 
 	public static Quantity pow(Quantity q, int n) {
@@ -150,6 +148,10 @@ public class Quantity {
 	@Override
 	public int hashCode() {
 		return 0;
+	}
+
+	public Quantity inverse() {
+		return new Quantity(vector.negate());
 	}
 
 	public Quantity multiply(Quantity q) {

@@ -10,32 +10,37 @@ import physics.quantity.UnitSystem;
 
 public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimensioned {
 
+	public static final Scalar ONE = new Scalar(Quantity.NONE, 1);
+	public static final Scalar ZERO = new Scalar(Quantity.NONE, 0);
 	public static final Scalar METER = new Scalar(Quantity.LENGTH, 1);
-	public static final Scalar CENTIMETER = new Scalar(Quantity.LENGTH, 1e-2);
 	public static final Scalar SECOND = new Scalar(Quantity.TIME, 1);
 	public static final Scalar MINUTE = new Scalar(SECOND, 60);
 	public static final Scalar HOUR = new Scalar(MINUTE, 60);
 	public static final Scalar DAY = new Scalar(HOUR, 24);
-	public static final Scalar YEAR = new Scalar(DAY, 365.25);
-	public static final Scalar LIGHT_SPEED = new Scalar(Quantity.VELOCITY, 299792458);
 	public static final Scalar KILOGRAM = new Scalar(Quantity.MASS, 1);
 	public static final Scalar NEWTONE = new Scalar(Quantity.FORCE, 1);
 	public static final Scalar JOULE = new Scalar(Quantity.ENERGY, 1);
 	public static final Scalar COULOMB = new Scalar(Quantity.CHARGE, 1);
 	public static final Scalar RADIAN = new Scalar(Quantity.ANGLE, 1);
-	public static final Scalar ELEMENTARY_CHARGE = COULOMB.multiply(1.6e-19);
 	public static final Scalar AMPERE = new Scalar(Quantity.CURRENT, 1);
-	public static final Scalar TESLA = NEWTONE.divide(METER.multiply(AMPERE));
+	public static final Scalar TESLA = new Scalar(Quantity.MAGNETIC_FIELD, 1);
 	public static final Scalar VOLT = new Scalar(Quantity.VOLTAGE, 1);
 	public static final Scalar HERTZ = SECOND.inverse();
-	public static final Scalar ONE = new Scalar(Quantity.NONE, 1);
-	public static final Scalar ZERO = new Scalar(Quantity.NONE, 0);
+
+	public static final Scalar LIGHT_SPEED = new Scalar(Quantity.VELOCITY, 299792458);
+	public static final Scalar ELEMENTARY_CHARGE = COULOMB.multiply(1.6e-19);
 	public static final Scalar G = METER.pow(3).divide(product(SECOND, SECOND, KILOGRAM)).multiply(6.67384e-11);
 	public static final Scalar K = NEWTONE.multiply(METER.pow(2)).divide(COULOMB.pow(2)).multiply(8.98755e9);
 	public static final Scalar VACUUM_PERMITTIVITY = K.multiply(4 * Math.PI).inverse();
 	public static final Scalar VACUUM_PERMEABILITY = product(LIGHT_SPEED.pow(2), VACUUM_PERMITTIVITY).inverse();
 	public static final Scalar STANDARD_GRAVITY = new Scalar(Quantity.ACCELERATION, 9.80665);
-	public static final Scalar ELECTRON_VOLT = ELEMENTARY_CHARGE.multiply(VOLT);
+
+	public static Scalar abs(Scalar scalar) {
+		if (scalar.value < 0) {
+			return new Scalar(scalar.quantity, -scalar.value);
+		}
+		return scalar;
+	}
 
 	public static double atan2(Scalar y, Scalar x) {
 		Quantities.requireSame(y, x);
@@ -201,12 +206,5 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 
 	public String toString(int n) {
 		return String.format("%." + n + "g", value) + " " + UnitSystem.SI.getUnitName(quantity);
-	}
-
-	public static Scalar abs(Scalar scalar) {
-		if (scalar.value < 0) {
-			return new Scalar(scalar.quantity, -scalar.value);
-		}
-		return scalar;
 	}
 }

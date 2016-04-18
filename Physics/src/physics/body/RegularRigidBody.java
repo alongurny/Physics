@@ -24,9 +24,19 @@ public class RegularRigidBody extends RegularBody implements RigidBody {
 		this.angularAcceleration = Vector.zero(Quantity.ANGULAR_ACCELERATION, dimension);
 	}
 
-	@Override
-	public Scalar getMomentOfInertia() {
-		return momentOfInertia;
+	public final void addAngularAcceleration(Vector angularAcceleration) {
+		Quantities.require(angularAcceleration, Quantity.ANGULAR_ACCELERATION);
+		this.angularAcceleration = this.angularAcceleration.add(angularAcceleration);
+	}
+
+	public final void addAngularImpulse(Vector angularImpulse, Scalar dt) {
+		Quantities.require(angularImpulse, Quantity.ANGULAR_MOMENTUM);
+		this.angularAcceleration = this.angularAcceleration.add(angularImpulse.divide(momentOfInertia).divide(dt));
+	}
+
+	public final void addTorque(Vector torque) {
+		Quantities.require(torque, Quantity.TORQUE);
+		this.angularAcceleration = this.angularAcceleration.add(torque.divide(momentOfInertia));
 	}
 
 	@Override
@@ -39,25 +49,15 @@ public class RegularRigidBody extends RegularBody implements RigidBody {
 		return angularVelocity;
 	}
 
+	@Override
+	public Scalar getMomentOfInertia() {
+		return momentOfInertia;
+	}
+
 	public final void rotate(Scalar dt) {
 		angularVelocity = angularVelocity.add(angularAcceleration.multiply(dt));
 		angularPosition = angularPosition.add(angularVelocity.multiply(dt));
 		angularAcceleration = Vector.zero(Quantity.ANGULAR_ACCELERATION, angularAcceleration.getDimension());
-	}
-
-	public final void addAngularAcceleration(Vector angularAcceleration) {
-		Quantities.require(angularAcceleration, Quantity.ANGULAR_ACCELERATION);
-		this.angularAcceleration = this.angularAcceleration.add(angularAcceleration);
-	}
-
-	public final void addTorque(Vector torque) {
-		Quantities.require(torque, Quantity.TORQUE);
-		this.angularAcceleration = this.angularAcceleration.add(torque.divide(momentOfInertia));
-	}
-
-	public final void addAngularImpulse(Vector angularImpulse, Scalar dt) {
-		Quantities.require(angularImpulse, Quantity.ANGULAR_MOMENTUM);
-		this.angularAcceleration = this.angularAcceleration.add(angularImpulse.divide(momentOfInertia).divide(dt));
 	}
 
 }

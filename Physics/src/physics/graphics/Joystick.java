@@ -40,6 +40,22 @@ public class Joystick {
 		panel.setFocusable(true);
 		MouseAdapter a = new MouseAdapter() {
 			@Override
+			public void mouseDragged(MouseEvent e) {
+				if (dragging) {
+					int side = Math.min(panel.getWidth(), panel.getHeight());
+
+					x = 2.0 * e.getX() / side - 1;
+					y = 2.0 * e.getY() / side - 1;
+					double length = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+					if (length > 1) {
+						x = x / length;
+						y = y / length;
+					}
+					panel.repaint();
+				}
+			}
+
+			@Override
 			public void mousePressed(MouseEvent e) {
 				int side = Math.min(panel.getWidth(), panel.getHeight());
 				int ex = e.getX(), ey = e.getY();
@@ -55,22 +71,6 @@ public class Joystick {
 				x = 0;
 				y = 0;
 				panel.repaint();
-			}
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				if (dragging) {
-					int side = Math.min(panel.getWidth(), panel.getHeight());
-
-					x = 2.0 * e.getX() / side - 1;
-					y = 2.0 * e.getY() / side - 1;
-					double length = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-					if (length > 1) {
-						x = x / length;
-						y = y / length;
-					}
-					panel.repaint();
-				}
 			}
 		};
 		panel.addMouseListener(a);

@@ -11,12 +11,12 @@ import physics.quantity.Quantity;
 
 public class Matrix {
 
-	public static Matrix identity(int dimension) {
-		return new Matrix(dimension, dimension, (i, j) -> i == j ? Scalar.ONE : Scalar.ZERO);
-	}
-
 	public static Matrix column(Vector v) {
 		return new Matrix(v.getDimension(), 1, (i, j) -> v.get(i));
+	}
+
+	public static Matrix identity(int dimension) {
+		return new Matrix(dimension, dimension, (i, j) -> i == j ? Scalar.ONE : Scalar.ZERO);
 	}
 
 	public static Matrix rotation(double phi) {
@@ -58,6 +58,25 @@ public class Matrix {
 		return new Matrix(getRowCount(), getColumnCount(), (i, j) -> f.apply(get(i, j)));
 	}
 
+	private void calculateDeterminant() {
+		if (!isInvertible()) {
+			determinant = Optional.of(Scalar.zero(getQuantity().pow(getRowCount())));
+		} else {
+			Scalar s = Scalar.ONE;
+			for (RowOperation r : getRowOperations()) {
+				s = r.changeDeterminant(s);
+			}
+			determinant = Optional.of(s.inverse());
+		}
+	}
+
+	private void calculateRREF() {
+		Matrix rep = apply(Function.identity());
+		List<RowOperation> ops = new ArrayList<>();
+		rref = Optional.of(rep);
+		rowOperations = Optional.of(ops);
+	}
+
 	public Scalar get(int row, int column) {
 		return values[row][column];
 	}
@@ -70,12 +89,59 @@ public class Matrix {
 		return values[0].length;
 	}
 
+	public Scalar getDeterminant() {
+		if (!isSquare()) {
+			throw new MatrixArithmeticException("Matrix is not square");
+		}
+		if (!determinant.isPresent()) {
+			calculateDeterminant();
+		}
+		return determinant.get();
+	}
+
+	public Quantity getQuantity() {
+		return get(0, 0).getQuantity();
+	}
+
 	public Vector getRow(int i) {
 		return new Vector(getColumnCount(), j -> values[i][j]);
 	}
 
+	public Matrix getRowCanonicalForm() {
+		if (!rref.isPresent()) {
+			calculateRREF();
+		}
+		return rref.get();
+	}
+
 	public int getRowCount() {
 		return values.length;
+	}
+
+	public List<RowOperation> getRowOperations() {
+		if (!rowOperations.isPresent()) {
+			calculateRREF();
+		}
+		return rowOperations.get();
+	}
+
+	public Matrix inverse() {
+		if (!isInvertible()) {
+			throw new MatrixArithmeticException("Matrix is not invertible");
+		}
+		Matrix i = identity(getRowCount());
+		for (RowOperation r : getRowOperations()) {
+			r.operate(i.values);
+		}
+		return i;
+	}
+
+	public boolean isInvertible() {
+		return isSquare() && !Vector.isZero(getRowCanonicalForm().getRow(getRowCount() - 1));
+	}
+
+	public boolean isSquare() {
+		return getRowCount() == getColumnCount();
 	}
 
 	public Matrix multiply(double c) {
@@ -96,72 +162,6 @@ public class Matrix {
 
 	public Matrix negate() {
 		return apply(Scalar::negate);
-	}
-
-	public boolean isSquare() {
-		return getRowCount() == getColumnCount();
-	}
-
-	public boolean isInvertible() {
-		return isSquare() && !Vector.isZero(getRowCanonicalForm().getRow(getRowCount() - 1));
-	}
-
-	public Matrix inverse() {
-		if (!isInvertible()) {
-			throw new MatrixArithmeticException("Matrix is not invertible");
-		}
-		Matrix i = identity(getRowCount());
-		for (RowOperation r : getRowOperations()) {
-			r.operate(i.values);
-		}
-		return i;
-	}
-
-	public Scalar getDeterminant() {
-		if (!isSquare()) {
-			throw new MatrixArithmeticException("Matrix is not square");
-		}
-		if (!determinant.isPresent()) {
-			calculateDeterminant();
-		}
-		return determinant.get();
-	}
-
-	public Matrix getRowCanonicalForm() {
-		if (!rref.isPresent()) {
-			calculateRREF();
-		}
-		return rref.get();
-	}
-
-	public List<RowOperation> getRowOperations() {
-		if (!rowOperations.isPresent()) {
-			calculateRREF();
-		}
-		return rowOperations.get();
-	}
-
-	private void calculateDeterminant() {
-		if (!isInvertible()) {
-			determinant = Optional.of(Scalar.zero(getQuantity().pow(getRowCount())));
-		} else {
-			Scalar s = Scalar.ONE;
-			for (RowOperation r : getRowOperations()) {
-				s = r.changeDeterminant(s);
-			}
-			determinant = Optional.of(s.inverse());
-		}
-	}
-
-	public Quantity getQuantity() {
-		return get(0, 0).getQuantity();
-	}
-
-	private void calculateRREF() {
-		Matrix rep = apply(Function.identity());
-		List<RowOperation> ops = new ArrayList<>();
-		rref = Optional.of(rep);
-		rowOperations = Optional.of(ops);
 	}
 
 	public Matrix subtract(Matrix other) {

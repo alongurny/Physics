@@ -11,13 +11,6 @@ import physics.math.Vector;
 
 public interface DrawableBody extends Drawable, Movable {
 
-	public static Optional<Vector> getIntersection(Scalar pixel, DrawableBody a, DrawableBody b) {
-		Area sa = new Area(a.getBounds(pixel));
-		sa.intersect(new Area(b.getBounds(pixel)));
-		return sa.isEmpty() ? Optional.empty()
-				: Optional.of(new Vector(sa.getBounds().getCenterX(), sa.getBounds().getCenterY()).multiply(pixel));
-	}
-
 	public static Optional<Vector> getFutureIntersection(Scalar pixel, DrawableBody a, DrawableBody b, Scalar dt) {
 		IntVector va = a.getVelocity(pixel.divide(dt));
 		IntVector vb = b.getVelocity(pixel.divide(dt));
@@ -29,12 +22,19 @@ public interface DrawableBody extends Drawable, Movable {
 		return result;
 	}
 
+	public static Optional<Vector> getIntersection(Scalar pixel, DrawableBody a, DrawableBody b) {
+		Area sa = new Area(a.getBounds(pixel));
+		sa.intersect(new Area(b.getBounds(pixel)));
+		return sa.isEmpty() ? Optional.empty()
+				: Optional.of(new Vector(sa.getBounds().getCenterX(), sa.getBounds().getCenterY()).multiply(pixel));
+	}
+
 	Polygon getBounds(Scalar pixel);
+
+	Vector getCollisionCircleCenter(Vector contactPoint);
 
 	IntVector getPosition(Scalar pixel);
 
 	IntVector getVelocity(Scalar pixel);
-
-	Vector getCollisionCircleCenter(Vector contactPoint);
 
 }

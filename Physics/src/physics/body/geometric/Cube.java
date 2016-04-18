@@ -14,12 +14,12 @@ public class Cube extends RegularBody {
 		this.s = s;
 	}
 
-	public Scalar getVolume() {
-		return s.pow(3);
-	}
-
 	public Scalar getSide() {
 		return s;
+	}
+
+	public Scalar getVolume() {
+		return s.pow(3);
 	}
 
 }

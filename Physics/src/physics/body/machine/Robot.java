@@ -19,28 +19,28 @@ public class Robot extends RegularRigidBody {
 		this.height = Quantities.require(height, Quantity.LENGTH);
 	}
 
-	public Scalar getPivot() {
-		return Scalar.sqrt(width.pow(2).add(height.pow(2))).divide(2).divide(Scalar.RADIAN);
-	}
-
-	public Scalar getWidth() {
-		return width;
-	}
-
-	public Scalar getHeight() {
-		return height;
-	}
-
-	public Scalar getWeight() {
-		return Scalar.STANDARD_GRAVITY.multiply(getMass());
-	}
-
 	public Vector getDimensions() {
 		return new Vector(width, height);
 	}
 
 	public Scalar getFriction(double factor) {
 		return getWeight().multiply(factor);
+	}
+
+	public Scalar getHeight() {
+		return height;
+	}
+
+	public Scalar getPivot() {
+		return Scalar.sqrt(width.pow(2).add(height.pow(2))).divide(2).divide(Scalar.RADIAN);
+	}
+
+	public Scalar getWeight() {
+		return Scalar.STANDARD_GRAVITY.multiply(getMass());
+	}
+
+	public Scalar getWidth() {
+		return width;
 	}
 
 }

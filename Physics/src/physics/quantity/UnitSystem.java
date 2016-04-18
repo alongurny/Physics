@@ -15,6 +15,7 @@ public class UnitSystem {
 
 	static {
 		SI.bindName(Quantity.FORCE, "N");
+		SI.bindName(Quantity.FREQUENCY, "Hz");
 		SI.bindName(Quantity.CURRENT, "A");
 		SI.bindName(Quantity.RESISTANCE, "ohm");
 		SI.bindName(Quantity.CONDUCTION, "mho");
@@ -24,7 +25,8 @@ public class UnitSystem {
 		SI.bindName(Quantity.VELOCITY, "m/s");
 		SI.bindName(Quantity.ANGULAR_VELOCITY, "rad/s");
 		SI.bindName(Quantity.TORQUE, "J/rad");
-		SI.bindName(Quantity.quotinent(Quantity.FORCE, Quantity.CHARGE), "N/C");
+		SI.bindName(Quantity.ELECTRIC_FIELD, "V/m");
+		SI.bindName(Quantity.MAGNETIC_FIELD, "T");
 		SI.bindName(Quantity.MOMENTUM, "N s");
 	}
 
@@ -47,16 +49,16 @@ public class UnitSystem {
 		repr.put(q, r);
 	}
 
-	public Scalar get(Quantity q, double factor) {
-		return get(q).multiply(factor);
-	}
-
 	public Scalar get(Quantity q) {
 		Scalar res = Scalar.ONE;
 		for (int i = 0; i < Quantity.COUNT; i++) {
 			res = res.multiply(scalars[i].pow(q.get(i)));
 		}
 		return res;
+	}
+
+	public Scalar get(Quantity q, double factor) {
+		return get(q).multiply(factor);
 	}
 
 	public String getUnitName(Quantity quantity) {

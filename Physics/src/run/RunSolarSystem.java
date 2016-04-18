@@ -28,13 +28,14 @@ public class RunSolarSystem {
 	static Planet sun = new Sun(Vector.Axes3D.ORIGIN, Vector.zero(Quantity.VELOCITY, 3));
 	static Planet earth = new Earth(
 			new Vector(Earth.ROUND_RADIUS, Scalar.zero(Quantity.LENGTH), Scalar.zero(Quantity.LENGTH)),
-			new Vector(Scalar.zero(Quantity.VELOCITY), Dynamics.getOrbitVelocity(sun, Earth.ROUND_RADIUS),
-					Scalar.zero(Quantity.VELOCITY)));
-	static PhysicalSystem solar = new PhysicalSystem(3, PhysicalSystem.DEFAULT_TIME_SPAN);
+			new Vector(0, 1, 0).multiply(Dynamics.getOrbitVelocity(sun, Earth.ROUND_RADIUS)));
+	static PhysicalSystem solar = new PhysicalSystem(3, PhysicalSystem.DEFAULT_TIME_SPAN.multiply(1e6));
 	static Body focus = sun;
 
 	public static void main(String[] args) throws InterruptedException {
 		solar.addExternalBiForce(Forces::getGravity);
+		solar.add(sun);
+		solar.add(earth);
 		Frame f = new Frame(sun.getPosition(), Color.DARK_GRAY, Scalar.METER.multiply(1e7));
 		f.addDrawable(new SphereDrawer(sun, Color.YELLOW));
 		f.addDrawable(new SphereDrawer(earth, Color.GREEN));

@@ -24,22 +24,12 @@ import physics.math.Vector;
 @SuppressWarnings("serial")
 public class Frame extends JFrame {
 
+	public static final Dimension DEFAULT_SIZE = new Dimension(640, 640);
 	private Vector focus;
 	private LabelDrawer labelDrawer;
 	private List<Drawable> drawables;
 	private List<DrawingListener> drawingListeners;
 	private Scalar pixel;
-	public static final Dimension DEFAULT_SIZE = new Dimension(640, 640);
-
-	public Vector getVector(int length, Point p) {
-		return focus.add(
-				Vector.extend(new Vector(p.getX() - getWidth() / 2, p.getY() - getHeight() / 2).multiply(pixel), 3));
-
-	}
-
-	public Scalar getPixel() {
-		return pixel;
-	}
 
 	public Frame(Vector focus, Color background, Scalar pixel) {
 		setBackground(background);
@@ -92,23 +82,33 @@ public class Frame extends JFrame {
 
 	}
 
-	public void setFocus(Vector focus) {
-		this.focus = Objects.requireNonNull(focus, "Focus cannot be null");
-	}
-
 	public void addDrawable(Drawable drawable) {
 		drawables.add(drawable);
-	}
-
-	public void addLabel(String desc, Supplier<?> supp) {
-		labelDrawer.add(desc, supp);
 	}
 
 	public void addDrawingListener(DrawingListener drawingListener) {
 		drawingListeners.add(drawingListener);
 	}
 
+	public void addLabel(String desc, Supplier<?> supp) {
+		labelDrawer.add(desc, supp);
+	}
+
 	public Vector getFocus() {
 		return focus;
+	}
+
+	public Scalar getPixel() {
+		return pixel;
+	}
+
+	public Vector getVector(int length, Point p) {
+		return focus.add(
+				Vector.extend(new Vector(p.getX() - getWidth() / 2, p.getY() - getHeight() / 2).multiply(pixel), 3));
+
+	}
+
+	public void setFocus(Vector focus) {
+		this.focus = Objects.requireNonNull(focus, "Focus cannot be null");
 	}
 }

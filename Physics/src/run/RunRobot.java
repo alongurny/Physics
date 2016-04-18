@@ -26,7 +26,7 @@ public class RunRobot {
 		f.addLabel("Rotation", () -> robot.getAngularPosition().get(0));
 		f.addLabel("Angular velocity", () -> robot.getAngularVelocity().get(0));
 		f.addDrawingListener(e -> robot.move(PhysicalSystem.DEFAULT_TIME_SPAN));
-		f.addDrawingListener(e -> robot.move(PhysicalSystem.DEFAULT_TIME_SPAN));
+		f.addDrawingListener(e -> robot.rotate(PhysicalSystem.DEFAULT_TIME_SPAN));
 		double mu = 0.04;
 		f.addDrawingListener(e -> {
 			if (!Scalar.isZero(robot.getVelocity().getMagnitude())) {

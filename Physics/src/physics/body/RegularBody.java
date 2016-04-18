@@ -43,10 +43,6 @@ public abstract class RegularBody implements Movable {
 		return acceleration;
 	}
 
-	public final Vector getTotalForce() {
-		return acceleration.multiply(mass);
-	}
-
 	public final Scalar getCharge() {
 		return charge;
 	}
@@ -58,18 +54,18 @@ public abstract class RegularBody implements Movable {
 		};
 	}
 
+	public final VectorField getGravitationalField() {
+		return v -> {
+			Vector diff = position.subtract(v);
+			return diff.multiply(Scalar.G.multiply(mass)).divide(diff.getMagnitude().pow(3));
+		};
+	}
+
 	public final VectorField getMagneticField() {
 		return v -> {
 			Vector r = v.subtract(position);
 			return Scalar.VACUUM_PERMEABILITY.multiply(charge).divide(4 * Math.PI).multiply(velocity.cross(r))
 					.divide(r.getMagnitude().pow(3));
-		};
-	}
-
-	public final VectorField getGravitationalField() {
-		return v -> {
-			Vector diff = position.subtract(v);
-			return diff.multiply(Scalar.G.multiply(mass)).divide(diff.getMagnitude().pow(3));
 		};
 	}
 
@@ -83,6 +79,10 @@ public abstract class RegularBody implements Movable {
 
 	public final Vector getPosition() {
 		return position;
+	}
+
+	public final Vector getTotalForce() {
+		return acceleration.multiply(mass);
 	}
 
 	public final Scalar getTranslationalKinecticEnergy() {

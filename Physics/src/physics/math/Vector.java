@@ -135,12 +135,12 @@ public final class Vector implements Quantifiable, Dimensioned {
 		return entries[i];
 	}
 
-	public Vector getDirection() {
-		return this.divide(getMagnitude());
-	}
-
 	public int getDimension() {
 		return entries.length;
+	}
+
+	public Vector getDirection() {
+		return this.divide(getMagnitude());
 	}
 
 	public Scalar getMagnitude() {

@@ -5,10 +5,10 @@ import physics.math.Vector;
 
 public interface RigidBody {
 
-	Scalar getMomentOfInertia();
-
 	Vector getAngularPosition();
 
 	Vector getAngularVelocity();
+
+	Scalar getMomentOfInertia();
 
 }

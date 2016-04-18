@@ -7,6 +7,10 @@ import physics.dimension.Dimensioned;
 import physics.dimension.Dimensions;
 
 public final class IntVector implements Dimensioned {
+	public static IntVector axis(int length, int loc) {
+		return new IntVector(length, i -> Mathx.kroneckerDelta(i, loc));
+	}
+
 	public static IntVector sum(IntVector... vectors) {
 		if (vectors.length == 0) {
 			throw new IllegalArgumentException("Must have at least one vector");
@@ -21,10 +25,6 @@ public final class IntVector implements Dimensioned {
 
 	public static IntVector zero(int length) {
 		return new IntVector(length, i -> 0);
-	}
-
-	public static IntVector axis(int length, int loc) {
-		return new IntVector(length, i -> Mathx.kroneckerDelta(i, loc));
 	}
 
 	private final int[] entries;
@@ -50,16 +50,33 @@ public final class IntVector implements Dimensioned {
 		return new IntVector(getDimension(), i -> op.apply(get(i), other.get(i)));
 	}
 
+	public IntVector divide(int n) {
+		if (!isDivisible(n)) {
+			throw new IntVectorArithmeticException("Cannot divide this instance of IntVector by " + n);
+		}
+		return new IntVector(getDimension(), i -> get(i) / n);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof IntVector && equalsIntVector((IntVector) obj);
+	}
+
+	private boolean equalsIntVector(IntVector p) {
+		for (int i = 0; i < getDimension(); i++) {
+			if (entries[i] != p.entries[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public int get(int i) {
 		return entries[i];
 	}
 
 	public int getDimension() {
 		return entries.length;
-	}
-
-	public IntVector multiply(int n) {
-		return new IntVector(getDimension(), i -> get(i) * n);
 	}
 
 	public boolean isDivisible(int n) {
@@ -71,11 +88,8 @@ public final class IntVector implements Dimensioned {
 		return true;
 	}
 
-	public IntVector divide(int n) {
-		if (!isDivisible(n)) {
-			throw new IntVectorArithmeticException("Cannot divide this instance of IntVector by " + n);
-		}
-		return new IntVector(getDimension(), i -> get(i) / n);
+	public IntVector multiply(int n) {
+		return new IntVector(getDimension(), i -> get(i) * n);
 	}
 
 	public IntVector negate() {
@@ -93,19 +107,5 @@ public final class IntVector implements Dimensioned {
 			sb.append(", " + get(i));
 		}
 		return sb.toString() + ")";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof IntVector && equalsIntVector((IntVector) obj);
-	}
-
-	private boolean equalsIntVector(IntVector p) {
-		for (int i = 0; i < getDimension(); i++) {
-			if (entries[i] != p.entries[i]) {
-				return false;
-			}
-		}
-		return true;
 	}
 }

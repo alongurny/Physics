@@ -32,10 +32,6 @@ public class Rectangle extends RegularBody implements DrawableBody {
 		g.fillRect(i_p.get(0) - i_d.get(0) / 2, i_p.get(1) - i_d.get(1) / 2, i_d.get(0), i_d.get(1));
 	}
 
-	public Vector getDimensions() {
-		return new Vector(width, height);
-	}
-
 	@Override
 	public Polygon getBounds(Scalar pixel) {
 		IntVector i_p = Pixel.convert(getPosition(), pixel);
@@ -46,20 +42,6 @@ public class Rectangle extends RegularBody implements DrawableBody {
 				new int[] { i_p.get(1) - i_d.get(1) / 2, i_p.get(1) + i_d.get(1) / 2, i_p.get(1) + i_d.get(1) / 2,
 						i_p.get(1) - i_d.get(1) / 2 },
 				4);
-	}
-
-	@Override
-	public IntVector getPosition(Scalar pixel) {
-		return Pixel.convert(getPosition(), pixel);
-	}
-
-	@Override
-	public IntVector getVelocity(Scalar pixel) {
-		return Pixel.convert(getVelocity(), pixel);
-	}
-
-	public Color getColor() {
-		return color;
 	}
 
 	@Override
@@ -80,6 +62,24 @@ public class Rectangle extends RegularBody implements DrawableBody {
 		}
 		return Vector.extend(contactPoint, getPosition().getDimension());
 
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public Vector getDimensions() {
+		return new Vector(width, height);
+	}
+
+	@Override
+	public IntVector getPosition(Scalar pixel) {
+		return Pixel.convert(getPosition(), pixel);
+	}
+
+	@Override
+	public IntVector getVelocity(Scalar pixel) {
+		return Pixel.convert(getVelocity(), pixel);
 	}
 
 }

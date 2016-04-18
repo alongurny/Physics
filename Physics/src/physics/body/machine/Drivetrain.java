@@ -7,8 +7,17 @@ import physics.quantity.UnitSystem;
 
 public class Drivetrain {
 
+	private static double limit(double speed) {
+		if (speed > 1) {
+			speed = 1;
+		} else if (speed < -1) {
+			speed = -1;
+		}
+		return speed;
+	}
 	private Scalar maximumSpeed = UnitSystem.SI.get(Quantity.VELOCITY, 0.02);
 	private Robot robot;
+
 	private Scalar dt;
 
 	public Drivetrain(Robot robot, Scalar dt) {
@@ -56,15 +65,6 @@ public class Drivetrain {
 					new Vector(angularVelocity.multiply(Scalar.RADIAN).multiply(robot.getMomentOfInertia())), dt);
 
 		}
-	}
-
-	private static double limit(double speed) {
-		if (speed > 1) {
-			speed = 1;
-		} else if (speed < -1) {
-			speed = -1;
-		}
-		return speed;
 	}
 
 }

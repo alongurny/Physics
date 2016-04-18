@@ -6,24 +6,24 @@ import physics.math.field.VectorField;
 
 public interface Body {
 
-	Vector getPosition();
-
-	Vector getVelocity();
-
 	Vector getAcceleration();
-
-	Scalar getMass();
 
 	Scalar getCharge();
 
-	Vector getMomentum();
-
-	Vector getTotalForce();
+	VectorField getElectricalField();
 
 	VectorField getGravitationalField();
 
-	VectorField getElectricalField();
-
 	VectorField getMagneticField();
+
+	Scalar getMass();
+
+	Vector getMomentum();
+
+	Vector getPosition();
+
+	Vector getTotalForce();
+
+	Vector getVelocity();
 
 }
