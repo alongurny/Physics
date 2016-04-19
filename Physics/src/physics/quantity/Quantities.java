@@ -5,8 +5,8 @@ import java.util.Objects;
 public class Quantities {
 
 	public static Quantity require(Quantity found, Quantity expected) {
-		Objects.requireNonNull(expected, "Not null!");
-		Objects.requireNonNull(found, "Not null!");
+		Objects.requireNonNull(expected);
+		Objects.requireNonNull(found);
 		if (!expected.equals(found)) {
 			throw new QuantityMismatchException(expected, found);
 		}
