@@ -72,14 +72,4 @@ public class Rectangle extends RegularBody implements DrawableBody {
 		return new Vector(width, height);
 	}
 
-	@Override
-	public IntVector getPosition(Scalar pixel) {
-		return Pixel.convert(getPosition(), pixel);
-	}
-
-	@Override
-	public IntVector getVelocity(Scalar pixel) {
-		return Pixel.convert(getVelocity(), pixel);
-	}
-
 }

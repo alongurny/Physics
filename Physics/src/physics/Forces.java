@@ -7,8 +7,8 @@ import physics.quantity.Quantity;
 
 public class Forces {
 
-	public static Vector getFriction(Body a, Scalar gravity, double co) {
-		if (Vector.isZero(a.getVelocity())) {
+	public static Vector getFriction(Body a, Scalar gravity, double co, Scalar threshold) {
+		if (a.getVelocity().getMagnitude().compareTo(threshold) <= 0) {
 			return Vector.zero(Quantity.FORCE, a.getPosition().getDimension());
 		}
 		return a.getVelocity().getDirection().multiply(1).multiply(gravity).multiply(a.getMass().multiply(-co));

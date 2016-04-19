@@ -83,4 +83,8 @@ public class PhysicalSystem implements Dimensioned {
 		})));
 		bodies.forEach(b -> b.move(dt));
 	}
+
+	public boolean contains(Movable b) {
+		return bodies.contains(b);
+	}
 }

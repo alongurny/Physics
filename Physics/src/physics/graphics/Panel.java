@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import physics.graphics.drawers.Drawable;
@@ -22,16 +21,17 @@ import physics.math.Scalar;
 import physics.math.Vector;
 
 @SuppressWarnings("serial")
-public class Frame extends JFrame {
+public class Panel extends JPanel {
 
-	public static final Dimension DEFAULT_SIZE = new Dimension(640, 640);
 	private Vector focus;
 	private LabelDrawer labelDrawer;
 	private List<Drawable> drawables;
 	private List<DrawingListener> drawingListeners;
 	private Scalar pixel;
+	private boolean scrollable;
+	private Thread thread;
 
-	public Frame(Vector focus, Color background, Scalar pixel) {
+	public Panel(int width, int height, Vector focus, Color background, Scalar pixel) {
 		setBackground(background);
 		this.focus = focus;
 		this.pixel = pixel;
@@ -39,47 +39,35 @@ public class Frame extends JFrame {
 		drawingListeners = new CopyOnWriteArrayList<DrawingListener>();
 		drawables = new ArrayList<Drawable>();
 		setFocusable(true);
-		add(new JPanel() {
-			@Override
-			public void paint(Graphics g) {
-				IntVector i_focus = Pixel.convert(Frame.this.focus, Frame.this.pixel);
-				int dx = getWidth() / 2 - i_focus.get(0);
-				int dy = getHeight() / 2 - i_focus.get(1);
-				for (Drawable d : drawables) {
-					g.translate(dx, dy);
-					d.draw(g, Frame.this.pixel);
-					g.translate(-dx, -dy);
-				}
-				labelDrawer.draw(g, Frame.this.pixel);
-			}
-		});
 		addMouseWheelListener(new MouseWheelListener() {
 
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				Frame.this.pixel = Frame.this.pixel.multiply(Math.pow(1.1, e.getPreciseWheelRotation()));
+				if (scrollable) {
+					Panel.this.pixel = Panel.this.pixel.multiply(Math.pow(1.1, e.getPreciseWheelRotation()));
+				}
 			}
 		});
-		setSize(DEFAULT_SIZE);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
-		new Thread(() -> {
-			long lastMove = System.nanoTime();
+		setPreferredSize(new Dimension(width, height));
+		thread = new Thread(() -> {
 			while (true) {
-				long now = System.nanoTime();
-				long prev = lastMove;
-				drawingListeners.forEach(d -> d.onDraw(new DrawingEvent(prev, now)));
-				lastMove = now;
+				drawingListeners.forEach(d -> d.onDraw(new DrawingEvent()));
 				repaint();
-				try {
-					Thread.sleep(15);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-
 			}
-		}).start();
+		});
 
+	}
+
+	public void start() {
+		thread.start();
+	}
+
+	public boolean isScrollable() {
+		return scrollable;
+	}
+
+	public void setScrollable(boolean scrollable) {
+		this.scrollable = scrollable;
 	}
 
 	public void addDrawable(Drawable drawable) {
@@ -109,6 +97,20 @@ public class Frame extends JFrame {
 	}
 
 	public void setFocus(Vector focus) {
-		this.focus = Objects.requireNonNull(focus, "Focus cannot be null");
+		this.focus = Objects.requireNonNull(focus, "focus cannot be null");
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		IntVector i_focus = Pixel.convert(focus, pixel);
+		int dx = getWidth() / 2 - i_focus.get(0);
+		int dy = getHeight() / 2 - i_focus.get(1);
+		for (Drawable d : drawables) {
+			g.translate(dx, dy);
+			d.draw(g, pixel);
+			g.translate(-dx, -dy);
+		}
+		labelDrawer.draw(g, pixel);
 	}
 }

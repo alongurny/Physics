@@ -5,6 +5,7 @@ import java.awt.geom.Area;
 import java.util.Optional;
 
 import physics.body.Movable;
+import physics.graphics.Pixel;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
@@ -12,8 +13,8 @@ import physics.math.Vector;
 public interface DrawableBody extends Drawable, Movable {
 
 	public static Optional<Vector> getFutureIntersection(Scalar pixel, DrawableBody a, DrawableBody b, Scalar dt) {
-		IntVector va = a.getVelocity(pixel.divide(dt));
-		IntVector vb = b.getVelocity(pixel.divide(dt));
+		IntVector va = Pixel.convert(a.getVelocity().multiply(dt), pixel);
+		IntVector vb = Pixel.convert(b.getVelocity().multiply(dt), pixel);
 		a.getBounds(pixel).translate(va.get(0), va.get(1));
 		b.getBounds(pixel).translate(vb.get(0), vb.get(1));
 		Optional<Vector> result = getIntersection(pixel, a, b);
@@ -32,9 +33,5 @@ public interface DrawableBody extends Drawable, Movable {
 	Polygon getBounds(Scalar pixel);
 
 	Vector getCollisionCircleCenter(Vector contactPoint);
-
-	IntVector getPosition(Scalar pixel);
-
-	IntVector getVelocity(Scalar pixel);
 
 }

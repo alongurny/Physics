@@ -57,18 +57,8 @@ public class Circle extends RegularBody implements DrawableBody {
 		return color;
 	}
 
-	@Override
-	public IntVector getPosition(Scalar pixel) {
-		return Pixel.convert(getPosition(), pixel);
-	}
-
 	public Scalar getRadius() {
 		return radius;
-	}
-
-	@Override
-	public IntVector getVelocity(Scalar pixel) {
-		return Pixel.convert(getVelocity(), pixel);
 	}
 
 }
