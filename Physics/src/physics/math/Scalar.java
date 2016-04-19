@@ -18,19 +18,19 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 	public static final Scalar HOUR = new Scalar(MINUTE, 60);
 	public static final Scalar DAY = new Scalar(HOUR, 24);
 	public static final Scalar KILOGRAM = new Scalar(Quantity.MASS, 1);
-	public static final Scalar NEWTONE = new Scalar(Quantity.FORCE, 1);
+	public static final Scalar NEWTON = new Scalar(Quantity.FORCE, 1);
 	public static final Scalar JOULE = new Scalar(Quantity.ENERGY, 1);
 	public static final Scalar COULOMB = new Scalar(Quantity.CHARGE, 1);
 	public static final Scalar RADIAN = new Scalar(Quantity.ANGLE, 1);
 	public static final Scalar AMPERE = new Scalar(Quantity.CURRENT, 1);
 	public static final Scalar TESLA = new Scalar(Quantity.MAGNETIC_FIELD, 1);
 	public static final Scalar VOLT = new Scalar(Quantity.VOLTAGE, 1);
-	public static final Scalar HERTZ = SECOND.inverse();
+	public static final Scalar HERTZ = new Scalar(Quantity.FREQUENCY, 1);
 
 	public static final Scalar LIGHT_SPEED = new Scalar(Quantity.VELOCITY, 299792458);
 	public static final Scalar ELEMENTARY_CHARGE = COULOMB.multiply(1.6e-19);
 	public static final Scalar G = METER.pow(3).divide(product(SECOND, SECOND, KILOGRAM)).multiply(6.67384e-11);
-	public static final Scalar K = NEWTONE.multiply(METER.pow(2)).divide(COULOMB.pow(2)).multiply(8.98755e9);
+	public static final Scalar K = NEWTON.multiply(METER.pow(2)).divide(COULOMB.pow(2)).multiply(8.98755e9);
 	public static final Scalar VACUUM_PERMITTIVITY = K.multiply(4 * Math.PI).inverse();
 	public static final Scalar VACUUM_PERMEABILITY = product(LIGHT_SPEED.pow(2), VACUUM_PERMITTIVITY).inverse();
 	public static final Scalar STANDARD_GRAVITY = new Scalar(Quantity.ACCELERATION, 9.80665);
