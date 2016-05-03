@@ -27,12 +27,12 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 	public static final Scalar VOLT = new Scalar(Quantity.VOLTAGE, 1);
 	public static final Scalar HERTZ = new Scalar(Quantity.FREQUENCY, 1);
 
-	public static final Scalar LIGHT_SPEED = new Scalar(Quantity.VELOCITY, 299792458);
+	public static final Scalar SPEED_OF_LIGHT = new Scalar(Quantity.VELOCITY, 299792458);
 	public static final Scalar ELEMENTARY_CHARGE = COULOMB.multiply(1.6e-19);
 	public static final Scalar G = METER.pow(3).divide(product(SECOND, SECOND, KILOGRAM)).multiply(6.67384e-11);
 	public static final Scalar K = NEWTON.multiply(METER.pow(2)).divide(COULOMB.pow(2)).multiply(8.98755e9);
 	public static final Scalar VACUUM_PERMITTIVITY = K.multiply(4 * Math.PI).inverse();
-	public static final Scalar VACUUM_PERMEABILITY = product(LIGHT_SPEED.pow(2), VACUUM_PERMITTIVITY).inverse();
+	public static final Scalar VACUUM_PERMEABILITY = product(SPEED_OF_LIGHT.pow(2), VACUUM_PERMITTIVITY).inverse();
 	public static final Scalar STANDARD_GRAVITY = new Scalar(Quantity.ACCELERATION, 9.80665);
 
 	public static Scalar abs(Scalar scalar) {
@@ -116,7 +116,7 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 	private Scalar(Quantity quantity, double value) {
 		this.quantity = Objects.requireNonNull(quantity);
 		if (Double.isNaN(value)) {
-			throw new IllegalArgumentException("Must be a finite or infinite number: " + value);
+			throw new IllegalArgumentException("value must be a finite or infinite number");
 		}
 		this.value = value;
 	}

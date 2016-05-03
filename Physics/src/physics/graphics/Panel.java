@@ -30,6 +30,7 @@ public class Panel extends JPanel {
 	private Scalar pixel;
 	private boolean scrollable;
 	private Thread thread;
+	private long dt;
 
 	public Panel(int width, int height, Vector focus, Color background, Scalar pixel) {
 		setBackground(background);
@@ -51,10 +52,20 @@ public class Panel extends JPanel {
 		setPreferredSize(new Dimension(width, height));
 		thread = new Thread(() -> {
 			while (true) {
+				long start = System.currentTimeMillis();
 				drawingListeners.forEach(d -> d.onDraw(new DrawingEvent()));
 				repaint();
+				long diff = System.currentTimeMillis() - start;
+				if (diff < dt) {
+					try {
+						Thread.sleep(dt - diff);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
+		setFPS(30);
 
 	}
 
@@ -91,13 +102,17 @@ public class Panel extends JPanel {
 	}
 
 	public Vector getVector(int length, Point p) {
-		return focus.add(
-				Vector.extend(new Vector(p.getX() - getWidth() / 2, p.getY() - getHeight() / 2).multiply(pixel), 3));
+		return focus.add(Vector
+				.extend(new Vector(p.getX() - getWidth() / 2, p.getY() - getHeight() / 2).multiply(pixel), length));
 
 	}
 
 	public void setFocus(Vector focus) {
 		this.focus = Objects.requireNonNull(focus, "focus cannot be null");
+	}
+
+	public void setFPS(int fps) {
+		this.dt = 1000 / fps;
 	}
 
 	@Override

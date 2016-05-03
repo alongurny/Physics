@@ -15,11 +15,11 @@ public class Spaceship extends RegularRigidBody {
 		this.fuel = fuel;
 	}
 
-	public void boostForward(Scalar value, Scalar dt) {
+	public void boostForward(Scalar value) {
 		Scalar pull = fuel.pull(value);
 		Scalar v0 = getVelocity().getMagnitude();
 		Scalar v = Scalar.sqrt(pull.multiply(2).divide(getMass()).add(v0.pow(2)));
-		addImpulse(getAngularPosition().multiply(v).subtract(getVelocity()).multiply(getMass()), dt);
+		addImpulse(getAngularPosition().multiply(v).subtract(getVelocity()).multiply(getMass()));
 	}
 
 	public Container getFuel() {

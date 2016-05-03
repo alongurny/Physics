@@ -15,6 +15,7 @@ public class Drivetrain {
 		}
 		return speed;
 	}
+
 	private Scalar maximumSpeed = UnitSystem.SI.get(Quantity.VELOCITY, 0.02);
 	private Robot robot;
 
@@ -53,14 +54,14 @@ public class Drivetrain {
 		Scalar leftSpeed = maximumSpeed.multiply(left);
 		Scalar rightSpeed = maximumSpeed.multiply(right);
 		if (leftSpeed.equals(rightSpeed)) {
-			robot.addImpulse(Vector.Axes2D.X.multiply(leftSpeed).multiply(robot.getMass()), dt);
+			robot.addImpulse(Vector.Axes2D.X.multiply(leftSpeed).multiply(robot.getMass()));
 		} else {
 			Scalar angularVelocity = leftSpeed.subtract(rightSpeed).divide(robot.getWidth());
 			Scalar gamma = robot.getWidth().multiply(leftSpeed.add(rightSpeed)).divide(leftSpeed.subtract(rightSpeed))
 					.multiply(angularVelocity);
 			Vector velocity = new Vector(-Scalar.sin(robot.getAngularPosition().get(0)),
 					Scalar.cos(robot.getAngularPosition().get(0))).multiply(gamma);
-			robot.addImpulse(velocity.multiply(robot.getMass()), dt);
+			robot.addImpulse(velocity.multiply(robot.getMass()));
 			robot.addAngularImpulse(
 					new Vector(angularVelocity.multiply(Scalar.RADIAN).multiply(robot.getMomentOfInertia())), dt);
 

@@ -6,7 +6,7 @@ import physics.math.Vector;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 
-public class RegularRigidBody extends RegularBody implements RigidBody {
+public abstract class RegularRigidBody extends RegularBody implements RigidBody {
 
 	private Scalar momentOfInertia;
 

@@ -7,7 +7,7 @@ public interface Movable extends Body {
 
 	void addForce(Vector force);
 
-	void addImpulse(Vector impulse, Scalar dt);
+	void addImpulse(Vector impulse);
 
 	void move(Scalar dt);
 

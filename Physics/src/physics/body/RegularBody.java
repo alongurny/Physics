@@ -10,9 +10,10 @@ import physics.quantity.Quantity;
 public abstract class RegularBody implements Movable {
 
 	private final Scalar mass;
-	private final Scalar charge;
+	private Scalar charge;
 	private Vector position;
 	private Vector velocity;
+	private Vector impulse;
 	private Vector acceleration;
 
 	public RegularBody(Scalar mass, Scalar charge, Vector position, Vector velocity) {
@@ -21,6 +22,7 @@ public abstract class RegularBody implements Movable {
 		this.charge = Quantities.require(charge, Quantity.CHARGE);
 		this.position = Quantities.require(position, Quantity.LENGTH);
 		this.velocity = Quantities.require(velocity, Quantity.VELOCITY);
+		this.impulse = Vector.zero(Quantity.MOMENTUM, position.getDimension());
 		this.acceleration = Vector.zero(Quantity.ACCELERATION, position.getDimension());
 	}
 
@@ -34,9 +36,9 @@ public abstract class RegularBody implements Movable {
 		this.acceleration = this.acceleration.add(force.divide(mass));
 	}
 
-	public final void addImpulse(Vector impulse, Scalar dt) {
+	public final void addImpulse(Vector impulse) {
 		Quantities.require(impulse, Quantity.MOMENTUM);
-		this.acceleration = this.acceleration.add(impulse.divide(mass).divide(dt));
+		this.impulse = this.impulse.add(impulse);
 	}
 
 	public final Vector getAcceleration() {
@@ -94,9 +96,14 @@ public abstract class RegularBody implements Movable {
 	}
 
 	public final void move(Scalar dt) {
-		velocity = velocity.add(acceleration.multiply(dt));
+		velocity = velocity.add(impulse.divide(mass));
 		position = position.add(velocity.multiply(dt));
+		velocity = velocity.add(acceleration.multiply(dt));
 		acceleration = Vector.zero(Quantity.ACCELERATION, acceleration.getDimension());
+	}
+
+	protected void setCharge(Scalar charge) {
+		this.charge = Quantities.require(charge, Quantity.CHARGE);
 	}
 
 }

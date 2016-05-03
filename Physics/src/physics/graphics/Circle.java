@@ -61,4 +61,10 @@ public class Circle extends RegularBody implements DrawableBody {
 		return radius;
 	}
 
+	@Override
+	public void onCollision(DrawableBody other) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

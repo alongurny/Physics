@@ -17,6 +17,7 @@ public class RobotDrawer implements Drawable {
 
 	public RobotDrawer(Robot robot, Color color) {
 		this.robot = robot;
+		this.color = color;
 	}
 
 	@Override

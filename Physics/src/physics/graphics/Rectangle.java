@@ -72,4 +72,10 @@ public class Rectangle extends RegularBody implements DrawableBody {
 		return new Vector(width, height);
 	}
 
+	@Override
+	public void onCollision(DrawableBody other) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

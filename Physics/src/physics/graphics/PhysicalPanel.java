@@ -28,8 +28,10 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 		addDrawingListener(e -> {
 			bodies.forEach(a -> bodies.forEach(b -> {
 				if (a != b && system.contains(a)) {
-					DrawableBody.getFutureIntersection(getPixel(), a, b, system.getDt())
-							.ifPresent(p -> a.addImpulse(Collision.getImpulse(a, b, p), system.getDt()));
+					DrawableBody.getFutureIntersection(getPixel(), a, b, system.getDt()).ifPresent(p -> {
+						a.addImpulse(Collision.getImpulse(a, b, p));
+						a.onCollision(b);
+					});
 				}
 			}));
 		});

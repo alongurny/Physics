@@ -8,8 +8,7 @@ public class Cube extends RegularBody {
 
 	private Scalar s;
 
-	public Cube(Scalar mass, Scalar charge, Vector center, Vector velocity, Vector angularPosition,
-			Vector angularVelocity, Scalar s) {
+	public Cube(Scalar mass, Scalar charge, Vector center, Vector velocity, Scalar s) {
 		super(mass, charge, center, velocity);
 		this.s = s;
 	}

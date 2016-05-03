@@ -34,4 +34,6 @@ public interface DrawableBody extends Drawable, Movable {
 
 	Vector getCollisionCircleCenter(Vector contactPoint);
 
+	void onCollision(DrawableBody other);
+
 }
