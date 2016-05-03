@@ -182,4 +182,8 @@ public final class Vector implements Quantifiable, Dimensioned {
 				+ system.getUnitName(getQuantity());
 	}
 
+	public Vector extend(int dimension) {
+		return extend(this, dimension);
+	}
+
 }

@@ -2,26 +2,41 @@ package physics.graphics;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.List;
 
 import physics.body.RegularBody;
-import physics.graphics.drawers.DrawableBody;
+import physics.graphics.drawers.Collidable;
+import physics.graphics.drawers.ElasticDrawableBody;
+import physics.graphics.drawers.VectorCollection;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
 
-public class Rectangle extends RegularBody implements DrawableBody {
+public class Rectangle extends RegularBody implements ElasticDrawableBody {
 
 	private Color color;
 	private Scalar width;
 	private Scalar height;
+	private VectorCollection bounds;
 
 	public Rectangle(Scalar mass, Vector center, Vector velocity, Scalar width, Scalar height, Color color) {
 		super(mass, Scalar.zero(Quantity.CHARGE), center, velocity);
 		this.width = width;
 		this.height = height;
 		this.color = color;
+		initializeBounds();
+	}
+
+	private void initializeBounds() {
+		List<Vector> vectors = new ArrayList<>();
+		int dimension = getPosition().getDimension();
+		vectors.add(getPosition().add(new Vector(width.negate(), height.negate()).multiply(0.5).extend(dimension)));
+		vectors.add(getPosition().add(new Vector(width, height.negate()).multiply(0.5).extend(dimension)));
+		vectors.add(getPosition().add(new Vector(width, height).multiply(0.5).extend(dimension)));
+		vectors.add(getPosition().add(new Vector(width.negate(), height).multiply(0.5).extend(dimension)));
+		this.bounds = new VectorCollection(vectors);
 	}
 
 	@Override
@@ -33,15 +48,8 @@ public class Rectangle extends RegularBody implements DrawableBody {
 	}
 
 	@Override
-	public Polygon getBounds(Scalar pixel) {
-		IntVector i_p = Pixel.convert(getPosition(), pixel);
-		IntVector i_d = Pixel.convert(getDimensions(), pixel);
-		return new Polygon(
-				new int[] { i_p.get(0) - i_d.get(0) / 2, i_p.get(0) - i_d.get(0) / 2, i_p.get(0) + i_d.get(0) / 2,
-						i_p.get(0) + i_d.get(0) / 2 },
-				new int[] { i_p.get(1) - i_d.get(1) / 2, i_p.get(1) + i_d.get(1) / 2, i_p.get(1) + i_d.get(1) / 2,
-						i_p.get(1) - i_d.get(1) / 2 },
-				4);
+	public VectorCollection getBounds() {
+		return bounds;
 	}
 
 	@Override
@@ -73,8 +81,7 @@ public class Rectangle extends RegularBody implements DrawableBody {
 	}
 
 	@Override
-	public void onCollision(DrawableBody other) {
-		// TODO Auto-generated method stub
+	public void onCollision(Collidable other) {
 
 	}
 

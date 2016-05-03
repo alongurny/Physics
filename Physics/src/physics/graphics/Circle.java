@@ -2,25 +2,39 @@ package physics.graphics;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.List;
 
 import physics.body.RegularBody;
-import physics.graphics.drawers.DrawableBody;
+import physics.graphics.drawers.Collidable;
+import physics.graphics.drawers.ElasticDrawableBody;
+import physics.graphics.drawers.VectorCollection;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
 
-public class Circle extends RegularBody implements DrawableBody {
+public class Circle extends RegularBody implements ElasticDrawableBody {
 
 	private static final int ACCURACY = 16;
 
 	private Scalar radius;
 	private Color color;
+	private VectorCollection bounds;
 
 	public Circle(Scalar mass, Scalar charge, Vector center, Vector velocity, Scalar radius, Color color) {
 		super(mass, charge, center, velocity);
 		this.radius = radius;
 		this.color = color;
+		initializeBounds();
+	}
+
+	private void initializeBounds() {
+		List<Vector> vectors = new ArrayList<>();
+		for (int i = 0; i < ACCURACY; i++) {
+			vectors.add(Vector.extend(Vector.fromPolar(radius, (2 * Math.PI * i) / ACCURACY),
+					getPosition().getDimension()));
+		}
+		this.bounds = new VectorCollection(vectors);
 	}
 
 	@Override
@@ -30,21 +44,12 @@ public class Circle extends RegularBody implements DrawableBody {
 		g.setColor(color);
 		g.fillOval(i_p.get(0) - i_diameter / 2, i_p.get(1) - i_diameter / 2, i_diameter, i_diameter);
 		g.setColor(Color.BLACK);
-		g.drawPolygon(getBounds(pixel));
+		g.drawPolygon(Pixel.convert(bounds, pixel));
 	}
 
 	@Override
-	public Polygon getBounds(Scalar pixel) {
-		int[] x = new int[ACCURACY];
-		int[] y = new int[ACCURACY];
-		for (int i = 0; i < ACCURACY; i++) {
-			Vector v = Vector.extend(Vector.fromPolar(radius, (2 * Math.PI * i) / ACCURACY),
-					getPosition().getDimension());
-			IntVector iv = Pixel.convert(getPosition().add(v), pixel);
-			x[i] = iv.get(0);
-			y[i] = iv.get(1);
-		}
-		return new Polygon(x, y, ACCURACY);
+	public VectorCollection getBounds() {
+		return bounds;
 
 	}
 
@@ -62,7 +67,7 @@ public class Circle extends RegularBody implements DrawableBody {
 	}
 
 	@Override
-	public void onCollision(DrawableBody other) {
+	public void onCollision(Collidable other) {
 		// TODO Auto-generated method stub
 
 	}

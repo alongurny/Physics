@@ -1,5 +1,6 @@
 package physics.quantity;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Quantities {
@@ -18,10 +19,15 @@ public class Quantities {
 		return m;
 	}
 
-	@SafeVarargs
 	public static void requireSame(Quantifiable... us) {
 		for (Quantifiable u : us) {
 			require(u, us[0].getQuantity());
+		}
+	}
+
+	public static void requireSame(List<? extends Quantifiable> us) {
+		for (Quantifiable u : us) {
+			require(u, us.get(0).getQuantity());
 		}
 	}
 

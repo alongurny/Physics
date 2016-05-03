@@ -7,7 +7,7 @@ import java.util.List;
 import physics.Collision;
 import physics.PhysicalSystem;
 import physics.dimension.Dimensioned;
-import physics.graphics.drawers.DrawableBody;
+import physics.graphics.drawers.ElasticDrawableBody;
 import physics.math.Scalar;
 import physics.math.Vector;
 
@@ -15,7 +15,7 @@ import physics.math.Vector;
 public class PhysicalPanel extends Panel implements Dimensioned {
 
 	private PhysicalSystem system;
-	private List<DrawableBody> bodies;
+	private List<ElasticDrawableBody> bodies;
 
 	public PhysicalPanel(int width, int height, Vector focus, Color background, Scalar pixel, int dimension,
 			Scalar dt) {
@@ -28,7 +28,7 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 		addDrawingListener(e -> {
 			bodies.forEach(a -> bodies.forEach(b -> {
 				if (a != b && system.contains(a)) {
-					DrawableBody.getFutureIntersection(getPixel(), a, b, system.getDt()).ifPresent(p -> {
+					Collision.getFutureIntersection(getPixel(), a, b, system.getDt()).ifPresent(p -> {
 						a.addImpulse(Collision.getImpulse(a, b, p));
 						a.onCollision(b);
 					});
@@ -37,7 +37,7 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 		});
 	}
 
-	public void addDrawableBody(DrawableBody b, boolean movable) {
+	public void add(ElasticDrawableBody b, boolean movable) {
 		addDrawable(b);
 		if (movable) {
 			system.add(b);
