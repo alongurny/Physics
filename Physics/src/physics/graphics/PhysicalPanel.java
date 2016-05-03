@@ -7,7 +7,8 @@ import java.util.List;
 import physics.Collision;
 import physics.PhysicalSystem;
 import physics.dimension.Dimensioned;
-import physics.graphics.drawers.ElasticDrawableBody;
+import physics.graphics.drawers.Drawable;
+import physics.graphics.drawers.Elastic;
 import physics.math.Scalar;
 import physics.math.Vector;
 
@@ -15,7 +16,7 @@ import physics.math.Vector;
 public class PhysicalPanel extends Panel implements Dimensioned {
 
 	private PhysicalSystem system;
-	private List<ElasticDrawableBody> bodies;
+	private List<Elastic> bodies;
 
 	public PhysicalPanel(int width, int height, Vector focus, Color background, Scalar pixel, int dimension,
 			Scalar dt) {
@@ -37,8 +38,10 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 		});
 	}
 
-	public void add(ElasticDrawableBody b, boolean movable) {
-		addDrawable(b);
+	public void add(Elastic b, boolean movable) {
+		if (b instanceof Drawable) {
+			addDrawable((Drawable) b);
+		}
 		if (movable) {
 			system.add(b);
 		}

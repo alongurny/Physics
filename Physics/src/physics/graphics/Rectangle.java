@@ -7,14 +7,15 @@ import java.util.List;
 
 import physics.body.RegularBody;
 import physics.graphics.drawers.Collidable;
-import physics.graphics.drawers.ElasticDrawableBody;
+import physics.graphics.drawers.Drawable;
+import physics.graphics.drawers.Elastic;
 import physics.graphics.drawers.VectorCollection;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
 
-public class Rectangle extends RegularBody implements ElasticDrawableBody {
+public class Rectangle extends RegularBody implements Elastic, Drawable {
 
 	private Color color;
 	private Scalar width;

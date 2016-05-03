@@ -1,7 +1,8 @@
 package physics.math;
 
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import physics.dimension.Dimensioned;
 import physics.dimension.Dimensions;
@@ -103,7 +104,7 @@ public final class Vector implements Quantifiable, Dimensioned {
 		return applyBinaryOperator(w, Scalar::add);
 	}
 
-	private Vector applyBinaryOperator(Vector other, BiFunction<Scalar, Scalar, Scalar> op) {
+	private Vector applyBinaryOperator(Vector other, BinaryOperator<Scalar> op) {
 		Dimensions.requireSame(this, other);
 		return new Vector(getDimension(), i -> op.apply(entries[i], other.entries[i]));
 	}
@@ -127,8 +128,8 @@ public final class Vector implements Quantifiable, Dimensioned {
 		return Scalar.sum(applyBinaryOperator(v, Scalar::multiply).entries);
 	}
 
-	private Vector get(Function<Scalar, Scalar> f) {
-		return new Vector(entries.length, i -> f.apply(entries[i]));
+	private Vector get(UnaryOperator<Scalar> op) {
+		return new Vector(entries.length, i -> op.apply(entries[i]));
 	}
 
 	public Scalar get(int i) {
