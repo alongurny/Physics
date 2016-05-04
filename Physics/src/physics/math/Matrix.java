@@ -1,10 +1,11 @@
 package physics.math;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+
+import com.gurny.ImmutablePair;
+import com.gurny.Lazy;
 
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
@@ -24,18 +25,22 @@ public class Matrix {
 	}
 
 	private Scalar[][] values;
-	private Optional<Matrix> rref;
-	private Optional<List<RowOperation>> rowOperations;
-	private Optional<Scalar> determinant;
+	private Lazy<ImmutablePair<Matrix, List<RowOperation>>> rref;
+	private Lazy<Scalar> determinant;
+	private Lazy<Matrix> negate;
+	private Lazy<Matrix> inverse;
+	private Lazy<Boolean> invertible;
 
 	public Matrix(double[][] values) {
 		this(values.length, values[0].length, (i, j) -> new Scalar(values[i][j]));
 	}
 
 	public Matrix(int rowCount, int columnCount, BiFunction<Integer, Integer, Scalar> f) {
-		rref = Optional.empty();
-		rowOperations = Optional.empty();
-		determinant = Optional.empty();
+		rref = new Lazy<>(this::getRREF);
+		determinant = new Lazy<>(this::calculateDeterminant);
+		inverse = new Lazy<>(this::calculateInverse);
+		negate = new Lazy<>(this::calculateNegate);
+		invertible = new Lazy<>(this::calculateInvertible);
 		this.values = new Scalar[rowCount][columnCount];
 		for (int i = 0; i < rowCount; i++) {
 			for (int j = 0; j < columnCount; j++) {
@@ -58,23 +63,37 @@ public class Matrix {
 		return new Matrix(getRowCount(), getColumnCount(), (i, j) -> f.apply(get(i, j)));
 	}
 
-	private void calculateDeterminant() {
-		if (!isInvertible()) {
-			determinant = Optional.of(Scalar.zero(getQuantity().pow(getRowCount())));
-		} else {
-			Scalar s = Scalar.ONE;
-			for (RowOperation r : getRowOperations()) {
-				s = r.changeDeterminant(s);
-			}
-			determinant = Optional.of(s.inverse());
+	public Scalar calculateDeterminant() {
+		if (!isSquare()) {
+			throw new MatrixArithmeticException("Matrix is not square");
 		}
+		if (!isInvertible()) {
+			return Scalar.zero(getQuantity().pow(getRowCount()));
+		}
+		Scalar s = Scalar.ONE;
+		for (RowOperation r : getRowOperations()) {
+			s = r.changeDeterminant(s);
+		}
+		return s.inverse();
 	}
 
-	private void calculateRREF() {
-		Matrix rep = apply(Function.identity());
-		List<RowOperation> ops = new ArrayList<>();
-		rref = Optional.of(rep);
-		rowOperations = Optional.of(ops);
+	private Matrix calculateInverse() {
+		if (!isInvertible()) {
+			throw new MatrixArithmeticException("Matrix is not invertible");
+		}
+		Matrix i = identity(getRowCount());
+		for (RowOperation r : getRowOperations()) {
+			r.operate(i.values);
+		}
+		return i;
+	}
+
+	private Matrix calculateNegate() {
+		return apply(Scalar::negate);
+	}
+
+	private boolean calculateInvertible() {
+		return isSquare() && !Vector.isZero(getRowCanonicalForm().getRow(getRowCount() - 1));
 	}
 
 	public Scalar get(int row, int column) {
@@ -90,12 +109,6 @@ public class Matrix {
 	}
 
 	public Scalar getDeterminant() {
-		if (!isSquare()) {
-			throw new MatrixArithmeticException("Matrix is not square");
-		}
-		if (!determinant.isPresent()) {
-			calculateDeterminant();
-		}
 		return determinant.get();
 	}
 
@@ -108,10 +121,7 @@ public class Matrix {
 	}
 
 	public Matrix getRowCanonicalForm() {
-		if (!rref.isPresent()) {
-			calculateRREF();
-		}
-		return rref.get();
+		return rref.get().getFirst();
 	}
 
 	public int getRowCount() {
@@ -119,25 +129,19 @@ public class Matrix {
 	}
 
 	public List<RowOperation> getRowOperations() {
-		if (!rowOperations.isPresent()) {
-			calculateRREF();
-		}
-		return rowOperations.get();
+		return rref.get().getSecond();
+	}
+
+	private ImmutablePair<Matrix, List<RowOperation>> getRREF() {
+		return null;
 	}
 
 	public Matrix inverse() {
-		if (!isInvertible()) {
-			throw new MatrixArithmeticException("Matrix is not invertible");
-		}
-		Matrix i = identity(getRowCount());
-		for (RowOperation r : getRowOperations()) {
-			r.operate(i.values);
-		}
-		return i;
+		return inverse.get();
 	}
 
 	public boolean isInvertible() {
-		return isSquare() && !Vector.isZero(getRowCanonicalForm().getRow(getRowCount() - 1));
+		return invertible.get();
 	}
 
 	public boolean isSquare() {
@@ -161,7 +165,7 @@ public class Matrix {
 	}
 
 	public Matrix negate() {
-		return apply(Scalar::negate);
+		return negate.get();
 	}
 
 	public Matrix subtract(Matrix other) {

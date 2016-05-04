@@ -1,6 +1,5 @@
 package physics.graphics;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +17,8 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 	private PhysicalSystem system;
 	private List<Elastic> bodies;
 
-	public PhysicalPanel(int width, int height, Vector focus, Color background, Scalar pixel, int dimension,
-			Scalar dt) {
-		super(width, height, focus, background, pixel);
+	public PhysicalPanel(int width, int height, Vector focus, Scalar pixel, int dimension, Scalar dt) {
+		super(width, height, focus, pixel);
 		bodies = new ArrayList<>();
 		system = new PhysicalSystem(dimension, dt);
 		addDrawingListener(e -> {

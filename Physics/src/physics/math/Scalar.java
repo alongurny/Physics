@@ -109,10 +109,6 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 
 	private final double value;
 
-	public Scalar(double value) {
-		this(Quantity.NONE, value);
-	}
-
 	private Scalar(Quantity quantity, double value) {
 		this.quantity = Objects.requireNonNull(quantity);
 		if (Double.isNaN(value)) {
@@ -123,6 +119,10 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 
 	public Scalar(Scalar s, double factor) {
 		this(Objects.requireNonNull(s.quantity), s.value * factor);
+	}
+
+	public Scalar(double value) {
+		this(Quantity.NONE, value);
 	}
 
 	public Scalar add(Scalar v) {

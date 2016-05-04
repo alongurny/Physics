@@ -1,7 +1,7 @@
 package physics.math;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntUnaryOperator;
 
 import physics.dimension.Dimensioned;
 import physics.dimension.Dimensions;
@@ -34,10 +34,10 @@ public final class IntVector implements Dimensioned {
 
 	}
 
-	private IntVector(int length, Function<Integer, Integer> f) {
+	private IntVector(int length, IntUnaryOperator f) {
 		entries = new int[length];
 		for (int i = 0; i < entries.length; i++) {
-			this.entries[i] = f.apply(i);
+			this.entries[i] = f.applyAsInt(i);
 		}
 	}
 
@@ -45,9 +45,9 @@ public final class IntVector implements Dimensioned {
 		return applyBinaryOperator(w, (a, b) -> a + b);
 	}
 
-	private IntVector applyBinaryOperator(IntVector other, BiFunction<Integer, Integer, Integer> op) {
+	private IntVector applyBinaryOperator(IntVector other, IntBinaryOperator op) {
 		Dimensions.requireSame(this, other);
-		return new IntVector(getDimension(), i -> op.apply(get(i), other.get(i)));
+		return new IntVector(getDimension(), i -> op.applyAsInt(get(i), other.get(i)));
 	}
 
 	public IntVector divide(int n) {

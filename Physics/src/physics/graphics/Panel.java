@@ -1,6 +1,5 @@
 package physics.graphics;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -32,8 +31,7 @@ public class Panel extends JPanel {
 	private Thread thread;
 	private long dt;
 
-	public Panel(int width, int height, Vector focus, Color background, Scalar pixel) {
-		setBackground(background);
+	public Panel(int width, int height, Vector focus, Scalar pixel) {
 		this.focus = focus;
 		this.pixel = pixel;
 		labelDrawer = new LabelDrawer(10, 20);
