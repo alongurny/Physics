@@ -1,5 +1,6 @@
 package physics.math;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -132,7 +133,35 @@ public class Matrix {
 	}
 
 	private ImmutablePair<Matrix, List<RowOperation>> getRREF() {
-		return null;
+		Matrix m = apply(Function.identity());
+		Scalar[][] rref = m.values;
+		List<RowOperation> operations = new ArrayList<>();
+		int r = 0;
+		for (int c = 0; c < rref[0].length && r < rref.length; c++) {
+			int j = r;
+			for (int i = r + 1; i < rref.length; i++)
+				if (Scalar.abs(rref[i][c]).compareTo(Scalar.abs(rref[j][c])) > 0)
+					j = i;
+			if (Scalar.isZero(rref[j][c]))
+				continue;
+
+			RowOperation swap = RowOperation.swap(j, r);
+			operations.add(swap);
+			swap.operate(rref);
+
+			RowOperation multiply = RowOperation.multiply(r, rref[r][c].inverse());
+			operations.add(multiply);
+			multiply.operate(rref);
+			for (int i = 0; i < rref.length; i++) {
+				if (i != r) {
+					RowOperation addRow = RowOperation.addRow(i, r, rref[i][c].negate());
+					operations.add(addRow);
+					addRow.operate(rref);
+				}
+			}
+			r++;
+		}
+		return new ImmutablePair<>(m, operations);
 	}
 
 	public Matrix inverse() {
