@@ -1,4 +1,4 @@
-package com.gurny;
+package physics.util;
 
 import java.util.Optional;
 import java.util.function.Supplier;

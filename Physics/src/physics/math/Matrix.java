@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.gurny.ImmutablePair;
-import com.gurny.Lazy;
-
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
+import physics.util.ImmutablePair;
+import physics.util.Lazy;
 
 public class Matrix {
 

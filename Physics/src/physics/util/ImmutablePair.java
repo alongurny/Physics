@@ -1,4 +1,4 @@
-package com.gurny;
+package physics.util;
 
 public class ImmutablePair<T, S> {
 
