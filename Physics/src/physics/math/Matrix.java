@@ -6,12 +6,13 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import physics.graphics.drawers.VectorCollection;
+import physics.quantity.Quantifiable;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 import physics.util.ImmutablePair;
 import physics.util.Lazy;
 
-public class Matrix {
+public class Matrix implements Quantifiable {
 
 	public static Matrix column(Vector v) {
 		return new Matrix(v.getDimension(), 1, (i, j) -> v.get(i));
@@ -125,6 +126,7 @@ public class Matrix {
 		return determinant.get();
 	}
 
+	@Override
 	public Quantity getQuantity() {
 		return get(0, 0).getQuantity();
 	}

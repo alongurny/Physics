@@ -1,6 +1,7 @@
 package physics.body.machine;
 
 import physics.body.RegularRigidBody;
+import physics.math.Matrix;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
@@ -9,7 +10,7 @@ public class Spaceship extends RegularRigidBody {
 
 	private Container fuel;
 
-	public Spaceship(Scalar mass, Vector center, Vector velocity, Scalar inertiaMoment, Vector angularPosition,
+	public Spaceship(Scalar mass, Vector center, Vector velocity, Matrix inertiaMoment, Vector angularPosition,
 			Vector angularVelocity, Container fuel) {
 		super(mass, Scalar.zero(Quantity.CHARGE), center, velocity, inertiaMoment, angularPosition, angularVelocity);
 		this.fuel = fuel;

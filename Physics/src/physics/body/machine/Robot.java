@@ -1,6 +1,7 @@
 package physics.body.machine;
 
 import physics.body.RegularRigidBody;
+import physics.math.Matrix;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantities;
@@ -10,7 +11,7 @@ public class Robot extends RegularRigidBody {
 
 	private Scalar width, height;
 
-	public Robot(Scalar mass, Vector center, Scalar inertiaMomemnt, Vector angularPosition, Scalar width,
+	public Robot(Scalar mass, Vector center, Matrix inertiaMomemnt, Vector angularPosition, Scalar width,
 			Scalar height) {
 		super(mass, Scalar.zero(Quantity.CHARGE), center, Vector.zero(Quantity.VELOCITY, center.getDimension()),
 				inertiaMomemnt, angularPosition,

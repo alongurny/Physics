@@ -19,11 +19,8 @@ public class Drivetrain {
 	private Scalar maximumSpeed = UnitSystem.SI.get(Quantity.VELOCITY, 0.02);
 	private Robot robot;
 
-	private Scalar dt;
-
-	public Drivetrain(Robot robot, Scalar dt) {
+	public Drivetrain(Robot robot) {
 		this.robot = robot;
-		this.dt = dt;
 	}
 
 	public void arcade(double moveValue, double rotateValue) {
@@ -63,7 +60,7 @@ public class Drivetrain {
 					Scalar.cos(robot.getAngularPosition().get(0))).multiply(gamma);
 			robot.addImpulse(velocity.multiply(robot.getMass()));
 			robot.addAngularImpulse(
-					new Vector(angularVelocity.multiply(Scalar.RADIAN).multiply(robot.getMomentOfInertia())), dt);
+					robot.getMomentOfInertia().multiplyColumn(new Vector(angularVelocity.multiply(Scalar.RADIAN))));
 
 		}
 	}

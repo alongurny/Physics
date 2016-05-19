@@ -1,6 +1,7 @@
 package physics.body;
 
 import physics.dimension.Dimensions;
+import physics.math.Matrix;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantities;
@@ -8,13 +9,14 @@ import physics.quantity.Quantity;
 
 public abstract class RegularRigidBody extends RegularBody implements RigidBody {
 
-	private Scalar momentOfInertia;
+	private Matrix momentOfInertia;
 
 	private Vector angularPosition;
 	private Vector angularVelocity;
 	private Vector angularAcceleration;
+	private Vector angularImpulse;
 
-	public RegularRigidBody(Scalar mass, Scalar charge, Vector position, Vector velocity, Scalar momentOfInertia,
+	public RegularRigidBody(Scalar mass, Scalar charge, Vector position, Vector velocity, Matrix momentOfInertia,
 			Vector angularPosition, Vector angularVelocity) {
 		super(mass, charge, position, velocity);
 		this.momentOfInertia = Quantities.require(momentOfInertia, Quantity.MOMENT_OF_INERTIA);
@@ -22,6 +24,7 @@ public abstract class RegularRigidBody extends RegularBody implements RigidBody 
 		this.angularVelocity = Quantities.require(angularVelocity, Quantity.ANGULAR_VELOCITY);
 		int dimension = Dimensions.requireSame(angularPosition, angularVelocity);
 		this.angularAcceleration = Vector.zero(Quantity.ANGULAR_ACCELERATION, dimension);
+		this.angularImpulse = Vector.zero(Quantity.ANGULAR_MOMENTUM, dimension);
 	}
 
 	public final void addAngularAcceleration(Vector angularAcceleration) {
@@ -29,14 +32,14 @@ public abstract class RegularRigidBody extends RegularBody implements RigidBody 
 		this.angularAcceleration = this.angularAcceleration.add(angularAcceleration);
 	}
 
-	public final void addAngularImpulse(Vector angularImpulse, Scalar dt) {
+	public final void addAngularImpulse(Vector angularImpulse) {
 		Quantities.require(angularImpulse, Quantity.ANGULAR_MOMENTUM);
-		this.angularAcceleration = this.angularAcceleration.add(angularImpulse.divide(momentOfInertia).divide(dt));
+		this.angularImpulse = this.angularImpulse.add(angularImpulse);
 	}
 
 	public final void addTorque(Vector torque) {
 		Quantities.require(torque, Quantity.TORQUE);
-		this.angularAcceleration = this.angularAcceleration.add(torque.divide(momentOfInertia));
+		this.angularAcceleration = this.angularAcceleration.add(momentOfInertia.inverse().multiplyColumn(torque));
 	}
 
 	@Override
@@ -50,14 +53,17 @@ public abstract class RegularRigidBody extends RegularBody implements RigidBody 
 	}
 
 	@Override
-	public Scalar getMomentOfInertia() {
+	public Matrix getMomentOfInertia() {
 		return momentOfInertia;
 	}
 
+	@Override
 	public final void rotate(Scalar dt) {
-		angularVelocity = angularVelocity.add(angularAcceleration.multiply(dt));
+		angularVelocity = angularVelocity.add(momentOfInertia.inverse().multiplyColumn(angularImpulse));
 		angularPosition = angularPosition.add(angularVelocity.multiply(dt));
-		angularAcceleration = Vector.zero(Quantity.ANGULAR_ACCELERATION, angularAcceleration.getDimension());
+		angularVelocity = angularVelocity.add(angularAcceleration.multiply(dt));
+		angularAcceleration = Vector.zero(Quantity.ACCELERATION, angularAcceleration.getDimension());
+		angularImpulse = Vector.zero(Quantity.ANGULAR_MOMENTUM, angularImpulse.getDimension());
 	}
 
 }

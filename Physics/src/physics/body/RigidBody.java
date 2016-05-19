@@ -1,14 +1,14 @@
 package physics.body;
 
-import physics.math.Scalar;
+import physics.math.Matrix;
 import physics.math.Vector;
 
-public interface RigidBody {
+public interface RigidBody extends Rotatable {
 
 	Vector getAngularPosition();
 
 	Vector getAngularVelocity();
 
-	Scalar getMomentOfInertia();
+	Matrix getMomentOfInertia();
 
 }
