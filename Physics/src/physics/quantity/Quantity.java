@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import physics.math.IntVector;
+import physics.util.LazyCache;
 
 public class Quantity {
 
@@ -96,6 +97,7 @@ public class Quantity {
 
 	public static void bindName(Quantity quantity, String name) {
 		repr.put(quantity, name);
+		quantity.tostring.setOutdated();
 	}
 
 	public static Quantity pow(Quantity q, int n) {
@@ -123,9 +125,11 @@ public class Quantity {
 	}
 
 	private final IntVector vector;
+	private LazyCache<String> tostring;
 
 	private Quantity(IntVector vector) {
 		this.vector = vector;
+		this.tostring = new LazyCache<>(this::calculateToString);
 	}
 
 	public Quantity divide(Quantity q) {
@@ -162,8 +166,7 @@ public class Quantity {
 		return new Quantity(vector.multiply(n));
 	}
 
-	@Override
-	public String toString() {
+	public String calculateToString() {
 		List<String> ss = new ArrayList<String>();
 		for (int i = 0; i < vector.getDimension(); i++) {
 			int value = vector.get(i);
@@ -177,5 +180,10 @@ public class Quantity {
 			res = repr.get(this) + " " + res;
 		}
 		return res;
+	}
+
+	@Override
+	public String toString() {
+		return tostring.get();
 	}
 }

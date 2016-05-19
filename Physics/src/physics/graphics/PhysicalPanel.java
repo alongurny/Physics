@@ -14,6 +14,7 @@ import physics.math.Vector;
 @SuppressWarnings("serial")
 public class PhysicalPanel extends Panel implements Dimensioned {
 
+	public static final Scalar DEFAULT_TIME_SPAN = Scalar.SECOND.multiply(15e-3);
 	private LinearSystem system;
 	private List<Elastic> bodies;
 
