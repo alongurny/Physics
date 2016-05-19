@@ -3,6 +3,7 @@ package physics;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import physics.body.Movable;
@@ -11,9 +12,8 @@ import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
 
-public class PhysicalSystem implements Dimensioned {
+public class LinearSystem implements Dimensioned {
 
-	public static final Scalar DEFAULT_TIME_SPAN = Scalar.SECOND.multiply(15e-3);
 	private List<Movable> bodies;
 	private List<Function<Movable, Vector>> forces;
 	private List<BiFunction<Movable, Movable, Vector>> biforces;
@@ -21,7 +21,7 @@ public class PhysicalSystem implements Dimensioned {
 	private int dimension;
 	private Scalar dt;
 
-	public PhysicalSystem(int dimension, Scalar dt) {
+	public LinearSystem(int dimension, Scalar dt) {
 		this.bodies = new CopyOnWriteArrayList<>();
 		this.forces = new CopyOnWriteArrayList<>();
 		this.biforces = new CopyOnWriteArrayList<>();
@@ -72,6 +72,10 @@ public class PhysicalSystem implements Dimensioned {
 			sum = sum.add(f.apply(b));
 		}
 		return sum;
+	}
+
+	protected void forEach(Consumer<? super Movable> action) {
+		bodies.forEach(action);
 	}
 
 	public void progress() {

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import physics.graphics.drawers.VectorCollection;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 import physics.util.ImmutablePair;
@@ -14,6 +15,10 @@ public class Matrix {
 
 	public static Matrix column(Vector v) {
 		return new Matrix(v.getDimension(), 1, (i, j) -> v.get(i));
+	}
+
+	public static Matrix zero(int rowCount, int columnCount) {
+		return new Matrix(rowCount, columnCount, (i, j) -> Scalar.ZERO);
 	}
 
 	public static Matrix identity(int dimension) {
@@ -30,6 +35,8 @@ public class Matrix {
 	private Lazy<Matrix> negate;
 	private Lazy<Matrix> inverse;
 	private Lazy<Boolean> invertible;
+	private Lazy<Matrix> transpose;
+	private Lazy<VectorSpace> nullspace;
 
 	public Matrix(double[][] values) {
 		this(values.length, values[0].length, (i, j) -> new Scalar(values[i][j]));
@@ -41,6 +48,8 @@ public class Matrix {
 		inverse = new Lazy<>(this::calculateInverse);
 		negate = new Lazy<>(this::calculateNegate);
 		invertible = new Lazy<>(this::calculateInvertible);
+		transpose = new Lazy<>(this::calculateTranspose);
+		nullspace = new Lazy<>(this::calculateNullspace);
 		this.values = new Scalar[rowCount][columnCount];
 		for (int i = 0; i < rowCount; i++) {
 			for (int j = 0; j < columnCount; j++) {
@@ -63,7 +72,7 @@ public class Matrix {
 		return new Matrix(getRowCount(), getColumnCount(), (i, j) -> f.apply(get(i, j)));
 	}
 
-	public Scalar calculateDeterminant() {
+	private Scalar calculateDeterminant() {
 		if (!isSquare()) {
 			throw new MatrixArithmeticException("Matrix is not square");
 		}
@@ -94,6 +103,10 @@ public class Matrix {
 
 	private boolean calculateInvertible() {
 		return isSquare() && !Vector.isZero(getRowCanonicalForm().getRow(getRowCount() - 1));
+	}
+
+	private Matrix calculateTranspose() {
+		return new Matrix(getColumnCount(), getRowCount(), (i, j) -> get(j, i));
 	}
 
 	public Scalar get(int row, int column) {
@@ -132,6 +145,50 @@ public class Matrix {
 		return rref.get().getSecond();
 	}
 
+	public int getRank() {
+		Matrix rref = getRowCanonicalForm();
+		int rank = 0;
+		for (int i = 0; i < rref.getRowCount(); i++) {
+			if (Vector.isZero(rref.getRow(i))) {
+				break;
+			}
+			rank++;
+		}
+		return rank;
+	}
+
+	public VectorSpace getNullspace() {
+		return nullspace.get();
+	}
+
+	/**
+	 * FIXME: doesn't work
+	 */
+	private VectorSpace calculateNullspace() {
+		Scalar[][] well = zero(getRowCount(), getColumnCount()).values;
+		Matrix rref = getRowCanonicalForm();
+		List<Vector> vectors = new ArrayList<>();
+		int count = 0;
+		for (int i = 0; i < getRowCount() && count < getColumnCount(); i++) {
+			while (Scalar.isZero(rref.get(i, count)) && count < getColumnCount()) {
+				well[count][i] = Scalar.ONE;
+				System.out.println(count + ", " + i);
+				count++;
+			}
+			for (int j = count + 1; j < getColumnCount(); j++) {
+				well[j][i] = rref.get(i, j).negate();
+			}
+			count++;
+		}
+		for (Scalar[] row : well) {
+			Vector v = new Vector(row);
+			if (!Vector.isZero(v)) {
+				vectors.add(v);
+			}
+		}
+		return new VectorSpace(new VectorCollection(vectors));
+	}
+
 	private ImmutablePair<Matrix, List<RowOperation>> getRREF() {
 		Matrix m = apply(Function.identity());
 		Scalar[][] rref = m.values;
@@ -166,6 +223,10 @@ public class Matrix {
 
 	public Matrix inverse() {
 		return inverse.get();
+	}
+
+	public Matrix transpose() {
+		return transpose.get();
 	}
 
 	public boolean isInvertible() {

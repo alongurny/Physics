@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import physics.Collision;
-import physics.PhysicalSystem;
+import physics.LinearSystem;
 import physics.dimension.Dimensioned;
 import physics.graphics.drawers.Drawable;
 import physics.graphics.drawers.Elastic;
@@ -14,13 +14,13 @@ import physics.math.Vector;
 @SuppressWarnings("serial")
 public class PhysicalPanel extends Panel implements Dimensioned {
 
-	private PhysicalSystem system;
+	private LinearSystem system;
 	private List<Elastic> bodies;
 
 	public PhysicalPanel(int width, int height, Vector focus, Scalar pixel, int dimension, Scalar dt) {
 		super(width, height, focus, pixel);
 		bodies = new ArrayList<>();
-		system = new PhysicalSystem(dimension, dt);
+		system = new LinearSystem(dimension, dt);
 		addDrawingListener(e -> {
 			system.progress();
 		});
@@ -51,8 +51,12 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 		return system.getDimension();
 	}
 
-	public PhysicalSystem getPhysicalSystem() {
+	public LinearSystem getPhysicalSystem() {
 		return system;
+	}
+
+	public Scalar getDt() {
+		return system.getDt();
 	}
 
 }

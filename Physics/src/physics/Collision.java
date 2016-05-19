@@ -22,8 +22,7 @@ public class Collision {
 		Area area = new Area(Pixel.convert(bounds1, pixel));
 		area.intersect(new Area(Pixel.convert(bounds2, pixel)));
 		return area.isEmpty() ? Optional.empty()
-				: Optional
-						.of(new Vector(area.getBounds().getCenterX(), area.getBounds().getCenterY()).multiply(pixel));
+				: Optional.of(new Vector(area.getBounds().getCenterX(), area.getBounds().getCenterY()).multiply(pixel));
 	}
 
 	public static Vector getImpulse(Elastic c1, Elastic c2, Vector contactPoint) {

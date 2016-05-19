@@ -5,10 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
+import physics.dimension.Dimensioned;
 import physics.math.Vector;
 import physics.quantity.Quantities;
 
-public class VectorCollection implements Iterable<Vector> {
+public class VectorCollection implements Iterable<Vector>, Dimensioned {
 	private List<Vector> vectors;
 
 	public VectorCollection(List<Vector> vectors) {
@@ -33,5 +34,15 @@ public class VectorCollection implements Iterable<Vector> {
 
 	public int size() {
 		return vectors.size();
+	}
+
+	@Override
+	public int getDimension() {
+		return vectors.get(0).getDimension();
+	}
+
+	@Override
+	public String toString() {
+		return vectors.toString();
 	}
 }

@@ -100,6 +100,7 @@ public abstract class RegularBody implements Movable {
 		position = position.add(velocity.multiply(dt));
 		velocity = velocity.add(acceleration.multiply(dt));
 		acceleration = Vector.zero(Quantity.ACCELERATION, acceleration.getDimension());
+		impulse = Vector.zero(Quantity.MOMENTUM, impulse.getDimension());
 	}
 
 	protected void setCharge(Scalar charge) {

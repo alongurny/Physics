@@ -20,22 +20,11 @@ public class Circle extends RegularBody implements Elastic, Drawable {
 
 	private Scalar radius;
 	private Color color;
-	private VectorCollection bounds;
 
 	public Circle(Scalar mass, Scalar charge, Vector center, Vector velocity, Scalar radius, Color color) {
 		super(mass, charge, center, velocity);
 		this.radius = radius;
 		this.color = color;
-		initializeBounds();
-	}
-
-	private void initializeBounds() {
-		List<Vector> vectors = new ArrayList<>();
-		for (int i = 0; i < ACCURACY; i++) {
-			vectors.add(Vector.extend(Vector.fromPolar(radius, (2 * Math.PI * i) / ACCURACY),
-					getPosition().getDimension()));
-		}
-		this.bounds = new VectorCollection(vectors);
 	}
 
 	@Override
@@ -45,13 +34,18 @@ public class Circle extends RegularBody implements Elastic, Drawable {
 		g.setColor(color);
 		g.fillOval(i_p.get(0) - i_diameter / 2, i_p.get(1) - i_diameter / 2, i_diameter, i_diameter);
 		g.setColor(Color.BLACK);
-		g.drawPolygon(Pixel.convert(bounds, pixel));
+		g.drawPolygon(Pixel.convert(getBounds(), pixel));
 	}
 
 	@Override
 	public VectorCollection getBounds() {
-		return bounds;
-
+		List<Vector> vectors = new ArrayList<>();
+		for (int i = 0; i < ACCURACY; i++) {
+			vectors.add(
+					Vector.extend(Vector.fromPolar(radius, (2 * Math.PI * i) / ACCURACY), getPosition().getDimension())
+							.add(getPosition()));
+		}
+		return new VectorCollection(vectors);
 	}
 
 	@Override

@@ -20,24 +20,12 @@ public class Rectangle extends RegularBody implements Elastic, Drawable {
 	private Color color;
 	private Scalar width;
 	private Scalar height;
-	private VectorCollection bounds;
 
 	public Rectangle(Scalar mass, Vector center, Vector velocity, Scalar width, Scalar height, Color color) {
 		super(mass, Scalar.zero(Quantity.CHARGE), center, velocity);
 		this.width = width;
 		this.height = height;
 		this.color = color;
-		initializeBounds();
-	}
-
-	private void initializeBounds() {
-		List<Vector> vectors = new ArrayList<>();
-		int dimension = getPosition().getDimension();
-		vectors.add(getPosition().add(new Vector(width.negate(), height.negate()).multiply(0.5).extend(dimension)));
-		vectors.add(getPosition().add(new Vector(width, height.negate()).multiply(0.5).extend(dimension)));
-		vectors.add(getPosition().add(new Vector(width, height).multiply(0.5).extend(dimension)));
-		vectors.add(getPosition().add(new Vector(width.negate(), height).multiply(0.5).extend(dimension)));
-		this.bounds = new VectorCollection(vectors);
 	}
 
 	@Override
@@ -50,14 +38,20 @@ public class Rectangle extends RegularBody implements Elastic, Drawable {
 
 	@Override
 	public VectorCollection getBounds() {
-		return bounds;
+		List<Vector> vectors = new ArrayList<>();
+		int dimension = getPosition().getDimension();
+		vectors.add(getPosition().add(new Vector(width.negate(), height.negate()).multiply(0.5).extend(dimension)));
+		vectors.add(getPosition().add(new Vector(width, height.negate()).multiply(0.5).extend(dimension)));
+		vectors.add(getPosition().add(new Vector(width, height).multiply(0.5).extend(dimension)));
+		vectors.add(getPosition().add(new Vector(width.negate(), height).multiply(0.5).extend(dimension)));
+		return new VectorCollection(vectors);
 	}
 
 	@Override
 	public Vector getCollisionCircleCenter(Vector contactPoint) {
 		contactPoint = Vector.extend(contactPoint, getPosition().getDimension());
 		Vector d = contactPoint.subtract(getPosition());
-		double phase = Scalar.atan2(d.get(1), d.get(0));
+		double phase = Vector.getPhase(d);
 		double angle = Scalar.atan2(height, width);
 		contactPoint = Vector.extend(contactPoint, 2);
 		if (Math.abs(phase) < angle) {
@@ -65,9 +59,9 @@ public class Rectangle extends RegularBody implements Elastic, Drawable {
 		} else if (Math.abs(phase) > Math.PI - angle) {
 			contactPoint = contactPoint.add(new Vector(0.5, 0).multiply(width));
 		} else if (angle < phase && phase < Math.PI - angle) {
-			contactPoint = contactPoint.add(new Vector(0, 0.5).multiply(height));
-		} else if (-Math.PI + angle < phase && phase < -angle) {
 			contactPoint = contactPoint.add(new Vector(0, -0.5).multiply(height));
+		} else if (-Math.PI + angle < phase && phase < -angle) {
+			contactPoint = contactPoint.add(new Vector(0, 0.5).multiply(height));
 		}
 		return Vector.extend(contactPoint, getPosition().getDimension());
 
