@@ -11,6 +11,7 @@ import physics.dimension.Dimensioned;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
+import physics.util.Debug;
 
 public class LinearSystem implements Dimensioned {
 
@@ -79,13 +80,15 @@ public class LinearSystem implements Dimensioned {
 	}
 
 	public void progress() {
-		bodies.forEach(b -> forces.forEach(f -> b.addForce(f.apply(b))));
-		biforces.forEach(f -> bodies.forEach(b -> bodies.forEach(c -> {
-			if (b != c) {
-				b.addForce(f.apply(b, c));
-			}
-		})));
-		bodies.forEach(b -> b.move(dt));
+		Debug.printTimeIt("forces", () -> bodies.forEach(b -> forces.forEach(f -> b.addForce(f.apply(b)))));
+		Debug.printTimeIt("biforces", () -> biforces.forEach(f -> {
+			bodies.forEach(b -> bodies.forEach(c -> {
+				if (b != c) {
+					b.addForce(f.apply(b, c));
+				}
+			}));
+		}));
+		Debug.printTimeIt("move", () -> bodies.forEach(b -> b.move(dt)));
 	}
 
 	public boolean contains(Movable b) {

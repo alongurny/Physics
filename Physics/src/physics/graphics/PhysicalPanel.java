@@ -22,19 +22,19 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 		super(width, height, focus, pixel);
 		bodies = new ArrayList<>();
 		system = new LinearSystem(dimension, dt);
-		addDrawingListener(e -> {
-			system.progress();
-		});
-		addDrawingListener(e -> {
-			bodies.forEach(a -> bodies.forEach(b -> {
-				if (a != b && system.contains(a)) {
-					Collision.getFutureIntersection(getPixel(), a, b, system.getDt()).ifPresent(p -> {
-						a.addImpulse(Collision.getImpulse(a, b, p));
-						a.onCollision(b);
-					});
-				}
-			}));
-		});
+		addCalculation(system::progress);
+		addCalculation(this::doIntersections);
+	}
+
+	private void doIntersections() {
+		bodies.forEach(a -> bodies.forEach(b -> {
+			if (a != b && system.contains(a)) {
+				Collision.getFutureIntersection(getPixel(), a, b, system.getDt()).ifPresent(p -> {
+					a.addImpulse(Collision.getImpulse(a, b, p));
+					a.onCollision(b);
+				});
+			}
+		}));
 	}
 
 	public void add(Elastic b, boolean movable) {

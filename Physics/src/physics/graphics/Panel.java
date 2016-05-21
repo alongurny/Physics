@@ -25,17 +25,19 @@ public class Panel extends JPanel {
 	private Vector focus;
 	private LabelDrawer labelDrawer;
 	private List<Drawable> drawables;
-	private List<DrawingListener> drawingListeners;
+	private List<Runnable> calculations;
 	private Scalar pixel;
 	private boolean scrollable;
-	private Thread thread;
+	private Thread calculationThread;
+	private Thread drawingThread;
 	private long dt;
+	private boolean calculating;
 
 	public Panel(int width, int height, Vector focus, Scalar pixel) {
 		this.focus = focus;
 		this.pixel = pixel;
 		labelDrawer = new LabelDrawer(10, 20);
-		drawingListeners = new CopyOnWriteArrayList<DrawingListener>();
+		calculations = new CopyOnWriteArrayList<>();
 		drawables = new ArrayList<Drawable>();
 		setFocusable(true);
 		addMouseWheelListener(new MouseWheelListener() {
@@ -43,32 +45,47 @@ public class Panel extends JPanel {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				if (scrollable) {
-					Panel.this.pixel = Panel.this.pixel.multiply(Math.pow(1.1, e.getPreciseWheelRotation()));
+					multiplyPixel(Math.pow(1.1, e.getPreciseWheelRotation()));
 				}
 			}
 		});
 		setPreferredSize(new Dimension(width, height));
-		thread = new Thread(() -> {
+		calculationThread = new Thread(this::calculate);
+		drawingThread = new Thread(() -> {
 			while (true) {
-				long start = System.currentTimeMillis();
-				drawingListeners.forEach(d -> d.onDraw(new DrawingEvent()));
 				repaint();
-				long diff = System.currentTimeMillis() - start;
-				if (diff < dt) {
-					try {
-						Thread.sleep(dt - diff);
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
 			}
 		});
-		setFPS(30);
 
 	}
 
+	private void multiplyPixel(double value) {
+		pixel = pixel.multiply(value);
+	}
+
+	private void calculate() {
+		calculating = true;
+		while (calculating) {
+			long start = System.currentTimeMillis();
+			calculations.forEach(Runnable::run);
+			long diff = System.currentTimeMillis() - start;
+			if (diff < dt) {
+				try {
+					Thread.sleep(dt - diff);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public void setCalculating(boolean calculating) {
+		this.calculating = calculating;
+	}
+
 	public void start() {
-		thread.start();
+		calculationThread.start();
+		drawingThread.start();
 	}
 
 	public boolean isScrollable() {
@@ -83,8 +100,8 @@ public class Panel extends JPanel {
 		drawables.add(drawable);
 	}
 
-	public void addDrawingListener(DrawingListener drawingListener) {
-		drawingListeners.add(drawingListener);
+	public void addCalculation(Runnable calculation) {
+		calculations.add(calculation);
 	}
 
 	public void addLabel(String desc, Supplier<?> supp) {
