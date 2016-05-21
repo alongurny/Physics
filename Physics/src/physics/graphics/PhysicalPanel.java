@@ -10,6 +10,7 @@ import physics.graphics.drawers.Drawable;
 import physics.graphics.drawers.Elastic;
 import physics.math.Scalar;
 import physics.math.Vector;
+import physics.util.Debug;
 
 @SuppressWarnings("serial")
 public class PhysicalPanel extends Panel implements Dimensioned {
@@ -22,8 +23,8 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 		super(width, height, focus, pixel);
 		bodies = new ArrayList<>();
 		system = new LinearSystem(dimension, dt);
-		addCalculation(system::progress);
-		addCalculation(this::doIntersections);
+		addCalculation(() -> Debug.printTimeIt("progress", system::progress));
+		addCalculation(() -> Debug.printTimeIt("intersect", this::doIntersections));
 	}
 
 	private void doIntersections() {

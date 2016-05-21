@@ -52,8 +52,13 @@ public class Panel extends JPanel {
 		setPreferredSize(new Dimension(width, height));
 		calculationThread = new Thread(this::calculate);
 		drawingThread = new Thread(() -> {
-			while (true) {
+			while (calculating) {
 				repaint();
+				try {
+					Thread.sleep(1);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 
@@ -64,7 +69,6 @@ public class Panel extends JPanel {
 	}
 
 	private void calculate() {
-		calculating = true;
 		while (calculating) {
 			long start = System.currentTimeMillis();
 			calculations.forEach(Runnable::run);
@@ -84,6 +88,7 @@ public class Panel extends JPanel {
 	}
 
 	public void start() {
+		calculating = true;
 		calculationThread.start();
 		drawingThread.start();
 	}
