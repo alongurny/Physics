@@ -3,14 +3,12 @@ package physics.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import physics.Collision;
 import physics.LinearSystem;
 import physics.dimension.Dimensioned;
 import physics.graphics.drawers.Drawable;
 import physics.graphics.drawers.Elastic;
 import physics.math.Scalar;
 import physics.math.Vector;
-import physics.util.Debug;
 
 @SuppressWarnings("serial")
 public class PhysicalPanel extends Panel implements Dimensioned {
@@ -23,17 +21,14 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 		super(width, height, focus, pixel);
 		bodies = new ArrayList<>();
 		system = new LinearSystem(dimension, dt);
-		addCalculation(() -> Debug.printTimeIt("progress", system::progress));
-		addCalculation(() -> Debug.printTimeIt("intersect", this::doIntersections));
+		addCalculation(system::progress);
+		addCalculation(this::doIntersections);
 	}
 
 	private void doIntersections() {
 		bodies.forEach(a -> bodies.forEach(b -> {
 			if (a != b && system.contains(a)) {
-				Collision.getFutureIntersection(getPixel(), a, b, system.getDt()).ifPresent(p -> {
-					a.addImpulse(Collision.getImpulse(a, b, p));
-					a.onCollision(b);
-				});
+				a.getFutureIntersection(getPixel(), b, getDt()).ifPresent(p -> a.onCollision(getPixel(), b, getDt()));
 			}
 		}));
 	}

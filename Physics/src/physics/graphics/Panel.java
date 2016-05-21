@@ -29,7 +29,6 @@ public class Panel extends JPanel {
 	private Scalar pixel;
 	private boolean scrollable;
 	private Thread calculationThread;
-	private Thread drawingThread;
 	private long dt;
 	private boolean calculating;
 
@@ -51,17 +50,6 @@ public class Panel extends JPanel {
 		});
 		setPreferredSize(new Dimension(width, height));
 		calculationThread = new Thread(this::calculate);
-		drawingThread = new Thread(() -> {
-			while (calculating) {
-				repaint();
-				try {
-					Thread.sleep(1);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-
 	}
 
 	private void multiplyPixel(double value) {
@@ -72,6 +60,7 @@ public class Panel extends JPanel {
 		while (calculating) {
 			long start = System.currentTimeMillis();
 			calculations.forEach(Runnable::run);
+			repaint();
 			long diff = System.currentTimeMillis() - start;
 			if (diff < dt) {
 				try {
@@ -90,7 +79,6 @@ public class Panel extends JPanel {
 	public void start() {
 		calculating = true;
 		calculationThread.start();
-		drawingThread.start();
 	}
 
 	public boolean isScrollable() {

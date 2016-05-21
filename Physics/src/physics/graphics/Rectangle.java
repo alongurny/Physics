@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import physics.body.RegularBody;
-import physics.graphics.drawers.Collidable;
 import physics.graphics.drawers.Drawable;
 import physics.graphics.drawers.Elastic;
 import physics.graphics.drawers.VectorCollection;
@@ -14,18 +13,21 @@ import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
+import physics.util.Lazy;
 
 public class Rectangle extends RegularBody implements Elastic, Drawable {
 
 	private Color color;
 	private Scalar width;
 	private Scalar height;
+	private Lazy<VectorCollection> relativeBounds;
 
 	public Rectangle(Scalar mass, Vector center, Vector velocity, Scalar width, Scalar height, Color color) {
 		super(mass, Scalar.zero(Quantity.CHARGE), center, velocity);
 		this.width = width;
 		this.height = height;
 		this.color = color;
+		this.relativeBounds = new Lazy<>(this::calculateRelativeBounds);
 	}
 
 	@Override
@@ -36,15 +38,19 @@ public class Rectangle extends RegularBody implements Elastic, Drawable {
 		g.fillRect(i_p.get(0) - i_d.get(0) / 2, i_p.get(1) - i_d.get(1) / 2, i_d.get(0), i_d.get(1));
 	}
 
-	@Override
-	public VectorCollection getBounds() {
+	private VectorCollection calculateRelativeBounds() {
 		List<Vector> vectors = new ArrayList<>();
 		int dimension = getPosition().getDimension();
-		vectors.add(getPosition().add(new Vector(width.negate(), height.negate()).multiply(0.5).extend(dimension)));
-		vectors.add(getPosition().add(new Vector(width, height.negate()).multiply(0.5).extend(dimension)));
-		vectors.add(getPosition().add(new Vector(width, height).multiply(0.5).extend(dimension)));
-		vectors.add(getPosition().add(new Vector(width.negate(), height).multiply(0.5).extend(dimension)));
+		vectors.add(new Vector(width.negate(), height.negate()).multiply(0.5).extend(dimension));
+		vectors.add(new Vector(width, height.negate()).multiply(0.5).extend(dimension));
+		vectors.add(new Vector(width, height).multiply(0.5).extend(dimension));
+		vectors.add(new Vector(width.negate(), height).multiply(0.5).extend(dimension));
 		return new VectorCollection(vectors);
+	}
+
+	@Override
+	public VectorCollection getRelativeBounds() {
+		return relativeBounds.get();
 	}
 
 	@Override
@@ -75,9 +81,12 @@ public class Rectangle extends RegularBody implements Elastic, Drawable {
 		return new Vector(width, height);
 	}
 
-	@Override
-	public void onCollision(Collidable other) {
+	public Scalar getWidth() {
+		return width;
+	}
 
+	public Scalar getHeight() {
+		return height;
 	}
 
 }

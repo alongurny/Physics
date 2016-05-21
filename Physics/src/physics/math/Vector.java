@@ -187,4 +187,8 @@ public final class Vector implements Quantifiable, Dimensioned {
 		return extend(this, dimension);
 	}
 
+	public static Scalar distance(Vector a, Vector b) {
+		return a.subtract(b).getMagnitude();
+	}
+
 }

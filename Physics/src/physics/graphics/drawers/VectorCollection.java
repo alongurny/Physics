@@ -7,9 +7,11 @@ import java.util.function.UnaryOperator;
 
 import physics.dimension.Dimensioned;
 import physics.math.Vector;
+import physics.quantity.Quantifiable;
 import physics.quantity.Quantities;
+import physics.quantity.Quantity;
 
-public class VectorCollection implements Iterable<Vector>, Dimensioned {
+public class VectorCollection implements Iterable<Vector>, Dimensioned, Quantifiable {
 	private List<Vector> vectors;
 
 	public VectorCollection(List<Vector> vectors) {
@@ -44,5 +46,10 @@ public class VectorCollection implements Iterable<Vector>, Dimensioned {
 	@Override
 	public String toString() {
 		return vectors.toString();
+	}
+
+	@Override
+	public Quantity getQuantity() {
+		return vectors.get(0).getQuantity();
 	}
 }

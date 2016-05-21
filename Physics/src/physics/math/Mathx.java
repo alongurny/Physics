@@ -18,4 +18,12 @@ public class Mathx {
 		return factorial(a) / (factorial(b) * factorial(a - b));
 	}
 
+	public static Scalar partition(Scalar x1, Scalar x2, double ratio) {
+		return (x1.add(x2.multiply(ratio))).divide(1 + ratio);
+	}
+
+	public static Vector partition(Vector x1, Vector x2, double ratio) {
+		return (x1.add(x2.multiply(ratio))).divide(1 + ratio);
+	}
+
 }

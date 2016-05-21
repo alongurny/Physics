@@ -4,7 +4,6 @@ import java.awt.geom.Area;
 import java.util.Optional;
 
 import physics.graphics.Pixel;
-import physics.graphics.drawers.Boundable;
 import physics.graphics.drawers.Elastic;
 import physics.graphics.drawers.VectorCollection;
 import physics.math.Scalar;
@@ -12,13 +11,7 @@ import physics.math.Vector;
 
 public class Collision {
 
-	public static Optional<Vector> getFutureIntersection(Scalar pixel, Boundable a, Boundable b, Scalar dt) {
-		VectorCollection bounds1 = a.getBounds().map(v -> v.add(a.getVelocity().multiply(dt)));
-		VectorCollection bounds2 = b.getBounds().map(v -> v.add(b.getVelocity().multiply(dt)));
-		return getIntersection(pixel, bounds1, bounds2);
-	}
-
-	private static Optional<Vector> getIntersection(Scalar pixel, VectorCollection bounds1, VectorCollection bounds2) {
+	public static Optional<Vector> getIntersection(Scalar pixel, VectorCollection bounds1, VectorCollection bounds2) {
 		Area area = new Area(Pixel.convert(bounds1, pixel));
 		area.intersect(new Area(Pixel.convert(bounds2, pixel)));
 		return area.isEmpty() ? Optional.empty()
