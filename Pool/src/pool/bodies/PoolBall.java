@@ -2,26 +2,24 @@ package pool.bodies;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import physics.body.geometric.ChargeableSphere;
-import physics.graphics.Pixel;
+import physics.graphics.PixelGraphics;
 import physics.graphics.Rectangle;
 import physics.graphics.drawers.Boundable;
 import physics.graphics.drawers.Collidable;
-import physics.graphics.drawers.Drawable;
 import physics.graphics.drawers.Elastic;
+import physics.graphics.drawers.PixelDrawable;
 import physics.graphics.drawers.VectorCollection;
-import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
 import physics.util.Lazy;
 
-public class PoolBall extends ChargeableSphere implements Elastic, Drawable {
+public class PoolBall extends ChargeableSphere implements Elastic, PixelDrawable {
 
 	private static final int ACCURACY = 4;
 
@@ -63,26 +61,23 @@ public class PoolBall extends ChargeableSphere implements Elastic, Drawable {
 	}
 
 	@Override
-	public void draw(Graphics g, Scalar pixel) {
-		int i_diameter = Pixel.convert(getRadius().multiply(2), pixel);
-		IntVector i_p = Pixel.convert(getPosition(), pixel);
+	public void draw(PixelGraphics g) {
+		Scalar diameter = getRadius().multiply(2);
 		Scalar charge = getCharge();
 		double ratio = Scalar.abs(charge).convert(maxCharge);
 		boolean positive = charge.compareTo(Scalar.zero(Quantity.CHARGE)) > 0;
 		int magnitude = ((int) (15 * ratio)) / 2 * 2;
 		g.setColor(new Color(positive ? 255 : 0, 0, !positive ? 255 : 0, Math.min(255, magnitude * 12)));
-		g.fillOval(i_p.get(0) - i_diameter / 2 - magnitude / 2, i_p.get(1) - i_diameter / 2 - magnitude / 2,
-				i_diameter + magnitude, i_diameter + magnitude);
+		g.fillOval(getPosition(), diameter, diameter);
 		g.setColor(color);
-		g.fillOval(i_p.get(0) - i_diameter / 2, i_p.get(1) - i_diameter / 2, i_diameter, i_diameter);
+		g.fillOval(getPosition(), diameter, diameter);
 		if (stripe) {
 			g.setColor(Color.WHITE);
-			g.fillOval(i_p.get(0) - i_diameter * 7 / 20, i_p.get(1) - i_diameter * 7 / 20, i_diameter * 7 / 10,
-					i_diameter * 7 / 10);
+			g.fillOval(getPosition(), diameter.multiply(0.75), diameter.multiply(0.75));
 		}
 		g.setColor(stripe ? Color.BLACK : Color.WHITE);
 		g.setFont(new Font("arial", Font.BOLD, 12));
-		g.drawString(text, i_p.get(0) - 2, i_p.get(1) + 4);
+		g.drawString(text, getPosition());
 
 	}
 

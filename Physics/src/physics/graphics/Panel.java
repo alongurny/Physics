@@ -2,6 +2,7 @@ package physics.graphics;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -13,9 +14,8 @@ import java.util.function.Supplier;
 
 import javax.swing.JPanel;
 
-import physics.graphics.drawers.Drawable;
 import physics.graphics.drawers.LabelDrawer;
-import physics.math.IntVector;
+import physics.graphics.drawers.PixelDrawable;
 import physics.math.Scalar;
 import physics.math.Vector;
 
@@ -24,7 +24,7 @@ public class Panel extends JPanel {
 
 	private Vector focus;
 	private LabelDrawer labelDrawer;
-	private List<Drawable> drawables;
+	private List<PixelDrawable> pixelDrawables;
 	private List<Runnable> calculations;
 	private Scalar pixel;
 	private boolean scrollable;
@@ -37,7 +37,7 @@ public class Panel extends JPanel {
 		this.pixel = pixel;
 		labelDrawer = new LabelDrawer(10, 20);
 		calculations = new CopyOnWriteArrayList<>();
-		drawables = new ArrayList<Drawable>();
+		pixelDrawables = new ArrayList<PixelDrawable>();
 		setFocusable(true);
 		addMouseWheelListener(new MouseWheelListener() {
 
@@ -89,8 +89,8 @@ public class Panel extends JPanel {
 		this.scrollable = scrollable;
 	}
 
-	public void addDrawable(Drawable drawable) {
-		drawables.add(drawable);
+	public void addDrawable(PixelDrawable pixelDrawable) {
+		pixelDrawables.add(pixelDrawable);
 	}
 
 	public void addCalculation(Runnable calculation) {
@@ -126,14 +126,16 @@ public class Panel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		IntVector i_focus = Pixel.convert(focus, pixel);
-		int dx = getWidth() / 2 - i_focus.get(0);
-		int dy = getHeight() / 2 - i_focus.get(1);
-		for (Drawable d : drawables) {
-			g.translate(dx, dy);
-			d.draw(g, pixel);
-			g.translate(-dx, -dy);
+		int w = getWidth() / 2;
+		int h = getHeight() / 2;
+		g.translate(w, h);
+		PixelGraphics pg = new PixelGraphics(pixel, (Graphics2D) g);
+		for (PixelDrawable d : pixelDrawables) {
+			pg.translate(focus.negate());
+			d.draw(pg);
+			pg.translate(focus);
 		}
-		labelDrawer.draw(g, pixel);
+		g.translate(-w, -h);
+		labelDrawer.draw(g);
 	}
 }

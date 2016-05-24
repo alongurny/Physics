@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import physics.math.Scalar;
-
-public class LabelDrawer implements Drawable {
+public class LabelDrawer implements RawDrawable {
 
 	private List<String> strings;
 	private List<Supplier<?>> suppliers;
@@ -27,7 +25,7 @@ public class LabelDrawer implements Drawable {
 	}
 
 	@Override
-	public void draw(Graphics g, Scalar pixel) {
+	public void draw(Graphics g) {
 		g.setColor(Color.WHITE);
 		for (int i = 0; i < strings.size(); i++) {
 			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(), x, y + 10 * i);

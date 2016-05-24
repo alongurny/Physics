@@ -1,15 +1,12 @@
 package physics.graphics.drawers;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
 import physics.body.geometric.Sphere;
-import physics.graphics.Pixel;
-import physics.math.IntVector;
+import physics.graphics.PixelGraphics;
 import physics.math.Scalar;
-import physics.math.Vector;
 
-public class SphereDrawer implements Drawable {
+public class SphereDrawer implements PixelDrawable {
 
 	private Sphere sphere;
 	private Color color;
@@ -20,13 +17,10 @@ public class SphereDrawer implements Drawable {
 	}
 
 	@Override
-	public void draw(Graphics g, Scalar pixel) {
+	public void draw(PixelGraphics g) {
 		g.setColor(color);
-		Scalar radius = sphere.getRadius();
-		Vector p = sphere.getPosition().subtract(new Vector(radius, radius, radius));
-		IntVector i_p = Pixel.convert(p, pixel);
-		int i_radius = Pixel.convert(radius, pixel);
-		g.fillOval(i_p.get(0), i_p.get(1), Math.max(3, 2 * i_radius), Math.max(3, 2 * i_radius));
+		Scalar diameter = sphere.getRadius().multiply(2);
+		g.fillOval(sphere.getPosition(), diameter, diameter);
 	}
 
 }

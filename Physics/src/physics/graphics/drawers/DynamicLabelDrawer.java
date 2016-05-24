@@ -1,18 +1,15 @@
 package physics.graphics.drawers;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 import physics.body.Body;
-import physics.graphics.Pixel;
+import physics.graphics.PixelGraphics;
 import physics.math.IntVector;
-import physics.math.Scalar;
-import physics.math.Vector;
 
-public class DynamicLabelDrawer implements Drawable {
+public class DynamicLabelDrawer implements PixelDrawable {
 
 	private List<String> strings;
 	private List<Supplier<?>> suppliers;
@@ -33,13 +30,13 @@ public class DynamicLabelDrawer implements Drawable {
 	}
 
 	@Override
-	public void draw(Graphics g, Scalar pixel) {
+	public void draw(PixelGraphics g) {
 		g.setColor(Color.WHITE);
-		Vector p = body.getPosition();
-		IntVector i_p = Pixel.convert(p, pixel);
 		for (int i = 0; i < strings.size(); i++) {
-			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(), i_p.get(0) + offsetX,
-					i_p.get(1) + offsetY + 10 * i);
+			IntVector offset = new IntVector(offsetX, offsetY + 10 * i);
+			g.rawTranslate(offset);
+			g.drawString(strings.get(i) + " = " + suppliers.get(i).get(), body.getPosition());
+			g.rawTranslate(offset.negate());
 		}
 	}
 }

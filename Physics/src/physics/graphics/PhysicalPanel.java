@@ -5,7 +5,7 @@ import java.util.List;
 
 import physics.LinearSystem;
 import physics.dimension.Dimensioned;
-import physics.graphics.drawers.Drawable;
+import physics.graphics.drawers.PixelDrawable;
 import physics.graphics.drawers.Elastic;
 import physics.math.Scalar;
 import physics.math.Vector;
@@ -34,8 +34,8 @@ public class PhysicalPanel extends Panel implements Dimensioned {
 	}
 
 	public void add(Elastic b, boolean movable) {
-		if (b instanceof Drawable) {
-			addDrawable((Drawable) b);
+		if (b instanceof PixelDrawable) {
+			addDrawable((PixelDrawable) b);
 		}
 		if (movable) {
 			system.add(b);

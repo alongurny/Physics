@@ -1,18 +1,16 @@
 package pool.bodies;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
 import physics.body.RegularBody;
-import physics.graphics.Pixel;
-import physics.graphics.drawers.Drawable;
-import physics.math.IntVector;
+import physics.graphics.PixelGraphics;
+import physics.graphics.drawers.PixelDrawable;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantity;
 import physics.quantity.UnitSystem;
 
-public class Stick extends RegularBody implements Drawable {
+public class Stick extends RegularBody implements PixelDrawable {
 
 	private static final Scalar density = UnitSystem.SI.get(Quantity.MASS.divide(Quantity.LENGTH), 0.02);
 
@@ -25,11 +23,9 @@ public class Stick extends RegularBody implements Drawable {
 	}
 
 	@Override
-	public void draw(Graphics g, Scalar pixel) {
+	public void draw(PixelGraphics g) {
 		g.setColor(new Color(100, 135, 0));
-		IntVector i_start = Pixel.convert(getPosition(), pixel);
-		IntVector i_end = Pixel.convert(getPosition().add(length), pixel);
-		g.drawLine(i_start.get(0), i_start.get(1), i_end.get(0), i_end.get(1));
+		g.drawLine(getPosition(), getPosition().add(length));
 	}
 
 }

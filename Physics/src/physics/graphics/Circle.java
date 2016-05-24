@@ -1,20 +1,18 @@
 package physics.graphics;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
 import physics.body.RegularBody;
-import physics.graphics.drawers.Drawable;
 import physics.graphics.drawers.Elastic;
+import physics.graphics.drawers.PixelDrawable;
 import physics.graphics.drawers.VectorCollection;
-import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.util.Lazy;
 
-public class Circle extends RegularBody implements Elastic, Drawable {
+public class Circle extends RegularBody implements Elastic, PixelDrawable {
 
 	private static final int ACCURACY = 16;
 
@@ -39,13 +37,10 @@ public class Circle extends RegularBody implements Elastic, Drawable {
 	}
 
 	@Override
-	public void draw(Graphics g, Scalar pixel) {
-		int i_diameter = Pixel.convert(radius.multiply(2), pixel);
-		IntVector i_p = Pixel.convert(getPosition(), pixel);
+	public void draw(PixelGraphics g) {
+		Scalar diameter = getRadius().multiply(2);
 		g.setColor(color);
-		g.fillOval(i_p.get(0) - i_diameter / 2, i_p.get(1) - i_diameter / 2, i_diameter, i_diameter);
-		g.setColor(Color.BLACK);
-		g.drawPolygon(Pixel.convert(getAbsoluteBounds(), pixel));
+		g.drawOval(getPosition(), diameter, diameter);
 	}
 
 	@Override
