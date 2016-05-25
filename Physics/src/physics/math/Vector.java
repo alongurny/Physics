@@ -6,12 +6,13 @@ import java.util.function.UnaryOperator;
 
 import physics.dimension.Dimensioned;
 import physics.dimension.Dimensions;
+import physics.math.algebra.AbelianAdditiveGroup;
 import physics.quantity.Quantifiable;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 import physics.quantity.UnitSystem;
 
-public final class Vector implements Quantifiable, Dimensioned {
+public final class Vector implements Quantifiable, Dimensioned, AbelianAdditiveGroup<Vector> {
 
 	public static class Axes2D {
 		public static final Vector ORIGIN = Vector.zero(Quantity.LENGTH, 2);
@@ -165,10 +166,6 @@ public final class Vector implements Quantifiable, Dimensioned {
 		return get(Scalar::negate);
 	}
 
-	public Vector subtract(Vector v) {
-		return this.add(v.negate());
-	}
-
 	@Override
 	public String toString() {
 		return toString(UnitSystem.SI);
@@ -189,6 +186,11 @@ public final class Vector implements Quantifiable, Dimensioned {
 
 	public static Scalar distance(Vector a, Vector b) {
 		return a.subtract(b).getMagnitude();
+	}
+
+	@Override
+	public Vector zero() {
+		return zero(getQuantity(), getDimension());
 	}
 
 }

@@ -6,13 +6,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import physics.graphics.drawers.VectorCollection;
+import physics.math.algebra.Ring;
 import physics.quantity.Quantifiable;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 import physics.util.ImmutablePair;
 import physics.util.Lazy;
 
-public class Matrix implements Quantifiable {
+public class Matrix implements Quantifiable, Ring<Matrix> {
 
 	public static Matrix column(Vector v) {
 		return new Matrix(v.getDimension(), 1, (i, j) -> v.get(i));
@@ -259,10 +260,6 @@ public class Matrix implements Quantifiable {
 		return negate.get();
 	}
 
-	public Matrix subtract(Matrix other) {
-		return this.add(other.negate());
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -270,6 +267,19 @@ public class Matrix implements Quantifiable {
 			sb.append(getRow(i).toString() + "\n");
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public Matrix zero() {
+		return zero(getRowCount(), getColumnCount());
+	}
+
+	@Override
+	public Matrix unit() {
+		if (!isSquare()) {
+			throw new MatrixArithmeticException("Matrix is not square");
+		}
+		return identity(getRowCount());
 	}
 
 }

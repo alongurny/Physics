@@ -5,22 +5,11 @@ import java.util.function.IntUnaryOperator;
 
 import physics.dimension.Dimensioned;
 import physics.dimension.Dimensions;
+import physics.math.algebra.AdditiveGroup;
 
-public final class IntVector implements Dimensioned {
+public final class IntVector implements Dimensioned, AdditiveGroup<IntVector> {
 	public static IntVector axis(int length, int loc) {
 		return new IntVector(length, i -> Mathx.kroneckerDelta(i, loc));
-	}
-
-	public static IntVector sum(IntVector... vectors) {
-		if (vectors.length == 0) {
-			throw new IllegalArgumentException("Must have at least one vector");
-		}
-		Dimensions.requireSame(vectors);
-		IntVector res = vectors[0];
-		for (int i = 1; i < vectors.length; i++) {
-			res = res.add(vectors[i]);
-		}
-		return res;
 	}
 
 	public static IntVector zero(int length) {
@@ -96,10 +85,6 @@ public final class IntVector implements Dimensioned {
 		return new IntVector(getDimension(), i -> -get(i));
 	}
 
-	public IntVector subtract(IntVector v) {
-		return this.add(v.negate());
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("(" + get(0));
@@ -107,5 +92,10 @@ public final class IntVector implements Dimensioned {
 			sb.append(", " + get(i));
 		}
 		return sb.toString() + ")";
+	}
+
+	@Override
+	public IntVector zero() {
+		return zero(getDimension());
 	}
 }

@@ -3,12 +3,13 @@ package physics.math;
 import java.util.Objects;
 
 import physics.dimension.Dimensioned;
+import physics.math.algebra.Field;
 import physics.quantity.Quantifiable;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 import physics.quantity.UnitSystem;
 
-public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimensioned {
+public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimensioned, Field<Scalar> {
 
 	public static final Scalar ONE = new Scalar(Quantity.NONE, 1);
 	public static final Scalar ZERO = new Scalar(Quantity.NONE, 0);
@@ -206,5 +207,15 @@ public final class Scalar implements Comparable<Scalar>, Quantifiable, Dimension
 
 	public String toString(int n) {
 		return String.format("%." + n + "g", value) + " " + UnitSystem.SI.getUnitName(quantity);
+	}
+
+	@Override
+	public Scalar unit() {
+		return Scalar.ONE;
+	}
+
+	@Override
+	public Scalar zero() {
+		return zero(quantity);
 	}
 }
