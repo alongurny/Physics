@@ -2,7 +2,6 @@ package physics.math.field;
 
 import physics.math.Vector;
 import physics.math.algebra.AbelianAdditiveGroup;
-import physics.math.algebra.AdditiveMonoid;
 
 public interface VectorField extends AbelianAdditiveGroup<VectorField> {
 
