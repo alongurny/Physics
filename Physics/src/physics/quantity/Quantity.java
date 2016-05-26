@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import physics.math.IntVector;
+import physics.math.algebra.AbelianMultiplicativeGroup;
 import physics.util.LazyCache;
 
-public class Quantity {
+public class Quantity implements AbelianMultiplicativeGroup<Quantity> {
 
 	public enum Basic {
 		LENGTH, TIME, MASS, CHARGE, ANGLE
@@ -185,5 +186,10 @@ public class Quantity {
 	@Override
 	public String toString() {
 		return tostring.get();
+	}
+
+	@Override
+	public Quantity unit() {
+		return NONE;
 	}
 }
