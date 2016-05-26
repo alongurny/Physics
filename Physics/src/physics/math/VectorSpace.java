@@ -1,7 +1,5 @@
 package physics.math;
 
-import physics.graphics.drawers.VectorCollection;
-
 public class VectorSpace {
 
 	private VectorCollection basis;

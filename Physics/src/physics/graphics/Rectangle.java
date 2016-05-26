@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import physics.body.RegularBody;
-import physics.graphics.drawers.Elastic;
+import physics.collision.Collidable;
 import physics.graphics.drawers.PixelDrawable;
-import physics.graphics.drawers.VectorCollection;
 import physics.math.Scalar;
 import physics.math.Vector;
+import physics.math.VectorCollection;
 import physics.quantity.Quantity;
 import physics.util.Lazy;
 
-public class Rectangle extends RegularBody implements Elastic, PixelDrawable {
+public class Rectangle extends RegularBody implements Collidable, PixelDrawable {
 
 	private Color color;
 	private Scalar width;
@@ -83,6 +83,11 @@ public class Rectangle extends RegularBody implements Elastic, PixelDrawable {
 
 	public Scalar getHeight() {
 		return height;
+	}
+
+	@Override
+	public double getElasticity() {
+		return 1;
 	}
 
 }

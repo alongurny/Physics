@@ -1,11 +1,11 @@
-package physics.graphics.drawers;
+package physics.collision;
 
 import java.util.Optional;
 
-import physics.Collision;
 import physics.body.Movable;
 import physics.math.Scalar;
 import physics.math.Vector;
+import physics.math.VectorCollection;
 
 public interface Collidable extends Boundable, Movable {
 
@@ -15,6 +15,12 @@ public interface Collidable extends Boundable, Movable {
 		return Collision.getIntersection(pixel, bounds1, bounds2);
 	}
 
-	void onCollision(Scalar pixel, Collidable other, Scalar dt);
+	double getElasticity();
+
+	default void onCollision(Scalar pixel, Collidable e, Scalar dt) {
+		getFutureIntersection(pixel, e, dt).ifPresent(p -> addImpulse(Collision.getImpulse(this, e, p)));
+	}
+
+	Vector getCollisionCircleCenter(Vector contactPoint);
 
 }

@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import physics.body.RegularBody;
-import physics.graphics.drawers.Elastic;
+import physics.collision.Collidable;
 import physics.graphics.drawers.PixelDrawable;
-import physics.graphics.drawers.VectorCollection;
 import physics.math.Scalar;
 import physics.math.Vector;
+import physics.math.VectorCollection;
 import physics.util.Lazy;
 
-public class Circle extends RegularBody implements Elastic, PixelDrawable {
+public class Circle extends RegularBody implements Collidable, PixelDrawable {
 
 	private static final int ACCURACY = 16;
 
@@ -59,6 +59,11 @@ public class Circle extends RegularBody implements Elastic, PixelDrawable {
 
 	public Scalar getRadius() {
 		return radius;
+	}
+
+	@Override
+	public double getElasticity() {
+		return 1;
 	}
 
 }

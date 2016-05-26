@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import physics.graphics.drawers.VectorCollection;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
+import physics.math.VectorCollection;
 
 public class PixelGraphics {
 

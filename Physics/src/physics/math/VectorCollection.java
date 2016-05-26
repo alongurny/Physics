@@ -1,4 +1,4 @@
-package physics.graphics.drawers;
+package physics.math;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 import physics.dimension.Dimensioned;
-import physics.math.Vector;
 import physics.quantity.Quantifiable;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;

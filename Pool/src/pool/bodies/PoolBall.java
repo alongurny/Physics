@@ -7,19 +7,18 @@ import java.util.List;
 import java.util.Optional;
 
 import physics.body.geometric.ChargeableSphere;
+import physics.collision.Boundable;
+import physics.collision.Collidable;
 import physics.graphics.PixelGraphics;
 import physics.graphics.Rectangle;
-import physics.graphics.drawers.Boundable;
-import physics.graphics.drawers.Collidable;
-import physics.graphics.drawers.Elastic;
 import physics.graphics.drawers.PixelDrawable;
-import physics.graphics.drawers.VectorCollection;
 import physics.math.Scalar;
 import physics.math.Vector;
+import physics.math.VectorCollection;
 import physics.quantity.Quantity;
 import physics.util.Lazy;
 
-public class PoolBall extends ChargeableSphere implements Elastic, PixelDrawable {
+public class PoolBall extends ChargeableSphere implements Collidable, PixelDrawable {
 
 	private static final int ACCURACY = 4;
 
@@ -118,7 +117,7 @@ public class PoolBall extends ChargeableSphere implements Elastic, PixelDrawable
 
 	@Override
 	public void onCollision(Scalar pixel, Collidable other, Scalar dt) {
-		Elastic.super.onCollision(pixel, other, dt);
+		Collidable.super.onCollision(pixel, other, dt);
 		if (other instanceof PoolBall) {
 			PoolBall c = (PoolBall) other;
 			Scalar avg = getCharge().add(c.getCharge()).divide(2);
@@ -147,11 +146,16 @@ public class PoolBall extends ChargeableSphere implements Elastic, PixelDrawable
 					&& Scalar.abs(diff.get(1)).compareTo(r.getHeight()) < 0
 					|| Scalar.abs(diff.get(1)).compareTo(r.getHeight().divide(2)) < 0
 							&& Scalar.abs(diff.get(0)).compareTo(r.getWidth()) < 0) {
-				return Elastic.super.getFutureIntersection(pixel, b, dt);
+				return Collidable.super.getFutureIntersection(pixel, b, dt);
 			}
 			return Optional.empty();
 		}
-		return Elastic.super.getFutureIntersection(pixel, b, dt);
+		return Collidable.super.getFutureIntersection(pixel, b, dt);
+	}
+
+	@Override
+	public double getElasticity() {
+		return 1;
 	}
 
 }

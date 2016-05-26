@@ -2,10 +2,10 @@ package physics.graphics;
 
 import java.awt.Polygon;
 
-import physics.graphics.drawers.VectorCollection;
 import physics.math.IntVector;
 import physics.math.Scalar;
 import physics.math.Vector;
+import physics.math.VectorCollection;
 
 public class Pixel {
 

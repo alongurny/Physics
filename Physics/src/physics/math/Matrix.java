@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import physics.graphics.drawers.VectorCollection;
 import physics.math.algebra.Ring;
 import physics.quantity.Quantifiable;
 import physics.quantity.Quantities;
