@@ -67,7 +67,7 @@ public class PoolPanel extends PhysicalPanel {
 				b.addCharge(factor.multiply(b.getVelocity().getMagnitude()));
 			}
 		});
-		addLabel("Q", () -> getPhysicalSystem().getTotalScalar(Quantity.CHARGE, Movable::getCharge));
+		addLabel("Q", () -> getPhysicalSystem().getTotalScalar(Movable::getCharge));
 		getPhysicalSystem().addExternalBiForce(Forces::getLorentzForce);
 		getPhysicalSystem().addExternalForce(
 				a -> Forces.getFriction(a, Scalar.STANDARD_GRAVITY, 0.01, UnitSystem.SI.get(Quantity.VELOCITY, 1e-8)));
