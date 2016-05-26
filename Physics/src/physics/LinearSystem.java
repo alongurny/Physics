@@ -5,11 +5,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import physics.body.Movable;
 import physics.dimension.Dimensioned;
 import physics.math.Scalar;
 import physics.math.Vector;
+import physics.math.algebra.AdditiveMonoid;
 import physics.quantity.Quantity;
 
 public class LinearSystem implements Dimensioned {
@@ -20,6 +22,7 @@ public class LinearSystem implements Dimensioned {
 
 	private int dimension;
 	private Scalar dt;
+	private Scalar totalTime;
 
 	public LinearSystem(int dimension, Scalar dt) {
 		this.bodies = new CopyOnWriteArrayList<>();
@@ -27,6 +30,7 @@ public class LinearSystem implements Dimensioned {
 		this.biforces = new CopyOnWriteArrayList<>();
 		this.dt = dt;
 		this.dimension = dimension;
+		this.totalTime = Scalar.zero(Quantity.TIME);
 	}
 
 	public void add(Movable b) {
@@ -51,27 +55,19 @@ public class LinearSystem implements Dimensioned {
 	}
 
 	public Vector getTotalForce() {
-		return getTotalVector(Quantity.FORCE, Movable::getTotalForce);
+		return getTotalVector(Movable::getTotalForce);
 	}
 
 	public Vector getTotalMomentum() {
-		return getTotalVector(Quantity.MOMENTUM, Movable::getMomentum);
+		return getTotalVector(Movable::getMomentum);
 	}
 
-	public Scalar getTotalScalar(Quantity quantity, Function<Movable, Scalar> f) {
-		Scalar sum = Scalar.zero(quantity);
-		for (Movable b : bodies) {
-			sum = sum.add(f.apply(b));
-		}
-		return sum;
+	public Scalar getTotalScalar(Function<Movable, Scalar> f) {
+		return AdditiveMonoid.sum(bodies.stream().map(f).collect(Collectors.toList()));
 	}
 
-	public Vector getTotalVector(Quantity quantity, Function<Movable, Vector> f) {
-		Vector sum = Vector.zero(quantity, dimension);
-		for (Movable b : bodies) {
-			sum = sum.add(f.apply(b));
-		}
-		return sum;
+	public Vector getTotalVector(Function<Movable, Vector> f) {
+		return AdditiveMonoid.sum(bodies.stream().map(f).collect(Collectors.toList()));
 	}
 
 	protected void forEach(Consumer<? super Movable> action) {
@@ -88,6 +84,11 @@ public class LinearSystem implements Dimensioned {
 			}));
 		});
 		bodies.forEach(b -> b.move(dt));
+		totalTime = totalTime.add(dt);
+	}
+
+	public Scalar getTotalTime() {
+		return totalTime;
 	}
 
 	public boolean contains(Movable b) {
