@@ -1,10 +1,10 @@
 package physics.body.geometric;
 
-import physics.body.RegularBody;
+import physics.body.AbstractBody;
 import physics.math.Scalar;
 import physics.math.Vector;
 
-public class Cube extends RegularBody {
+public class Cube extends AbstractBody {
 
 	private Scalar s;
 

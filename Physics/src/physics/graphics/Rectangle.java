@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import physics.body.RegularBody;
+import physics.body.AbstractBody;
 import physics.collision.Collidable;
 import physics.graphics.drawers.PixelDrawable;
 import physics.math.Scalar;
@@ -13,7 +13,7 @@ import physics.math.VectorCollection;
 import physics.quantity.Quantity;
 import physics.util.Lazy;
 
-public class Rectangle extends RegularBody implements Collidable, PixelDrawable {
+public class Rectangle extends AbstractBody implements Collidable, PixelDrawable {
 
 	private Color color;
 	private Scalar width;

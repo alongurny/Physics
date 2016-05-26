@@ -1,10 +1,10 @@
 package physics.body.geometric;
 
-import physics.body.RegularBody;
+import physics.body.AbstractBody;
 import physics.math.Scalar;
 import physics.math.Vector;
 
-public class Sphere extends RegularBody {
+public class Sphere extends AbstractBody {
 
 	private Scalar radius;
 

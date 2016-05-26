@@ -7,7 +7,7 @@ import physics.math.field.VectorField;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 
-public abstract class RegularBody implements Movable {
+public abstract class AbstractBody implements Movable {
 
 	private final Scalar mass;
 	private Scalar charge;
@@ -16,7 +16,7 @@ public abstract class RegularBody implements Movable {
 	private Vector impulse;
 	private Vector acceleration;
 
-	public RegularBody(Scalar mass, Scalar charge, Vector position, Vector velocity) {
+	public AbstractBody(Scalar mass, Scalar charge, Vector position, Vector velocity) {
 		Dimensions.requireSame(position, velocity);
 		this.mass = Quantities.require(mass, Quantity.MASS);
 		this.charge = Quantities.require(charge, Quantity.CHARGE);

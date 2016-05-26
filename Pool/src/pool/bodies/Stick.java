@@ -2,7 +2,7 @@ package pool.bodies;
 
 import java.awt.Color;
 
-import physics.body.RegularBody;
+import physics.body.AbstractBody;
 import physics.graphics.PixelGraphics;
 import physics.graphics.drawers.PixelDrawable;
 import physics.math.Scalar;
@@ -10,7 +10,7 @@ import physics.math.Vector;
 import physics.quantity.Quantity;
 import physics.quantity.UnitSystem;
 
-public class Stick extends RegularBody implements PixelDrawable {
+public class Stick extends AbstractBody implements PixelDrawable {
 
 	private static final Scalar density = UnitSystem.SI.get(Quantity.MASS.divide(Quantity.LENGTH), 0.02);
 

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import physics.body.RegularBody;
+import physics.body.AbstractBody;
 import physics.collision.Collidable;
 import physics.graphics.drawers.PixelDrawable;
 import physics.math.Scalar;
@@ -12,7 +12,7 @@ import physics.math.Vector;
 import physics.math.VectorCollection;
 import physics.util.Lazy;
 
-public class Circle extends RegularBody implements Collidable, PixelDrawable {
+public class Circle extends AbstractBody implements Collidable, PixelDrawable {
 
 	private static final int ACCURACY = 16;
 

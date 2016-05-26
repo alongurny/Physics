@@ -7,7 +7,7 @@ import physics.math.Vector;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 
-public abstract class RegularRigidBody extends RegularBody implements RigidBody {
+public abstract class AbstractRigidBody extends AbstractBody implements RigidBody {
 
 	private Matrix momentOfInertia;
 
@@ -16,7 +16,7 @@ public abstract class RegularRigidBody extends RegularBody implements RigidBody 
 	private Vector angularAcceleration;
 	private Vector angularImpulse;
 
-	public RegularRigidBody(Scalar mass, Scalar charge, Vector position, Vector velocity, Matrix momentOfInertia,
+	public AbstractRigidBody(Scalar mass, Scalar charge, Vector position, Vector velocity, Matrix momentOfInertia,
 			Vector angularPosition, Vector angularVelocity) {
 		super(mass, charge, position, velocity);
 		this.momentOfInertia = Quantities.require(momentOfInertia, Quantity.MOMENT_OF_INERTIA);

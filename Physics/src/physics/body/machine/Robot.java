@@ -1,13 +1,13 @@
 package physics.body.machine;
 
-import physics.body.RegularRigidBody;
+import physics.body.AbstractRigidBody;
 import physics.math.Matrix;
 import physics.math.Scalar;
 import physics.math.Vector;
 import physics.quantity.Quantities;
 import physics.quantity.Quantity;
 
-public class Robot extends RegularRigidBody {
+public class Robot extends AbstractRigidBody {
 
 	private Scalar width, height;
 
