@@ -58,6 +58,18 @@ public final class Vector implements Quantifiable, Dimensioned, AbelianAdditiveG
 		return true;
 	}
 
+	public Scalar getX() {
+		return get(0);
+	}
+
+	public Scalar getY() {
+		return get(1);
+	}
+
+	public Scalar getZ() {
+		return get(2);
+	}
+
 	public static Vector sum(Vector... vectors) {
 		if (vectors.length == 0) {
 			throw new IllegalArgumentException("Must have at least one vector");
